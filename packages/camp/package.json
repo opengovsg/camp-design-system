@@ -82,7 +82,7 @@
     "@types/react-dom": "^18.0.5",
     "@types/react-input-mask": "^3.0.1",
     "@typescript-eslint/eslint-plugin": "6.15.0",
-    "@typescript-eslint/parser": "6.19.1",
+    "@typescript-eslint/parser": "8.15.0",
     "@vitejs/plugin-react": "^4.3.3",
     "auto-changelog": "^2.4.0",
     "esbuild": "^0.24.0",
