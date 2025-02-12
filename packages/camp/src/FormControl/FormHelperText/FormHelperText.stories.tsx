@@ -1,4 +1,4 @@
-import { FormControl } from '@chakra-ui/form-control'
+import { FormControl } from '@chakra-ui/react'
 import { Meta, StoryFn } from '@storybook/react'
 
 import { FormHelperText, FormHelperTextProps } from './FormHelperText'
