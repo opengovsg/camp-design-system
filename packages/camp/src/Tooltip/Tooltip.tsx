@@ -1,6 +1,5 @@
-import { useState } from 'react'
+import { ElementType, useState } from 'react'
 import {
-  As,
   Box,
   SystemStyleObject,
   Tooltip as ChakraTooltip,
@@ -14,7 +13,7 @@ export interface TouchableTooltipProps
    * Styles for the container which wraps the children.
    */
   wrapperStyles?: SystemStyleObject
-  wrapperAs?: As
+  wrapperAs?: ElementType
 }
 
 /** @deprecated Use TouchableTooltipProps instead */

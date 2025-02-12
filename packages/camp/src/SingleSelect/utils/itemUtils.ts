@@ -1,5 +1,3 @@
-import type { As as _ } from '@chakra-ui/react'
-
 import { ComboboxItem } from '../types'
 
 export const itemIsObject = (

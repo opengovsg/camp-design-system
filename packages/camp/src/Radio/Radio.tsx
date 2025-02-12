@@ -132,7 +132,7 @@ export const Radio = forwardRef<RadioProps, 'input'>(
 
     const {
       getInputProps,
-      getCheckboxProps,
+      getRadioProps,
       getLabelProps,
       getRootProps,
       htmlProps,
@@ -147,7 +147,7 @@ export const Radio = forwardRef<RadioProps, 'input'>(
 
     const [layoutProps, otherProps] = split(htmlProps, layoutPropNames as never)
 
-    const checkboxProps = getCheckboxProps(otherProps)
+    const radioProps = getRadioProps(otherProps)
     const inputProps = getInputProps(htmlInputProps, ref)
     const rootProps = Object.assign({}, layoutProps, getRootProps())
 
@@ -193,7 +193,7 @@ export const Radio = forwardRef<RadioProps, 'input'>(
       ...props.__css,
     }
 
-    const checkboxStyles = {
+    const radioStyles = {
       display: 'inline-flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -219,8 +219,8 @@ export const Radio = forwardRef<RadioProps, 'input'>(
         <input className="chakra-radio__input" {...inputProps} />
         <chakra.span
           className="chakra-radio__control"
-          {...checkboxProps}
-          __css={checkboxStyles}
+          {...radioProps}
+          __css={radioStyles}
         />
         {children && (
           <chakra.span
