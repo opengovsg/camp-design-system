@@ -1,7 +1,8 @@
-import { As, Flex, Icon, Text } from '@chakra-ui/react'
+import { ElementType } from 'react'
+import { Flex, Icon, Text } from '@chakra-ui/react'
 
 export interface RestrictedGovtMastheadItemProps {
-  icon: As
+  icon: ElementType
   header: string
   children: React.ReactNode
 }

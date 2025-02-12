@@ -1,4 +1,4 @@
-import type { As } from '@chakra-ui/react'
+import { ElementType } from 'react'
 
 export type ComboboxItem<T = string> =
   | {
@@ -11,7 +11,7 @@ export type ComboboxItem<T = string> =
       /** Whether item is disabled */
       disabled?: boolean
       /** Icon to display in input field when item is selected, if available */
-      icon?: As
+      icon?: ElementType
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       [key: string]: any
     }

@@ -1,6 +1,5 @@
-import { useMemo } from 'react'
+import { ElementType, useMemo } from 'react'
 import {
-  As,
   Box,
   CloseButton,
   Collapse,
@@ -25,7 +24,7 @@ export interface BannerProps {
   /**
    * The icon to use for the banner. Defaults to the variant's icon.
    */
-  icon?: As
+  icon?: ElementType
   /**
    * The close button to use for the banner.
    * Defaults to the variant's close button.
