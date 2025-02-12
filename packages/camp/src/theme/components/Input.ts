@@ -11,12 +11,12 @@ const { definePartsStyle, defineMultiStyleConfig } =
 
 const outlineVariant = definePartsStyle((props) => {
   const {
-    isSuccess,
-    isPrefilled,
     theme,
     focusBorderColor: fc = 'utility.focus-default',
     errorBorderColor: ec = 'interaction.critical.default',
   } = props
+  const isPrefilled = props['data-is-prefilled']
+  const isSuccess = props['data-is-success']
 
   return {
     addon: {

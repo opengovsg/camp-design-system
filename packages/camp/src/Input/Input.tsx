@@ -30,13 +30,18 @@ export const Input = forwardRef<InputProps, 'input'>((props, ref) => {
   // Omit extra props so they will not be passed into the DOM and trigger
   // React warnings.
   const inputProps = omit(props, ['isSuccess', 'isPrefilled'])
+  const dataAttributes = {
+    'data-is-success': props.isSuccess || undefined,
+    'data-is-prefilled': props.isPrefilled || undefined,
+  }
 
   // Return normal input component if not success state.
   if (!props.isSuccess) {
     return (
       <ChakraInput
         ref={ref}
-        sx={merge({}, inputStyles.field, props.sx)}
+        __css={inputStyles.field}
+        {...dataAttributes}
         {...inputProps}
       />
     )
@@ -48,7 +53,8 @@ export const Input = forwardRef<InputProps, 'input'>((props, ref) => {
     <InputGroup>
       <ChakraInput
         ref={ref}
-        sx={merge({}, inputStyles.field, props.sx)}
+        __css={inputStyles.field}
+        {...dataAttributes}
         {...inputProps}
       />
       <InputRightElement sx={inputStyles.success}>
