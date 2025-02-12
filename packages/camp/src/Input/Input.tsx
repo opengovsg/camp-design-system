@@ -8,7 +8,6 @@ import {
   InputRightElement,
   useMultiStyleConfig,
 } from '@chakra-ui/react'
-import merge from 'lodash/merge'
 import omit from 'lodash/omit'
 
 import { BxsCheckCircle } from '~/icons/BxsCheckCircle'
