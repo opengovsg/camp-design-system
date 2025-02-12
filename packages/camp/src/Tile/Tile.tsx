@@ -1,6 +1,5 @@
-import { FC, useMemo } from 'react'
+import { ElementType, FC, useMemo } from 'react'
 import {
-  As,
   Button,
   ButtonProps,
   ComponentWithAs,
@@ -36,7 +35,7 @@ export interface TileProps
   /**
    * The icon that should be displayed on the tile
    */
-  icon?: As
+  icon?: ElementType
 
   /**
    * The components to be displayed
