@@ -21,13 +21,11 @@ Prefilled.args = {
   defaultValue: 'Prefilled field',
   isPrefilled: true,
 }
-
 export const Error = Template.bind({})
 Error.args = {
   isInvalid: true,
   defaultValue: 'Field error',
 }
-
 export const Success = Template.bind({})
 Success.args = {
   isSuccess: true,
@@ -37,6 +35,11 @@ export const Disabled = Template.bind({})
 Disabled.args = {
   defaultValue: 'Some text',
   isDisabled: true,
+}
+export const Themeable = Template.bind({})
+Themeable.args = {
+  defaultValue: 'Some text',
+  width: '300px',
 }
 
 export const Sizes = () => (

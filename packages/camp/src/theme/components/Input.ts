@@ -11,12 +11,14 @@ const { definePartsStyle, defineMultiStyleConfig } =
 
 const outlineVariant = definePartsStyle((props) => {
   const {
-    isSuccess,
-    isPrefilled,
     theme,
     focusBorderColor: fc = 'utility.focus-default',
     errorBorderColor: ec = 'interaction.critical.default',
   } = props
+
+  // The variant is used by both input as well as other components.
+  const isPrefilled = props.isPrefilled ?? props['data-prefilled'] !== undefined
+  const isSuccess = props.isSuccess ?? props['data-success'] !== undefined
 
   return {
     addon: {
