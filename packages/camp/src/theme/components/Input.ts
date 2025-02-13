@@ -17,8 +17,8 @@ const outlineVariant = definePartsStyle((props) => {
   } = props
 
   // The variant is used by both input as well as other components.
-  const isPrefilled = props.isPrefilled ?? props['data-is-prefilled']
-  const isSuccess = props.isSuccess ?? props['data-is-success']
+  const isPrefilled = props.isPrefilled ?? props['data-prefilled']
+  const isSuccess = props.isSuccess ?? props['data-success']
 
   return {
     addon: {

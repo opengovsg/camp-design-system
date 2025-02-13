@@ -30,8 +30,8 @@ export const Input = forwardRef<InputProps, 'input'>((props, ref) => {
   // React warnings.
   const inputProps = omit(props, ['isSuccess', 'isPrefilled'])
   const dataAttributes = {
-    'data-is-success': props.isSuccess || undefined,
-    'data-is-prefilled': props.isPrefilled || undefined,
+    'data-success': props.isSuccess || undefined,
+    'data-prefilled': props.isPrefilled || undefined,
   }
 
   // Return normal input component if not success state.
