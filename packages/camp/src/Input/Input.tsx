@@ -8,6 +8,7 @@ import {
   InputRightElement,
   useMultiStyleConfig,
 } from '@chakra-ui/react'
+import { dataAttr } from '@chakra-ui/utils'
 import omit from 'lodash/omit'
 
 import { BxsCheckCircle } from '~/icons/BxsCheckCircle'
@@ -30,8 +31,8 @@ export const Input = forwardRef<InputProps, 'input'>((props, ref) => {
   // React warnings.
   const inputProps = omit(props, ['isSuccess', 'isPrefilled'])
   const dataAttributes = {
-    'data-success': props.isSuccess || undefined,
-    'data-prefilled': props.isPrefilled || undefined,
+    'data-success': dataAttr(props.isSuccess),
+    'data-prefilled': dataAttr(props.isPrefilled),
   }
 
   // Return normal input component if not success state.
