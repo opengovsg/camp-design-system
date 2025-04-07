@@ -110,45 +110,16 @@ MobileCustomInput.args = {
 }
 MobileCustomInput.parameters = getMobileViewParameters()
 
-const MonthYearChangeTemplate: StoryFn<DatePickerProps> = () => {
-  const [currentMonth, setCurrentMonth] = useState<number>()
-  const [currentYear, setCurrentYear] = useState<number>()
-
-  return (
-    <Stack spacing={4}>
-      <FormControl>
-        <FormLabel>Date Picker with Month/Year Change Tracking</FormLabel>
-        <DatePicker
-          onMonthChange={setCurrentMonth}
-          onYearChange={setCurrentYear}
-        />
-      </FormControl>
-      <Stack>
-        <FormControl>
-          <FormLabel>Current Month</FormLabel>
-          <Button variant="outline" pointerEvents="none">
-            {currentMonth !== undefined
-              ? currentMonth + 1
-              : 'No month selected'}
-          </Button>
-        </FormControl>
-        <FormControl>
-          <FormLabel>Current Year</FormLabel>
-          <Button variant="outline" pointerEvents="none">
-            {currentYear !== undefined ? currentYear : 'No year selected'}
-          </Button>
-        </FormControl>
-      </Stack>
-    </Stack>
-  )
+export const WithMonthYearChangeCallbacks = Template.bind({})
+WithMonthYearChangeCallbacks.args = {
+  onMonthChange: (month) => alert(`Month changed to: ${month + 1}`),
+  onYearChange: (year) => alert(`Year changed to: ${year}`),
 }
-
-export const MonthYearChangeTracking = MonthYearChangeTemplate.bind({})
-MonthYearChangeTracking.parameters = {
+WithMonthYearChangeCallbacks.parameters = {
   docs: {
     description: {
       story:
-        'This example shows how to use `onMonthChange` and `onYearChange` callbacks to track calendar navigation.',
+        'This example demonstrates `onMonthChange` and `onYearChange` callbacks. Alerts will appear when navigating the calendar.',
     },
   },
 }
