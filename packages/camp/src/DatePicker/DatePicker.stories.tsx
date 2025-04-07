@@ -110,6 +110,20 @@ MobileCustomInput.args = {
 }
 MobileCustomInput.parameters = getMobileViewParameters()
 
+export const WithMonthYearChangeCallbacks = Template.bind({})
+WithMonthYearChangeCallbacks.args = {
+  onMonthChange: (month) => alert(`Month changed to: ${month + 1}`),
+  onYearChange: (year) => alert(`Year changed to: ${year}`),
+}
+WithMonthYearChangeCallbacks.parameters = {
+  docs: {
+    description: {
+      story:
+        'This example demonstrates `onMonthChange` and `onYearChange` callbacks. Alerts will appear when navigating the calendar.',
+    },
+  },
+}
+
 const ControlledTemplate: StoryFn<DatePickerProps> = (args) => {
   const [datestate, setDatestate] = useState<DatePickerProps['value']>()
 

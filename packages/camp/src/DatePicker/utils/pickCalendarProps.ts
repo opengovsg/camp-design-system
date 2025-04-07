@@ -12,5 +12,7 @@ export const pickCalendarProps = (props: DatePickerProps) => {
     'showOutsideDays',
     'showTodayButton',
     'shouldSetDateOnTodayButtonClick',
+    'onMonthChange',
+    'onYearChange',
   )
 }

@@ -1,6 +1,6 @@
 {
   "name": "@opengovsg/design-system-react",
-  "version": "1.29.0",
+  "version": "1.30.0",
   "description": "React components",
   "homepage": "https://github.com/opengovsg/design-system/react#readme",
   "bugs": "https://github.com/opengovsg/design-system/issues",
@@ -104,7 +104,7 @@
     "storybook": "8.4.5",
     "tsc-alias": "^1.8.2",
     "typescript": "^5.0.4",
-    "vite": "^5.4.12",
+    "vite": "^5.4.15",
     "vite-plugin-dts": "^4.3.0"
   },
   "optionalDependencies": {
