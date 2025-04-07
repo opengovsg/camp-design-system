@@ -110,6 +110,49 @@ MobileCustomInput.args = {
 }
 MobileCustomInput.parameters = getMobileViewParameters()
 
+const MonthYearChangeTemplate: StoryFn<DatePickerProps> = () => {
+  const [currentMonth, setCurrentMonth] = useState<number>()
+  const [currentYear, setCurrentYear] = useState<number>()
+
+  return (
+    <Stack spacing={4}>
+      <FormControl>
+        <FormLabel>Date Picker with Month/Year Change Tracking</FormLabel>
+        <DatePicker
+          onMonthChange={setCurrentMonth}
+          onYearChange={setCurrentYear}
+        />
+      </FormControl>
+      <Stack>
+        <FormControl>
+          <FormLabel>Current Month</FormLabel>
+          <Button variant="outline" pointerEvents="none">
+            {currentMonth !== undefined
+              ? currentMonth + 1
+              : 'No month selected'}
+          </Button>
+        </FormControl>
+        <FormControl>
+          <FormLabel>Current Year</FormLabel>
+          <Button variant="outline" pointerEvents="none">
+            {currentYear !== undefined ? currentYear : 'No year selected'}
+          </Button>
+        </FormControl>
+      </Stack>
+    </Stack>
+  )
+}
+
+export const MonthYearChangeTracking = MonthYearChangeTemplate.bind({})
+MonthYearChangeTracking.parameters = {
+  docs: {
+    description: {
+      story:
+        'This example shows how to use `onMonthChange` and `onYearChange` callbacks to track calendar navigation.',
+    },
+  },
+}
+
 const ControlledTemplate: StoryFn<DatePickerProps> = (args) => {
   const [datestate, setDatestate] = useState<DatePickerProps['value']>()
 
