@@ -25,11 +25,10 @@ import {
 import { format, isValid, parse } from 'date-fns'
 
 import { DateRangeValue, RangeCalendarProps } from '~/Calendar'
-import { pickCalendarProps } from '~/DatePicker/utils'
 import { useIsMobile } from '~/hooks/useIsMobile'
 
 import { DateRangePickerProps } from './DateRangePicker'
-import { validateDateRange } from './utils'
+import { pickRangeCalendarProps, validateDateRange } from './utils'
 
 interface DateRangePickerContextReturn {
   isMobile: boolean
@@ -63,6 +62,8 @@ interface DateRangePickerContextReturn {
     | 'defaultFocusedDate'
     | 'showTodayButton'
     | 'shouldSetDateOnTodayButtonClick'
+    | 'onMonthChange'
+    | 'onYearChange'
   >
   inputPattern?: string
 }
@@ -121,7 +122,7 @@ const useProvideDateRangePicker = ({
   const startInputRef = useRef<HTMLInputElement>(null)
   const endInputRef = useRef<HTMLInputElement>(null)
 
-  const calendarProps = pickCalendarProps(props)
+  const calendarProps = pickRangeCalendarProps(props)
 
   const isMobile = useIsMobile({ ssr })
 

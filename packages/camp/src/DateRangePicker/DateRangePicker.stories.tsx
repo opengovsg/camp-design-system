@@ -76,6 +76,20 @@ SizeXs.args = {
   size: 'xs',
 }
 
+export const WithMonthYearChangeCallbacks = Template.bind({})
+WithMonthYearChangeCallbacks.args = {
+  onMonthChange: (month) => alert(`Month changed to: ${month + 1}`),
+  onYearChange: (year) => alert(`Year changed to: ${year}`),
+}
+WithMonthYearChangeCallbacks.parameters = {
+  docs: {
+    description: {
+      story:
+        'Demonstrates onMonthChange and onYearChange callbacks with alerts when navigating.',
+    },
+  },
+}
+
 const ControlledTemplate: StoryFn<DateRangePickerProps> = (args) => {
   const [datestate, setDatestate] = useState<DateRangeValue>([null, null])
 
