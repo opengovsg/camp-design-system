@@ -10,6 +10,7 @@ import { Tag, TagCloseButton, TagLabel, TagProps } from '~/Tag'
 
 export interface TagInputTagProps extends TagProps {
   isDisabled?: boolean
+  isReadOnly?: boolean
   isInvalid?: boolean
   label: string
   onClearTag: (event: SyntheticEvent) => void
@@ -19,6 +20,7 @@ export interface TagInputTagProps extends TagProps {
 export const TagInputTag = ({
   label,
   isDisabled = false,
+  isReadOnly = false,
   isInvalid,
   colorScheme,
   onClearTag,
@@ -68,6 +70,7 @@ export const TagInputTag = ({
     <Tag
       cursor="pointer"
       aria-disabled={isDisabled}
+      aria-readonly={isReadOnly}
       aria-invalid={isInvalid}
       colorScheme={isInvalid ? 'critical' : colorScheme}
       {...props}
@@ -79,7 +82,7 @@ export const TagInputTag = ({
       <TagLabel title={label}>{label}</TagLabel>
       <TagCloseButton
         tabIndex={-1}
-        isDisabled={isDisabled}
+        isDisabled={isDisabled || isReadOnly}
         onClick={handleCloseButtonClick}
       />
     </Tag>
