@@ -104,6 +104,7 @@ export const MultiSelectItem = ({
           aria-hidden
           as={itemMeta.icon}
           sx={styles.tagIcon}
+          aria-readonly={isReadOnly}
           aria-disabled={isDisabled}
         />
       ) : null}
@@ -111,7 +112,7 @@ export const MultiSelectItem = ({
       <TagCloseButton
         tabIndex={-1}
         aria-hidden
-        isDisabled={isDisabled}
+        isDisabled={isDisabled || isReadOnly}
         onClick={handleRemoveItem}
       />
     </Tag>

@@ -1,4 +1,4 @@
-import { Stack } from '@chakra-ui/react'
+import { FormControl, Stack } from '@chakra-ui/react'
 import { Meta, StoryFn } from '@storybook/react'
 
 import { getMobileViewParameters } from '~/utils/storybook'
@@ -56,6 +56,14 @@ Mobile.args = {
   ],
 }
 Mobile.parameters = getMobileViewParameters()
+
+export const ReadOnlyFormInput: StoryFn<TagInputProps> = (args) => {
+  return (
+    <FormControl isReadOnly id="test">
+      <TagInput defaultValue={['foo', 'bar']} {...args} />
+    </FormControl>
+  )
+}
 
 export const Sizes: StoryFn<TagInputProps> = (args) => {
   return (

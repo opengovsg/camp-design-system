@@ -4,7 +4,7 @@ import { anatomy } from '~/utils/anatomy'
 
 import { Input } from './Input'
 
-export const parts = anatomy('taginput').parts('container', 'field')
+export const parts = anatomy('taginput').parts('container', 'field', 'tag')
 
 const { definePartsStyle, defineMultiStyleConfig } =
   createMultiStyleConfigHelpers(parts.keys)
