@@ -183,3 +183,16 @@ export const FormInput: StoryFn<MultiSelectProps> = (args) => {
     </FormControl>
   )
 }
+
+export const ReadOnlyFormInput: StoryFn<MultiSelectProps> = () => {
+  return (
+    <FormControl isReadOnly id="test">
+      <MultiSelect
+        name="test"
+        values={['A', 'C', 'D']}
+        onChange={() => {}}
+        items={INITIAL_COMBOBOX_ITEMS}
+      />
+    </FormControl>
+  )
+}
