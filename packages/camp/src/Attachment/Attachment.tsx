@@ -164,10 +164,18 @@ export const Attachment: WithForwardRefType<boolean> = forwardRef<
       [multiple, value],
     )
 
-    // Dropzone is displayed when (1) Multiple upload (2) Single upload but no file attached.
+    // Check if max files limit is reached (only applicable in multiple mode)
+    const isMaxFilesReached = useMemo(
+      () => multiple && maxFiles !== undefined && value.length >= maxFiles,
+      [multiple, maxFiles, value],
+    )
+
+    // Dropzone is displayed when:
+    // - Multiple mode: always, unless maxFiles limit is reached
+    // - Single mode: only when no file is attached
     const showDropzone = useMemo(
-      () => multiple || !hasValue,
-      [multiple, hasValue],
+      () => (multiple ? !isMaxFilesReached : !hasValue),
+      [multiple, isMaxFilesReached, hasValue],
     )
 
     const filesArrayForRender = useMemo(() => {
@@ -413,6 +421,11 @@ export const Attachment: WithForwardRefType<boolean> = forwardRef<
                 inputProps={processedInputProps}
               />
             </Box>
+          ) : null}
+          {isMaxFilesReached ? (
+            <Text color="base.content.medium" textStyle="body-2">
+              Maximum uploads: {maxFiles}
+            </Text>
           ) : null}
           {rejections && rejections.length > 0
             ? rejections.map((fileRejection, index) => (
