@@ -162,3 +162,11 @@ export const WithRejectedFile = SingleTemplate.bind({})
 WithRejectedFile.args = {
   rejections: [MOCK_REJECTED_FILE],
 }
+
+export const WithMaxFilesLimit = MultipleTemplate.bind({})
+WithMaxFilesLimit.args = {
+  ...WithMultipleUpload.args,
+  maxFiles: 3,
+  showFileSize: true,
+  maxSize: 50_000_000,
+}
