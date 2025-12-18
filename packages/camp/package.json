@@ -101,7 +101,7 @@
     "react-dom": "^18.2.0",
     "rimraf": "^6.0.1",
     "rollup-plugin-copy": "^3.4.0",
-    "storybook": "8.4.5",
+    "storybook": "8.6.15",
     "tsc-alias": "^1.8.2",
     "typescript": "^5.0.4",
     "vite": "^5.4.21",
