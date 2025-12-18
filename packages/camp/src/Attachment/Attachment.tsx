@@ -190,9 +190,9 @@ export const Attachment: WithForwardRefType<boolean> = forwardRef<
       const parts: string[] = []
       if (multiple) {
         if (maxFiles) {
-          parts.push(`You can upload up to ${maxFiles} files at once.`)
+          parts.push(`You can upload up to ${maxFiles} files.`)
         } else {
-          parts.push('You can upload multiple files at once.')
+          parts.push('You can upload multiple files.')
         }
       }
 
