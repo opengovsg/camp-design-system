@@ -117,6 +117,12 @@ export type AttachmentProps<Multiple extends boolean> =
      * If exists, callback to be invoked when file has errors.
      */
     onRejection?: (rejections: FileRejection[]) => void
+
+    /**
+     * Maximum number of files allowed when multiple upload is enabled.
+     * If not specified, there is no limit. Only applicable when multiple is true.
+     */
+    maxFiles?: number
   } & AttachmentValueProp<Multiple>
 
 export const Attachment: WithForwardRefType<boolean> = forwardRef<
@@ -136,6 +142,7 @@ export const Attachment: WithForwardRefType<boolean> = forwardRef<
       imagePreview,
       onFileValidation,
       multiple,
+      maxFiles,
       rejections,
       onRejection,
       ...props
@@ -157,10 +164,18 @@ export const Attachment: WithForwardRefType<boolean> = forwardRef<
       [multiple, value],
     )
 
-    // Dropzone is displayed when (1) Multiple upload (2) Single upload but no file attached.
+    // Check if max files limit is reached (only applicable in multiple mode)
+    const isMaxFilesReached = useMemo(
+      () => multiple && maxFiles !== undefined && value.length >= maxFiles,
+      [multiple, maxFiles, value],
+    )
+
+    // Dropzone is displayed when:
+    // - Multiple mode: always, unless maxFiles limit is reached
+    // - Single mode: only when no file is attached
     const showDropzone = useMemo(
-      () => multiple || !hasValue,
-      [multiple, hasValue],
+      () => (multiple ? !isMaxFilesReached : !hasValue),
+      [multiple, isMaxFilesReached, hasValue],
     )
 
     const filesArrayForRender = useMemo(() => {
@@ -171,11 +186,20 @@ export const Attachment: WithForwardRefType<boolean> = forwardRef<
       return !hasValue && showFileSize && readableMaxSize
     }, [hasValue, showFileSize, readableMaxSize])
 
-    const chooseMaxSizeText = useMemo(
-      () =>
-        `${multiple ? 'You can upload multiple files at once.' : ''} Maximum file size: ${readableMaxSize}`,
-      [multiple, readableMaxSize],
-    )
+    const chooseMaxSizeText = useMemo(() => {
+      const parts: string[] = []
+      if (multiple) {
+        if (maxFiles) {
+          parts.push(`You can upload up to ${maxFiles} files.`)
+        } else {
+          parts.push('You can upload multiple files.')
+        }
+      }
+
+      parts.push(`Maximum file size: ${readableMaxSize}`)
+
+      return parts.join(' ')
+    }, [multiple, maxFiles, readableMaxSize])
 
     const ariaDescribedBy = useMemo(() => {
       const describedByIds = new Set<string>()
@@ -216,6 +240,49 @@ export const Attachment: WithForwardRefType<boolean> = forwardRef<
       async (acceptedFiles, rejectedFiles) => {
         const validatedFiles: File[] = []
         const rejects: FileRejection[] = [...rejectedFiles]
+
+        // Check if adding new files would exceed maxFiles limit
+        if (multiple && maxFiles) {
+          const currentFileCount = Array.isArray(value) ? value.length : 0
+          const availableSlots = maxFiles - currentFileCount
+
+          if (availableSlots <= 0) {
+            // No more files can be added
+            acceptedFiles.forEach((file) => {
+              rejects.push({
+                file,
+                errors: [
+                  {
+                    code: ErrorCode.TooManyFiles,
+                    message: `You can only upload a maximum of ${maxFiles} files`,
+                  },
+                ],
+              })
+            })
+            if (rejects.length > 0) {
+              onError?.(getErrorMessage(rejects[0]))
+            }
+            onRejection?.(rejects)
+            return
+          }
+
+          if (acceptedFiles.length > availableSlots) {
+            const filesToReject = acceptedFiles.slice(availableSlots)
+            acceptedFiles = acceptedFiles.slice(0, availableSlots)
+            filesToReject.forEach((file) => {
+              rejects.push({
+                file,
+                errors: [
+                  {
+                    code: ErrorCode.TooManyFiles,
+                    message: `You can only upload a maximum of ${maxFiles} files`,
+                  },
+                ],
+              })
+            })
+          }
+        }
+
         await Promise.all(
           acceptedFiles.map(async (file) => {
             const fileValidationErrorMessage = await onFileValidation?.(file)
@@ -239,12 +306,29 @@ export const Attachment: WithForwardRefType<boolean> = forwardRef<
         }
         onRejection?.(rejects)
         if (multiple) {
-          onChange(validatedFiles)
+          // append new files to existing ones
+          const existingFiles = Array.isArray(value) ? value : []
+          onChange([...existingFiles, ...validatedFiles])
         } else {
           onChange(validatedFiles[0])
         }
       },
-      [multiple, onFileValidation, onError, onRejection, onChange],
+      [
+        multiple,
+        maxFiles,
+        value,
+        onFileValidation,
+        onError,
+        onRejection,
+        onChange,
+      ],
+    )
+
+    // In single mode, disable interaction when a file is already attached
+    // In multiple mode, always allow interaction (unless readOnly/disabled)
+    const disableInteraction = useMemo(
+      () => inputProps.readOnly || (!multiple && hasValue),
+      [inputProps.readOnly, multiple, hasValue],
     )
 
     const { getRootProps, getInputProps, isDragActive, rootRef } = useDropzone({
@@ -252,9 +336,9 @@ export const Attachment: WithForwardRefType<boolean> = forwardRef<
       accept,
       disabled: inputProps.disabled,
       validator: fileValidator,
-      noKeyboard: inputProps.readOnly || hasValue,
-      noClick: inputProps.readOnly || hasValue,
-      noDrag: inputProps.readOnly || hasValue,
+      noKeyboard: disableInteraction,
+      noClick: disableInteraction,
+      noDrag: disableInteraction,
       onDrop: handleFileDrop,
     })
 
@@ -337,6 +421,11 @@ export const Attachment: WithForwardRefType<boolean> = forwardRef<
                 inputProps={processedInputProps}
               />
             </Box>
+          ) : null}
+          {isMaxFilesReached ? (
+            <Text color="base.content.medium" textStyle="body-2">
+              Maximum uploads: {maxFiles}
+            </Text>
           ) : null}
           {rejections && rejections.length > 0
             ? rejections.map((fileRejection, index) => (
