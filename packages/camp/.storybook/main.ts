@@ -1,11 +1,11 @@
 import path from 'path'
 import type { UserConfig } from 'vite'
-import type { StorybookConfig } from '@storybook/react-vite';
+import type { StorybookConfig } from '@storybook/react-vite'
 
-import { dirname } from 'node:path';
+import { dirname } from 'node:path'
 
 const getAbsolutePath = (packageName: string) =>
-  dirname(require.resolve(path.join(packageName, 'package.json')));
+  dirname(require.resolve(path.join(packageName, 'package.json')))
 export default {
   features: {},
   stories: [
