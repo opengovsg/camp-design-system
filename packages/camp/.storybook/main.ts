@@ -1,6 +1,11 @@
 import path from 'path'
 import type { UserConfig } from 'vite'
+import type { StorybookConfig } from '@storybook/react-vite'
 
+import { dirname } from 'node:path'
+
+const getAbsolutePath = (packageName: string) =>
+  dirname(require.resolve(path.join(packageName, 'package.json')))
 export default {
   features: {},
   stories: [
@@ -16,7 +21,7 @@ export default {
     '@storybook/addon-themes',
     '@storybook/addon-interactions',
   ],
-  framework: '@storybook/react-vite',
+  framework: getAbsolutePath('@storybook/react-vite'),
   staticDirs: ['./static'],
   core: {
     disableTelemetry: true,
@@ -42,4 +47,4 @@ export default {
   docs: {
     autodocs: 'tag',
   },
-}
+} satisfies StorybookConfig
