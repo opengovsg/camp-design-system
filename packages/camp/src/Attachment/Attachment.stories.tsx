@@ -162,3 +162,24 @@ export const WithRejectedFile = SingleTemplate.bind({})
 WithRejectedFile.args = {
   rejections: [MOCK_REJECTED_FILE],
 }
+
+export const WithMaxFilesLimit = MultipleTemplate.bind({})
+WithMaxFilesLimit.args = {
+  ...WithMultipleUpload.args,
+  maxFiles: 3,
+  showFileSize: true,
+  maxSize: 50_000_000,
+  imagePreview: 'small',
+}
+
+export const WithMaxFilesPartial = MultipleTemplate.bind({})
+WithMaxFilesPartial.args = {
+  ...WithMaxFilesLimit.args,
+  value: [MOCK_OGP_LOGO_FILE],
+}
+
+export const WithMaxFilesReached = MultipleTemplate.bind({})
+WithMaxFilesReached.args = {
+  ...WithMaxFilesLimit.args,
+  value: [MOCK_OGP_LOGO_FILE, MOCK_OGP_ICON_FILE, MOCK_OGP_LOGO_FILE],
+}

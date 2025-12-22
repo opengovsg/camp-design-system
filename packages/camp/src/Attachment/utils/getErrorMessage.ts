@@ -10,7 +10,10 @@ export const getErrorMessage = (rejectedFile: FileRejection): string => {
       return `Your file's extension ending in *${fileExt} is not allowed`
     }
     case ErrorCode.TooManyFiles: {
-      return 'You can only upload a single file in this input'
+      // Use custom message if provided, otherwise use default
+      return (
+        firstError.message || 'You can only upload a single file in this input'
+      )
     }
     default:
       return firstError.message

@@ -53,7 +53,7 @@ const withTheme = withThemeFromJSXProvider({
   Provider: ThemeProvider,
 })
 
-const withColorMode: Decorator = (storyFn, context) => {
+const withColorMode: Decorator = (Story, context) => {
   const bgFromContext = get(context, 'globals.backgrounds.value')
   const bgFromDefault = get(context, 'parameters.backgrounds.default')
   let colorMode: 'dark' | 'light' = 'light'
@@ -69,7 +69,11 @@ const withColorMode: Decorator = (storyFn, context) => {
         : 'light'
   }
 
-  return <ColorModeProvider value={colorMode}>{storyFn()}</ColorModeProvider>
+  return (
+    <ColorModeProvider value={colorMode}>
+      <Story />
+    </ColorModeProvider>
+  )
 }
 
 export const decorators = [withColorMode, withTheme]
