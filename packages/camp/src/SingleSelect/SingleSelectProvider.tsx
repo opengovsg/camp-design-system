@@ -16,6 +16,30 @@ import { VIRTUAL_LIST_ITEM_HEIGHT } from './constants'
 import { SelectContext, SharedSelectContextReturnProps } from './SelectContext'
 import { ComboboxItem } from './types'
 
+const getNextEnabledIndex = <Item extends ComboboxItem>(
+  items: Item[],
+  startIndex: number,
+  delta: number,
+  fallbackIndex?: number | null,
+) => {
+  if (!items.length) return -1
+
+  let nextIndex = startIndex
+
+  while (nextIndex >= 0 && nextIndex < items.length) {
+    if (!isItemDisabled(items[nextIndex])) return nextIndex
+    nextIndex += delta
+  }
+
+  const isValidFallback =
+    fallbackIndex != null &&
+    fallbackIndex >= 0 &&
+    fallbackIndex < items.length &&
+    !isItemDisabled(items[fallbackIndex])
+
+  return isValidFallback ? fallbackIndex : -1
+}
+
 export interface SingleSelectProviderProps<
   Item extends ComboboxItem = ComboboxItem,
 > extends SharedSelectContextReturnProps<Item>,
@@ -171,6 +195,24 @@ export const SingleSelectProvider = ({
       }
     },
     stateReducer: (state, { changes, type }) => {
+      const isArrowUp =
+        type === useCombobox.stateChangeTypes.InputKeyDownArrowUp
+      const isArrowDown =
+        type === useCombobox.stateChangeTypes.InputKeyDownArrowDown
+
+      const nextChanges =
+        (isArrowUp || isArrowDown) && changes.highlightedIndex != null
+          ? {
+              ...changes,
+              highlightedIndex: getNextEnabledIndex(
+                filteredItems,
+                changes.highlightedIndex,
+                isArrowUp ? -1 : 1,
+                state.highlightedIndex,
+              ),
+            }
+          : changes
+
       switch (type) {
         // Handle controlled `value` prop changes.
         case useCombobox.stateChangeTypes.ControlledPropUpdatedSelectedItem:
@@ -179,17 +221,17 @@ export const SingleSelectProvider = ({
           // This can only happen on first mount, since inputValue will be empty string
           // on future actions.
           if (state.inputValue && !changes.selectedItem) {
-            return { ...changes, inputValue: state.inputValue }
+            return { ...nextChanges, inputValue: state.inputValue }
           }
           return {
-            ...changes,
+            ...nextChanges,
             // Clear inputValue on item selection
             inputValue: '',
           }
         case useCombobox.stateChangeTypes.InputKeyDownEscape: {
-          if (isClearable) return changes
+          if (isClearable) return nextChanges
           return {
-            ...changes,
+            ...nextChanges,
             selectedItem: state.selectedItem,
           }
         }
@@ -199,7 +241,7 @@ export const SingleSelectProvider = ({
         case useCombobox.stateChangeTypes.ItemClick: {
           resetItems()
           return {
-            ...changes,
+            ...nextChanges,
             // Clear inputValue on item selection
             inputValue: '',
             isOpen: false,
@@ -207,16 +249,16 @@ export const SingleSelectProvider = ({
         }
         case useCombobox.stateChangeTypes.InputFocus:
           return {
-            ...changes,
+            ...nextChanges,
             isOpen: false, // keep the menu closed when input gets focused.
           }
         case useCombobox.stateChangeTypes.ToggleButtonClick:
           return {
-            ...changes,
+            ...nextChanges,
             isOpen: !state.isOpen,
           }
         default:
-          return changes
+          return nextChanges
       }
     },
     ...comboboxProps,

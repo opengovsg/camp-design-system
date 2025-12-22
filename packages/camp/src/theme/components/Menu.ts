@@ -9,6 +9,11 @@ const { definePartsStyle, defineMultiStyleConfig } =
 
 const $bg = cssVar('menu-bg')
 const $shadow = cssVar('menu-shadow')
+const disabledItemStyles = {
+  color: 'interaction.support.disabled-content',
+  opacity: 1,
+  cursor: 'not-allowed',
+}
 
 const getListItemColors = ({ colorScheme: c }: StyleFunctionProps) => {
   switch (c) {
@@ -54,10 +59,15 @@ const baseStyle = definePartsStyle((props) => {
       _hover: {
         [$bg.variable]: `colors.${hoverBg}`,
       },
-      _disabled: {
-        color: 'interaction.support.disabled-content',
-        opacity: 1,
-        cursor: 'not-allowed',
+      _disabled: disabledItemStyles,
+      '&[aria-disabled=true], &[data-disabled]': {
+        ...disabledItemStyles,
+        _hover: {
+          [$bg.variable]: 'colors.utility.ui',
+        },
+        _active: {
+          [$bg.variable]: 'colors.utility.ui',
+        },
       },
       _focus: {
         [$bg.variable]: `colors.${hoverBg}`,
