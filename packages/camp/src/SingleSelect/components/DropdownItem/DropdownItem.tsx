@@ -43,8 +43,9 @@ export const DropdownItem = ({
       {...getItemProps({
         item,
         index,
-        disabled: isDisabled,
       })}
+      aria-disabled={isDisabled || undefined}
+      data-disabled={dataAttr(isDisabled)}
     >
       <Flex flexDir="column">
         <Stack direction="row" align="center" spacing="1rem">
