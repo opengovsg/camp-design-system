@@ -2,6 +2,10 @@
   "name": "@opengovsg/design-system-react",
   "version": "1.32.0",
   "description": "React components",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/opengovsg/camp-design-system"
+  },
   "homepage": "https://github.com/opengovsg/design-system/react#readme",
   "bugs": "https://github.com/opengovsg/design-system/issues",
   "license": "SEE LICENSE IN LICENSE.md",
