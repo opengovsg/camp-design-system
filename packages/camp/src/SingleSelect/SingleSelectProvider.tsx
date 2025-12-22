@@ -16,6 +16,30 @@ import { VIRTUAL_LIST_ITEM_HEIGHT } from './constants'
 import { SelectContext, SharedSelectContextReturnProps } from './SelectContext'
 import { ComboboxItem } from './types'
 
+const getNextEnabledIndex = <Item extends ComboboxItem>(
+  items: Item[],
+  startIndex: number,
+  delta: number,
+  fallbackIndex?: number | null,
+) => {
+  if (!items.length) return -1
+
+  let nextIndex = startIndex
+
+  while (nextIndex >= 0 && nextIndex < items.length) {
+    if (!isItemDisabled(items[nextIndex])) return nextIndex
+    nextIndex += delta
+  }
+
+  const isValidFallback =
+    fallbackIndex != null &&
+    fallbackIndex >= 0 &&
+    fallbackIndex < items.length &&
+    !isItemDisabled(items[fallbackIndex])
+
+  return isValidFallback ? fallbackIndex : -1
+}
+
 export interface SingleSelectProviderProps<
   Item extends ComboboxItem = ComboboxItem,
 > extends SharedSelectContextReturnProps<Item>,
@@ -171,19 +195,6 @@ export const SingleSelectProvider = ({
       }
     },
     stateReducer: (state, { changes, type }) => {
-      const getNextEnabledIndex = (startIndex: number, delta: number) => {
-        if (!filteredItems.length) return -1
-
-        let nextIndex = startIndex
-
-        while (nextIndex >= 0 && nextIndex < filteredItems.length) {
-          if (!isItemDisabled(filteredItems[nextIndex])) return nextIndex
-          nextIndex += delta
-        }
-
-        return state.highlightedIndex ?? startIndex
-      }
-
       const isArrowUp =
         type === useCombobox.stateChangeTypes.InputKeyDownArrowUp
       const isArrowDown =
@@ -194,8 +205,10 @@ export const SingleSelectProvider = ({
           ? {
               ...changes,
               highlightedIndex: getNextEnabledIndex(
+                filteredItems,
                 changes.highlightedIndex,
                 isArrowUp ? -1 : 1,
+                state.highlightedIndex,
               ),
             }
           : changes
