@@ -13,7 +13,7 @@
   "license": "SEE LICENSE IN LICENSE.md",
   "devDependencies": {
     "json5": "^2.2.2",
-    "lodash": "^4.17.21",
+    "lodash": "^4.18.1",
     "prettier": "3.2.5",
     "rimraf": "^6.0.1",
     "style-dictionary": "^3.8.0",
