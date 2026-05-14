@@ -27,6 +27,11 @@ const palettes = {
     reverseFg: { value: '{colors.interaction.main.default}' },
     reverseHover: { value: '{colors.interaction.muted.main.hover}' },
     reverseActive: { value: '{colors.interaction.muted.main.active}' },
+    // `linkDefault` / `linkHover` back the Link recipe. v1 mapped `main` to
+    // `interaction.links.{default,hover}` (which are distinct from
+    // `interaction.main.{default,hover}` despite the name).
+    linkDefault: { value: '{colors.interaction.links.default}' },
+    linkHover: { value: '{colors.interaction.links.hover}' },
   },
   sub: {
     solid: { value: '{colors.interaction.sub.default}' },
@@ -41,6 +46,11 @@ const palettes = {
     reverseFg: { value: '{colors.interaction.sub.default}' },
     reverseHover: { value: '{colors.interaction.muted.sub.hover}' },
     reverseActive: { value: '{colors.interaction.muted.sub.active}' },
+    // v1 Link's `sub` palette fell into the default `${c}.500/.600` branch,
+    // but reusing `interaction.links.{default,hover}` matches the design intent
+    // (both `main` and `sub` should render as the brand link colour).
+    linkDefault: { value: '{colors.interaction.links.default}' },
+    linkHover: { value: '{colors.interaction.links.hover}' },
   },
   critical: {
     solid: { value: '{colors.interaction.critical.default}' },
@@ -55,6 +65,10 @@ const palettes = {
     reverseFg: { value: '{colors.interaction.critical.default}' },
     reverseHover: { value: '{colors.interaction.muted.critical.hover}' },
     reverseActive: { value: '{colors.interaction.muted.critical.active}' },
+    // v1 Link's `red` palette used the default `${c}.500 / ${c}.600` branch.
+    // `critical` was v1's `red`-equivalent — preserve those exact hex chain.
+    linkDefault: { value: '{colors.red.500}' },
+    linkHover: { value: '{colors.red.600}' },
   },
   warning: {
     solid: { value: '{colors.interaction.warning.default}' },
@@ -69,6 +83,10 @@ const palettes = {
     reverseFg: { value: '{colors.interaction.warning.default}' },
     reverseHover: { value: '{colors.interaction.warning.hover}' },
     reverseActive: { value: '{colors.interaction.warning.active}' },
+    // v1 Link's `warning` was a special-case branch: `yellow.800 / yellow.900`
+    // for legibility (the default `.500/.600` chain fails contrast on white).
+    linkDefault: { value: '{colors.yellow.800}' },
+    linkHover: { value: '{colors.yellow.900}' },
   },
   success: {
     solid: { value: '{colors.interaction.success.default}' },
@@ -83,6 +101,10 @@ const palettes = {
     reverseFg: { value: '{colors.interaction.success.default}' },
     reverseHover: { value: '{colors.interaction.success.hover}' },
     reverseActive: { value: '{colors.interaction.success.active}' },
+    // v1 Link's `success` was a special-case branch: `green.700 / green.800`
+    // for legibility (the default `.500/.600` chain fails contrast on white).
+    linkDefault: { value: '{colors.green.700}' },
+    linkHover: { value: '{colors.green.800}' },
   },
   neutral: {
     // `subtleBg` / `subtleFg` back the Badge `subtle` variant for the neutral
@@ -101,11 +123,18 @@ const palettes = {
     reverseFg: { value: '{colors.interaction.neutral.default}' },
     reverseHover: { value: '{colors.interaction.muted.neutral.hover}' },
     reverseActive: { value: '{colors.interaction.muted.neutral.active}' },
+    // v1 Link's `neutral` palette used dedicated tokens distinct from the
+    // generic neutral interaction colours.
+    linkDefault: { value: '{colors.interaction.links.neutral-default}' },
+    linkHover: { value: '{colors.interaction.links.neutral-hover}' },
   },
   inverse: {
     outlineBorder: { value: '{colors.base.content.inverse}' },
     outlineHover: { value: '{colors.interaction.tinted.inverse.hover}' },
     outlineActive: { value: '{colors.interaction.tinted.inverse.active}' },
+    // v1 Link's `inverse` palette used dedicated tokens for dark backgrounds.
+    linkDefault: { value: '{colors.interaction.links.inverse-default}' },
+    linkHover: { value: '{colors.interaction.links.inverse-hover}' },
   },
 }
 

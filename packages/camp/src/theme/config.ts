@@ -2,6 +2,7 @@ import { defineConfig } from '@chakra-ui/react'
 
 import { badgeRecipe } from './recipes/badge.recipe'
 import { buttonRecipe } from './recipes/button.recipe'
+import { linkRecipe } from './recipes/link.recipe'
 import { avatarSlotRecipe } from './slotRecipes/avatar.slotRecipe'
 import { breakpoints } from './breakpoints'
 import { layerStyles } from './layerStyles'
@@ -40,6 +41,7 @@ export const config = defineConfig({
     recipes: {
       badge: badgeRecipe,
       button: buttonRecipe,
+      link: linkRecipe,
     },
     slotRecipes: {
       avatar: avatarSlotRecipe,

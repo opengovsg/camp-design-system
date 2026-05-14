@@ -5,3 +5,5 @@ export type {
   ButtonColorPalette,
   ThemeButtonColorScheme,
 } from './button.recipe'
+export { linkRecipe } from './link.recipe'
+export type { LinkColorPalette, ThemeLinkColorScheme } from './link.recipe'
