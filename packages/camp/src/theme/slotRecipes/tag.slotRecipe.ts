@@ -90,6 +90,13 @@ export const tagSlotRecipe = defineSlotRecipe({
           textStyle: 'caption-1',
           px: '0.5rem',
           py: '0.125rem',
+          // v3 default sets `gap: '1'` per size; v1 had no flex gap (icons used
+          // margins). Reset so the start/end element spacing matches v1.
+          gap: 0,
+          // v1 enforced `minH: '4'` / `minW: '4'` on xs via Chakra v2 default —
+          // v3 drops these. Restore so the tag holds shape with short content.
+          minH: '1rem',
+          minW: '1rem',
           '--tag-element-size': '1rem',
           '--tag-element-offset': '-0.125rem',
         },
@@ -101,6 +108,9 @@ export const tagSlotRecipe = defineSlotRecipe({
           textStyle: 'body-2',
           px: '0.5rem',
           py: '0.125rem',
+          gap: 0,
+          minH: '1.25rem',
+          minW: '1.25rem',
           '--tag-element-size': '1.25rem',
           '--tag-element-offset': '-0.25rem',
         },
@@ -112,6 +122,11 @@ export const tagSlotRecipe = defineSlotRecipe({
           textStyle: 'subhead-2',
           px: '0.5rem',
           py: '0.25rem',
+          gap: 0,
+          // v1 default Tag md was 24px tall (sizes.6) via Chakra v2's
+          // `minH: '6'`. v3 default is `minH: '5'` (20px) — too tight.
+          minH: '1.5rem',
+          minW: '1.5rem',
           '--tag-element-size': '1.25rem',
           '--tag-element-offset': '-0.25rem',
         },

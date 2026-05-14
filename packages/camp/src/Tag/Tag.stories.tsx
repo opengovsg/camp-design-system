@@ -24,17 +24,20 @@ export default {
   },
 } as Meta<TagRootProps>
 
-const Template: StoryFn<TagRootProps> = (args) => (
+const Template: StoryFn<TagRootProps & { label?: string }> = ({
+  label = 'Tag',
+  ...args
+}) => (
   <Tag.Root {...args}>
-    <Tag.Label>Tag</Tag.Label>
+    <Tag.Label>{label}</Tag.Label>
   </Tag.Root>
 )
 
 export const Subtle = Template.bind({})
-Subtle.args = { variant: 'subtle' }
+Subtle.args = { variant: 'subtle', label: 'Subtle tag' }
 
 export const Solid = Template.bind({})
-Solid.args = { variant: 'solid' }
+Solid.args = { variant: 'solid', label: 'Solid tag' }
 
 export const WithCloseButton: StoryFn<TagRootProps> = (args) => (
   <Tag.Root {...args}>
