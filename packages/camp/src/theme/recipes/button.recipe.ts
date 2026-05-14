@@ -19,8 +19,9 @@ export const buttonRecipe = defineRecipe({
   base: {
     textStyle: 'subhead-1',
     whiteSpace: 'pre-wrap',
-    borderRadius: 'base',
-    border: '1px solid',
+    borderRadius: 'sm',
+    borderWidth: '1px',
+    borderStyle: 'solid',
     flexShrink: 0,
     px: '15px',
     py: '9px',
@@ -105,7 +106,7 @@ export const buttonRecipe = defineRecipe({
         color: 'interaction.support.disabled-content',
         borderColor: 'base.divider.strong',
         borderStartRadius: 0,
-        borderEndRadius: 'sm',
+        borderEndRadius: 'xs',
         _hover: {
           bg: 'interaction.muted.main.hover',
           _disabled: { bg: 'interaction.support.disabled' },
