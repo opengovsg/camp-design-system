@@ -774,18 +774,18 @@ cv05 on' }` and relied on inheritance — but in v3 the universal cv11
 on" } }` — apply our features at the same universal scope so cv11 is
       overridden everywhere.
 
-           This is **intentionally broader than v1**: v1's `body` rule left
-           buttons/inputs/textareas at the browser UA default `normal` (no cv05
-           tail on `l`); v3 applies cv05/tnum to those form elements as well. The
-           design team confirmed this universal application is the desired
-           behaviour going forward.
+                 This is **intentionally broader than v1**: v1's `body` rule left
+                 buttons/inputs/textareas at the browser UA default `normal` (no cv05
+                 tail on `l`); v3 applies cv05/tnum to those form elements as well. The
+                 design team confirmed this universal application is the desired
+                 behaviour going forward.
 
-           **For follow-up specs:** do **not** add per-recipe `fontFeatureSettings:
+                 **For follow-up specs:** do **not** add per-recipe `fontFeatureSettings:
 
-      'normal'`resets on form elements like`Input`, `Textarea`, `Select`,
-     `Checkbox`, `Radio`, `Switch`. The universal `globalCss` rule is
-      intentional, and form text should render with the same character
-      variants as the surrounding body text.
+            'normal'`resets on form elements like`Input`, `Textarea`, `Select`,
+           `Checkbox`, `Radio`, `Switch`. The universal `globalCss` rule is
+            intentional, and form text should render with the same character
+            variants as the surrounding body text.
 
 ### Input
 

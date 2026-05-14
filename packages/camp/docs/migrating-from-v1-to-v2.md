@@ -241,6 +241,17 @@ module and run it after installs.
 Without this step, your custom variant still renders correctly at runtime —
 only the TypeScript value union is missing it.
 
+> **Roadmap.** Manual `chakra typegen` wiring is the v2.0 starting point;
+> the long-term plan is a companion code-gen package (e.g.
+> `@opengovsg/design-system-codegen`) that takes a consumer's
+> `defineConfig({...})`, layers it on the OGP base, and emits a fully-typed
+> assembled `system` module + augmented type declarations as a single
+> install-time / build-time step. The consumer would then just import the
+> generated `system` and pass it to `ChakraProvider`, with autocomplete for
+> every token / palette / variant — both ours and theirs — without any
+> further configuration. This is tracked as a follow-up; once it lands, the
+> `chakra typegen` script above will become unnecessary.
+
 ### What you can extend, and what you can't
 
 | Action                                                           | Supported?                                                               |
