@@ -1,7 +1,0 @@
-export * from './Sidebar'
-export * from './SidebarContainer'
-export * from './SidebarContext'
-export * from './SidebarHeader'
-export * from './SidebarItem'
-export * from './SidebarList'
-export * from './types'
