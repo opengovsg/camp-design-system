@@ -1051,7 +1051,7 @@ opacity: 0.5 }`.
 - **v3 slots:** `root, label, closeTrigger, startElement, endElement` (v1
   used `container, label, closeButton, icon`).
 - **v3 base.root:** `display: inline-flex; alignItems: center; borderRadius:
-  l2; focusVisibleRing: outside`.
+l2; focusVisibleRing: outside`.
 - **v3 variants:** `subtle, solid, outline, surface (default)`.
 - **v3 sizes:** `sm, md (default), lg, xl`.
 - **v3 defaultVariants:** `{ size: 'md', variant: 'surface' }`.
@@ -1079,7 +1079,7 @@ opacity: 0.5 }`.
      `aria-disabled` attribute on the root; v3 uses `data-disabled`. Both
      idioms work without a wrapper component.
   7. **closeTrigger focus ring** rewritten from v3's `focusVisibleRing:
-     inside` to `outline: 2px solid var(--chakra-colors-utility-focus-default)`
+inside` to `outline: 2px solid var(--chakra-colors-utility-focus-default)`
      so the focus token matches Link/Button/IconButton.
   8. **Compound variant: subtle warning → `yellow.700` text** (legibility
      against pale-yellow `subtleBg`). Same override Badge needed; see

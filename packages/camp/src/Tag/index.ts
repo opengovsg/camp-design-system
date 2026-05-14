@@ -1,5 +1,5 @@
-import { Tag as ChakraTag } from '@chakra-ui/react'
 import type { TagCloseTriggerProps } from '@chakra-ui/react'
+import { Tag as ChakraTag } from '@chakra-ui/react'
 
 import type { TagColorPalette } from '~/theme/slotRecipes/tag.slotRecipe'
 
@@ -11,11 +11,11 @@ import type { TagColorPalette } from '~/theme/slotRecipes/tag.slotRecipe'
 export const Tag: typeof ChakraTag = { ...ChakraTag }
 
 export type {
-  TagRootProps,
-  TagLabelProps,
-  TagStartElementProps,
-  TagEndElementProps,
   TagCloseTriggerProps,
+  TagEndElementProps,
+  TagLabelProps,
+  TagRootProps,
+  TagStartElementProps,
 } from '@chakra-ui/react'
 
 export type { TagColorPalette }
