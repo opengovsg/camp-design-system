@@ -19,13 +19,6 @@ export const buttonRecipe = defineRecipe({
   base: {
     textStyle: 'subhead-1',
     whiteSpace: 'pre-wrap',
-    // Match v1's button glyph rendering. In v1 the browser UA stylesheet's
-    // reset on `<button>` meant buttons showed `font-feature-settings: normal`
-    // (no cv05 / no tnum) — visually, the lowercase `l` rendered without
-    // Inter's cv05 tail. v3's defaultConfig applies cv11 via `*`, and our
-    // own globalCss applies tnum/cv05 at the body level; both would inherit
-    // into the button. Explicitly reset to `normal` here to preserve v1 look.
-    fontFeatureSettings: 'normal',
     borderRadius: 'sm',
     borderWidth: '1px',
     borderStyle: 'solid',

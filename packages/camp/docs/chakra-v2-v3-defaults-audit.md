@@ -767,28 +767,24 @@ height: '1em' }` in each of our `size.*` variants so consumer-set
      (v3's `sm` = v2's `base` = 0.25rem). Similarly v2's `sm` (0.125rem) is
      now `xs`. See [§3 radii](#radii) for the full conversion table.
   9. **v3 globalCss `* { fontFeatureSettings: '"cv11"' }` defeats `body
-{ ... }` inheritance.** Caused `tnum`/`cv05` to not propagate to descendant
-     text. **Fix applied (final):** keep v1's `body` rule, plus `* {
-     fontFeatureSettings: 'inherit' }` to neutralize v3's cv11 and restore
-     CSS inheritance from body. **Earlier attempt with `globalCss['*']`
-     alone over-applied features to buttons** (broke #10).
+{ ... }` inheritance.** v1 set `body { fontFeatureSettings: 'tnum on,
+cv05 on' }` and relied on inheritance — but in v3 the universal cv11
+     rule explicitly resets every descendant, breaking inheritance. **Fix
+     applied:** `globalCss: { '*': { fontFeatureSettings: "'tnum' on, 'cv05'
+on" } }` — apply our features at the same universal scope so cv11 is
+     overridden everywhere.
 
-  10. **Form-element font reset.** v1 buttons rendered with
-      `font-feature-settings: normal` because the browser UA stylesheet
-      resets font properties on `<button>`/`<input>`/`<textarea>`/`<select>`
-      (UA defaults don't inherit body fonts on form elements). Visually this
-      meant Inter's cv05 character variant did NOT apply to button text —
-      the lowercase `l` rendered without its serif tail. In v3 with our
-      `globalCss` and v3's default `*` rule, features WOULD propagate into
-      buttons. **Fix applied:** explicitly set `fontFeatureSettings: 'normal'`
-      in the Button recipe base to mirror UA-default behaviour.
+     This is **intentionally broader than v1**: v1's `body` rule left
+     buttons/inputs/textareas at the browser UA default `normal` (no cv05
+     tail on `l`); v3 applies cv05/tnum to those form elements as well. The
+     design team confirmed this universal application is the desired
+     behaviour going forward.
 
-      **For follow-up specs:** every form-element recipe (`Input`, `Textarea`,
-      `NumberInput`, `Select`, `Checkbox` label, `Radio` label, `Switch`
-      label) needs to decide whether to inherit body's tnum/cv05 or reset to
-      `normal`. The v1 behaviour was reset; the design intent may differ
-      per-component (e.g. NumberInput may legitimately want `tnum` for
-      tabular digit alignment).
+     **For follow-up specs:** do **not** add per-recipe `fontFeatureSettings:
+'normal'` resets on form elements like `Input`, `Textarea`, `Select`,
+     `Checkbox`, `Radio`, `Switch`. The universal `globalCss` rule is
+     intentional, and form text should render with the same character
+     variants as the surrounding body text.
 
 ### Input
 
