@@ -1,12 +1,12 @@
-import { FC } from 'react'
-import { ChakraProvider, ChakraProviderProps } from '@chakra-ui/react'
+import { ReactNode } from 'react'
+import { ChakraProvider } from '@chakra-ui/react'
 
-import { theme } from './theme'
+import { system } from './system'
 
-/**
- * The global provider that must be added to make all components in this design
- * system work correctly
- */
-export const ThemeProvider: FC<ChakraProviderProps> = (props) => (
-  <ChakraProvider portalZIndex={40} theme={theme} {...props} />
+export interface ThemeProviderProps {
+  children?: ReactNode
+}
+
+export const ThemeProvider = ({ children }: ThemeProviderProps) => (
+  <ChakraProvider value={system}>{children}</ChakraProvider>
 )
