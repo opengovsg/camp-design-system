@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { Icon, IconProps, usePrefersReducedMotion } from '@chakra-ui/react'
+import { Icon, type IconProps, useMediaQuery } from '@chakra-ui/react'
 import { keyframes } from '@emotion/react'
 
 import { BxLoader } from '~/icons'
@@ -18,13 +18,16 @@ const spin = keyframes({
 export const SpinnerIcon = ({
   speed = '2.5s',
   ...props
-}: SpinnerIconProps): JSX.Element => {
-  const prefersReducedMotion = usePrefersReducedMotion()
+}: SpinnerIconProps) => {
+  const [prefersReducedMotion] = useMediaQuery([
+    '(prefers-reduced-motion: reduce)',
+  ])
 
   const animation = useMemo(
     () =>
       prefersReducedMotion ? undefined : `${spin} ${speed} linear infinite`,
     [prefersReducedMotion, speed],
   )
+
   return <Icon animation={animation} as={BxLoader} {...props} />
 }
