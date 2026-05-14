@@ -15,6 +15,12 @@ const palettes = {
     solidHover: { value: '{colors.interaction.main.hover}' },
     solidActive: { value: '{colors.interaction.main.active}' },
     fg: { value: '#FFFFFF' },
+    // `subtleBg` / `subtleFg` back the Avatar `subtle` variant (and any
+    // future recipe that wants a tinted brand background with brand-coloured
+    // text). v1 used `interaction.${c}-subtle.default` for the bg and the
+    // base-`.default` colour for the fg.
+    subtleBg: { value: '{colors.interaction.main-subtle.default}' },
+    subtleFg: { value: '{colors.interaction.main.default}' },
     outlineBorder: { value: '{colors.interaction.main.default}' },
     outlineHover: { value: '{colors.interaction.tinted.main.hover}' },
     outlineActive: { value: '{colors.interaction.tinted.main.active}' },
@@ -27,6 +33,8 @@ const palettes = {
     solidHover: { value: '{colors.interaction.sub.hover}' },
     solidActive: { value: '{colors.interaction.sub.active}' },
     fg: { value: '#FFFFFF' },
+    subtleBg: { value: '{colors.interaction.sub-subtle.default}' },
+    subtleFg: { value: '{colors.interaction.sub.default}' },
     outlineBorder: { value: '{colors.interaction.sub.default}' },
     outlineHover: { value: '{colors.interaction.tinted.sub.hover}' },
     outlineActive: { value: '{colors.interaction.tinted.sub.active}' },
@@ -39,6 +47,8 @@ const palettes = {
     solidHover: { value: '{colors.interaction.critical.hover}' },
     solidActive: { value: '{colors.interaction.critical.active}' },
     fg: { value: '#FFFFFF' },
+    subtleBg: { value: '{colors.interaction.critical-subtle.default}' },
+    subtleFg: { value: '{colors.interaction.critical.default}' },
     outlineBorder: { value: '{colors.interaction.critical.default}' },
     outlineHover: { value: '{colors.interaction.tinted.critical.hover}' },
     outlineActive: { value: '{colors.interaction.tinted.critical.active}' },
@@ -51,6 +61,8 @@ const palettes = {
     solidHover: { value: '{colors.interaction.warning.hover}' },
     solidActive: { value: '{colors.interaction.warning.active}' },
     fg: { value: '#1F1F1F' },
+    subtleBg: { value: '{colors.interaction.warning-subtle.default}' },
+    subtleFg: { value: '{colors.interaction.warning.default}' },
     outlineBorder: { value: '{colors.interaction.warning.default}' },
     outlineHover: { value: '{colors.interaction.warning.hover}' },
     outlineActive: { value: '{colors.interaction.warning.active}' },
@@ -63,6 +75,8 @@ const palettes = {
     solidHover: { value: '{colors.interaction.success.hover}' },
     solidActive: { value: '{colors.interaction.success.active}' },
     fg: { value: '#FFFFFF' },
+    subtleBg: { value: '{colors.interaction.success-subtle.default}' },
+    subtleFg: { value: '{colors.interaction.success.default}' },
     outlineBorder: { value: '{colors.interaction.success.default}' },
     outlineHover: { value: '{colors.interaction.success.hover}' },
     outlineActive: { value: '{colors.interaction.success.active}' },
