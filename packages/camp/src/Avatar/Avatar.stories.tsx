@@ -1,3 +1,4 @@
+import { Fragment } from 'react'
 import { SimpleGrid, Text } from '@chakra-ui/react'
 import { Meta, StoryFn } from '@storybook/react'
 
@@ -33,8 +34,7 @@ const SizesTemplate: StoryFn<AvatarRootProps> = (args) => {
       alignItems="center"
     >
       {(['2xs', 'xs', 'sm', 'md', 'lg', 'xl'] as const).map((size) => (
-        // eslint-disable-next-line react/jsx-key
-        <>
+        <Fragment key={size}>
           <Text>{size}</Text>
           <Avatar.Root {...args} size={size}>
             <Avatar.Fallback name="ABC" />
@@ -47,7 +47,7 @@ const SizesTemplate: StoryFn<AvatarRootProps> = (args) => {
               <BxsUser />
             </Avatar.Icon>
           </Avatar.Root>
-        </>
+        </Fragment>
       ))}
     </SimpleGrid>
   )
@@ -63,10 +63,13 @@ const ColoursTemplate: StoryFn<AvatarRootProps> = ({ variant, ...args }) => {
     >
       {(['main', 'sub', 'success', 'critical', 'warning'] as const).map(
         (colorPalette) => (
-          // eslint-disable-next-line react/jsx-key
-          <>
+          <Fragment key={colorPalette}>
             <Text>{colorPalette}</Text>
-            <Avatar.Root {...args} colorPalette={colorPalette} variant={variant}>
+            <Avatar.Root
+              {...args}
+              colorPalette={colorPalette}
+              variant={variant}
+            >
               <Avatar.Fallback name="ABC" />
             </Avatar.Root>
             <Avatar.Root
@@ -76,12 +79,16 @@ const ColoursTemplate: StoryFn<AvatarRootProps> = ({ variant, ...args }) => {
             >
               <Avatar.Fallback name="ABC" />
             </Avatar.Root>
-            <Avatar.Root {...args} colorPalette={colorPalette} variant={variant}>
+            <Avatar.Root
+              {...args}
+              colorPalette={colorPalette}
+              variant={variant}
+            >
               <Avatar.Icon>
                 <BxsUser />
               </Avatar.Icon>
             </Avatar.Root>
-          </>
+          </Fragment>
         ),
       )}
     </SimpleGrid>

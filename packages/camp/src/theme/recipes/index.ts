@@ -1,9 +1,9 @@
-export { badgeRecipe } from './badge.recipe'
 export type { BadgeColorPalette, ThemeBadgeColorScheme } from './badge.recipe'
-export { buttonRecipe } from './button.recipe'
+export { badgeRecipe } from './badge.recipe'
 export type {
   ButtonColorPalette,
   ThemeButtonColorScheme,
 } from './button.recipe'
-export { linkRecipe } from './link.recipe'
+export { buttonRecipe } from './button.recipe'
 export type { LinkColorPalette, ThemeLinkColorScheme } from './link.recipe'
+export { linkRecipe } from './link.recipe'
