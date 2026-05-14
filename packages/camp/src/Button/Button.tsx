@@ -1,19 +1,17 @@
+import { forwardRef } from 'react'
 import {
   Button as ChakraButton,
-  ButtonProps as ChakraButtonProps,
-  ComponentWithAs as _,
-  forwardRef,
-  IconProps,
-  ThemingProps,
+  type ButtonProps as ChakraButtonProps,
+  type IconProps,
 } from '@chakra-ui/react'
 
 import { Spinner } from '~/Spinner'
-import { ThemeButtonColorScheme } from '~/theme/components/Button'
+import type { ButtonColorPalette } from '~/theme/recipes/button.recipe'
 
-export interface ButtonProps extends ChakraButtonProps {
+export interface ButtonProps extends Omit<ChakraButtonProps, 'colorPalette'> {
   /**
    * Specifies whether the button is full-width.
-   * If so, set button width to 100%, height to auto and padding to 15px
+   * If so, set button width to 100%, height to auto, padding to 15px.
    */
   isFullWidth?: boolean
 
@@ -23,19 +21,22 @@ export interface ButtonProps extends ChakraButtonProps {
   spinnerFontSize?: IconProps['fontSize']
 
   /**
-   * Color scheme of button.
+   * Color palette of button.
    */
-  colorScheme?: ThemingProps<'Button'>['colorScheme'] | ThemeButtonColorScheme
+  colorPalette?: ChakraButtonProps['colorPalette'] | ButtonColorPalette
 }
 
-export const Button = forwardRef<ButtonProps, 'button'>(
-  ({ children, spinnerFontSize, isFullWidth, ...props }, ref) => {
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  (
+    { children, spinnerFontSize, isFullWidth, colorPalette = 'main', ...props },
+    ref,
+  ) => {
     return (
       <ChakraButton
         ref={ref}
+        colorPalette={colorPalette}
         spinner={<Spinner fontSize={spinnerFontSize ?? '1.5rem'} />}
         {...props}
-        // 15px due to 1px border
         {...(isFullWidth ? { w: '100%', p: '15px', h: 'auto' } : {})}
       >
         {children}
