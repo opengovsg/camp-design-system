@@ -48,16 +48,16 @@ export const system = createSystem(defaultConfig, config)
 `createSystem` deep-merges `defaultConfig` and `config` in order. The relevant
 merge semantics:
 
-| Layer            | Behaviour                                                                                                                                                                                                                                                                                                          |
-| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `tokens.<cat>`   | Per-category replacement is the default; the key-by-key merge has known edge cases. **TODO verify.** Empirically, when you set `theme.tokens.durations` with one entry, v3's `defaultConfig` durations stay present unless our values shadow them. See [Open verification questions](#9-open-verification-questions). |
-| `semanticTokens` | Deep-merge by key path. Our keys win; sibling keys from `defaultConfig` remain.                                                                                                                                                                                                                                    |
-| `recipes.<x>`    | When `recipes.button` is set in our config, **Chakra merges it property-by-property in `base`, and variant-by-variant in `variants`**. Our recipe does NOT replace v3's default button recipe; it composes on top. This is the source of most regressions.                                                          |
-| `slotRecipes.<x>` | Same: deep-merge by slot/variant.                                                                                                                                                                                                                                                                                  |
-| `layerStyles`    | Deep-merge by key. v3 defaults (`fill.solid`, `outline.solid`, `disabled`, ...) remain available.                                                                                                                                                                                                                  |
-| `textStyles`     | Deep-merge by key. v3 ships only one default — `xs/sm/md/lg/xl/...` derived from `fontSizes` — but our `textStyles.subhead-1`, `body-1`, etc. supplement them.                                                                                                                                                     |
-| `globalCss`      | Merge-by-selector at the top level. If our config has a selector v3 also has (e.g. `*`), the rules are merged property-by-property — our values win on a conflict.                                                                                                                                                  |
-| `breakpoints`    | Replaced wholesale by our object. (We override; defaults dropped.)                                                                                                                                                                                                                                                 |
+| Layer             | Behaviour                                                                                                                                                                                                                                                                                                             |
+| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `tokens.<cat>`    | Per-category replacement is the default; the key-by-key merge has known edge cases. **TODO verify.** Empirically, when you set `theme.tokens.durations` with one entry, v3's `defaultConfig` durations stay present unless our values shadow them. See [Open verification questions](#9-open-verification-questions). |
+| `semanticTokens`  | Deep-merge by key path. Our keys win; sibling keys from `defaultConfig` remain.                                                                                                                                                                                                                                       |
+| `recipes.<x>`     | When `recipes.button` is set in our config, **Chakra merges it property-by-property in `base`, and variant-by-variant in `variants`**. Our recipe does NOT replace v3's default button recipe; it composes on top. This is the source of most regressions.                                                            |
+| `slotRecipes.<x>` | Same: deep-merge by slot/variant.                                                                                                                                                                                                                                                                                     |
+| `layerStyles`     | Deep-merge by key. v3 defaults (`fill.solid`, `outline.solid`, `disabled`, ...) remain available.                                                                                                                                                                                                                     |
+| `textStyles`      | Deep-merge by key. v3 ships only one default — `xs/sm/md/lg/xl/...` derived from `fontSizes` — but our `textStyles.subhead-1`, `body-1`, etc. supplement them.                                                                                                                                                        |
+| `globalCss`       | Merge-by-selector at the top level. If our config has a selector v3 also has (e.g. `*`), the rules are merged property-by-property — our values win on a conflict.                                                                                                                                                    |
+| `breakpoints`     | Replaced wholesale by our object. (We override; defaults dropped.)                                                                                                                                                                                                                                                    |
 
 ### The recipe merge trap
 
@@ -116,12 +116,12 @@ Quick reference: our overrides live in `packages/camp/src/theme/tokens/*.ts`
 
 **Drift highlights:**
 
-| Concern | Detail |
-| --- | --- |
-| Shadowed scales | `blue`, `red`, `green`, `yellow` shadow v3 defaults. Any v3 default recipe that references `colorPalette.<n>` with one of these as `colorPalette` will pick up our hexes — usually desirable. Stops 50–900 are present in our override but **stop 950 is missing**, so `red.950` resolves to v3's value (`#1f0808`), not a brand colour. |
-| `gray` vs `grey` | v3 ships `gray`. We ship `grey`. v3 default recipes reference `colorPalette: 'gray'` (the global fallback — see `globalCss.html.colorPalette: 'gray'`), so `gray` is in effect for unspecified consumers, with v3's hex values. |
-| Missing palettes from our side | We do not ship `teal`, `orange`, `purple`, `pink`, `cyan`, or any `*Alpha`. v3 defaults are in effect. |
-| Brand palette names | `main`, `sub`, `critical`, `warning`, `success`, `neutral`, `inverse` exist **only as semantic-token slots** (see [Section 4](#4-semantic-tokens-drift)). They are NOT registered as raw color scales, so `colors.main.500` etc. do not resolve. |
+| Concern                        | Detail                                                                                                                                                                                                                                                                                                                                   |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Shadowed scales                | `blue`, `red`, `green`, `yellow` shadow v3 defaults. Any v3 default recipe that references `colorPalette.<n>` with one of these as `colorPalette` will pick up our hexes — usually desirable. Stops 50–900 are present in our override but **stop 950 is missing**, so `red.950` resolves to v3's value (`#1f0808`), not a brand colour. |
+| `gray` vs `grey`               | v3 ships `gray`. We ship `grey`. v3 default recipes reference `colorPalette: 'gray'` (the global fallback — see `globalCss.html.colorPalette: 'gray'`), so `gray` is in effect for unspecified consumers, with v3's hex values.                                                                                                          |
+| Missing palettes from our side | We do not ship `teal`, `orange`, `purple`, `pink`, `cyan`, or any `*Alpha`. v3 defaults are in effect.                                                                                                                                                                                                                                   |
+| Brand palette names            | `main`, `sub`, `critical`, `warning`, `success`, `neutral`, `inverse` exist **only as semantic-token slots** (see [Section 4](#4-semantic-tokens-drift)). They are NOT registered as raw color scales, so `colors.main.500` etc. do not resolve.                                                                                         |
 
 ### radii
 
@@ -130,30 +130,30 @@ This was [regression #1](#1-overview). We do not override radii at all, so
 
 - **v3 default:** `node_modules/@chakra-ui/react/dist/esm/theme/tokens/radius.js`.
 
-| v3 key | v3 value | v2 closest equivalent |
-| --- | --- | --- |
-| `none` | `0` | `none` |
-| `2xs` | `0.0625rem` | (new) |
-| `xs` | `0.125rem` (2px) | `sm` |
-| `sm` | `0.25rem` (4px) | `base` ← **removed** |
-| `md` | `0.375rem` (6px) | `md` |
-| `lg` | `0.5rem` (8px) | `lg` |
-| `xl` | `0.75rem` (12px) | `xl` |
-| `2xl` | `1rem` | `2xl` |
-| `3xl` | `1.5rem` | `3xl` |
-| `4xl` | `2rem` | (new) |
-| `full` | `9999px` | `full` |
+| v3 key | v3 value         | v2 closest equivalent |
+| ------ | ---------------- | --------------------- |
+| `none` | `0`              | `none`                |
+| `2xs`  | `0.0625rem`      | (new)                 |
+| `xs`   | `0.125rem` (2px) | `sm`                  |
+| `sm`   | `0.25rem` (4px)  | `base` ← **removed**  |
+| `md`   | `0.375rem` (6px) | `md`                  |
+| `lg`   | `0.5rem` (8px)   | `lg`                  |
+| `xl`   | `0.75rem` (12px) | `xl`                  |
+| `2xl`  | `1rem`           | `2xl`                 |
+| `3xl`  | `1.5rem`         | `3xl`                 |
+| `4xl`  | `2rem`           | (new)                 |
+| `full` | `9999px`         | `full`                |
 
 **v2 → v3 conversion table** (what every spec author must internalise):
 
-| v2 you used | v3 you write |
-| --- | --- |
-| `borderRadius: 'base'` (4px) | `borderRadius: 'sm'` |
-| `borderRadius: 'sm'` (2px) | `borderRadius: 'xs'` |
-| `borderRadius: 'md'` (6px) | `borderRadius: 'md'` (no change) |
-| `borderRadius: 'lg'` (8px) | `borderRadius: 'lg'` (no change) |
-| `borderRadius: 'xl'` (12px) | `borderRadius: 'xl'` (no change) |
-| `borderRadius: 'full'` | `borderRadius: 'full'` (no change) |
+| v2 you used                  | v3 you write                       |
+| ---------------------------- | ---------------------------------- |
+| `borderRadius: 'base'` (4px) | `borderRadius: 'sm'`               |
+| `borderRadius: 'sm'` (2px)   | `borderRadius: 'xs'`               |
+| `borderRadius: 'md'` (6px)   | `borderRadius: 'md'` (no change)   |
+| `borderRadius: 'lg'` (8px)   | `borderRadius: 'lg'` (no change)   |
+| `borderRadius: 'xl'` (12px)  | `borderRadius: 'xl'` (no change)   |
+| `borderRadius: 'full'`       | `borderRadius: 'full'` (no change) |
 
 v3 also adds **semantic** radii: `l1 → {radii.xs}`, `l2 → {radii.sm}`,
 `l3 → {radii.md}`. Most v3 default recipes reference these (`borderRadius: 'l2'`,
@@ -163,7 +163,7 @@ etc.) — see `node_modules/@chakra-ui/react/dist/esm/theme/semantic-tokens/radi
 
 - **v3 default:** `node_modules/@chakra-ui/react/dist/esm/theme/tokens/spacing.js`.
   Keys `0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 6, 7, 8, 9, 10, 11, 12, 14, 16,
-  20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64, 72, 80, 96` (4-based rem ramp).
+20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64, 72, 80, 96` (4-based rem ramp).
 - **Our override:** `packages/camp/src/theme/tokens/spacing.ts`. Keys
   `1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14` with rem values matching v3
   for `1..12` but diverging at `13` (`3.5rem`, v3 has no `13`) and `14`
@@ -211,12 +211,12 @@ etc.) — see `node_modules/@chakra-ui/react/dist/esm/theme/semantic-tokens/radi
   [Section 4](#4-semantic-tokens-drift)).
 - **Our override:** `packages/camp/src/theme/tokens/shadows.ts`. Just two keys:
   `sm: '0px 0px 10px 0px rgba(191, 191, 191, 0.5)'` and `md: '0px 0px 20px 0px
-  rgba(104, 104, 104, 0.3)'`.
+rgba(104, 104, 104, 0.3)'`.
 
 **Drift highlights:**
 
 - v3 ships semantic shadow tokens (see Section 4): `xs, sm, md, lg, xl, 2xl,
-  inner, inset`, each with `_light` and `_dark` values. Our override defines
+inner, inset`, each with `_light` and `_dark` values. Our override defines
   raw `shadows.sm` and `shadows.md`. **Open question:** when a v3 recipe
   references `shadow: 'md'`, does it resolve to our raw `shadows.md` (since
   the raw token is defined and presumably ranks higher than the semantic
@@ -233,24 +233,24 @@ etc.) — see `node_modules/@chakra-ui/react/dist/esm/theme/semantic-tokens/radi
 - **Our override:** `packages/camp/src/theme/tokens/fontSizes.ts`. Keys
   `2xs..11xl` (we extend past v3's range).
 
-| Key | v3 | Ours |
-| --- | --- | --- |
-| `2xs` | 0.625rem | 0.625rem |
-| `xs` | 0.75rem | 0.75rem |
-| `sm` | 0.875rem | 0.875rem |
-| `md` | 1rem | 1rem |
-| `lg` | 1.125rem | 1.125rem |
-| `xl` | 1.25rem | 1.25rem |
-| `2xl` | 1.5rem | 1.5rem |
-| `3xl` | 1.875rem | **1.75rem** |
-| `4xl` | 2.25rem | **2rem** |
-| `5xl` | 3rem | **2.25rem** |
-| `6xl` | 3.75rem | **2.5rem** |
-| `7xl` | 4.5rem | **2.75rem** |
-| `8xl` | 6rem | **3rem** |
-| `9xl` | 8rem | **3.5rem** |
-| `10xl` | — | 4rem |
-| `11xl` | — | 4.5rem |
+| Key    | v3       | Ours        |
+| ------ | -------- | ----------- |
+| `2xs`  | 0.625rem | 0.625rem    |
+| `xs`   | 0.75rem  | 0.75rem     |
+| `sm`   | 0.875rem | 0.875rem    |
+| `md`   | 1rem     | 1rem        |
+| `lg`   | 1.125rem | 1.125rem    |
+| `xl`   | 1.25rem  | 1.25rem     |
+| `2xl`  | 1.5rem   | 1.5rem      |
+| `3xl`  | 1.875rem | **1.75rem** |
+| `4xl`  | 2.25rem  | **2rem**    |
+| `5xl`  | 3rem     | **2.25rem** |
+| `6xl`  | 3.75rem  | **2.5rem**  |
+| `7xl`  | 4.5rem   | **2.75rem** |
+| `8xl`  | 6rem     | **3rem**    |
+| `9xl`  | 8rem     | **3.5rem**  |
+| `10xl` | —        | 4rem        |
+| `11xl` | —        | 4.5rem      |
 
 **Drift highlight:** v3's default `Heading` recipe maps `size="2xl"` →
 `textStyle: '2xl'` (which resolves to `fontSize: '2xl'`). v3 default
@@ -261,7 +261,7 @@ who re-use v3 `Heading`** will see our reduced 3xl–9xl values, not v3's.
 ### fontWeights
 
 - **v3 default:** `thin, extralight, light, normal, medium, semibold, bold,
-  extrabold, black`.
+extrabold, black`.
 - **Our override:** `light, normal, medium, semibold, bold` (we omit `thin`,
   `extralight`, `extrabold`, `black`).
 
@@ -273,7 +273,7 @@ verify.**
 ### lineHeights
 
 - **v3 default:** named `shorter (1.25), short (1.375), moderate (1.5), tall
-  (1.625), taller (2)`. **Only five keys, all unitless.**
+(1.625), taller (2)`. **Only five keys, all unitless.**
 - **Our override:** numeric `'3'..'18'` (mapped to `0.75rem..4.5rem`). **No
   named keys at all.**
 
@@ -293,9 +293,9 @@ verify.**
 ### letterSpacings
 
 - **v3 default:** `tighter (-0.05em), tight (-0.025em), wide (0.025em), wider
-  (0.05em), widest (0.1em)`.
+(0.05em), widest (0.1em)`.
 - **Our override:** `'1' (-0.006em), '2' (-0.014em), '3' (-0.019em), '4'
-  (-0.022em), wide (0.080em), normal (0)`.
+(-0.022em), wide (0.080em), normal (0)`.
 
 **Drift highlights:**
 
@@ -324,9 +324,9 @@ rename our token to `mono`, or override `fontFamily: 'code'` per recipe.
 ### durations
 
 - **v3 default:** `fastest (50ms), faster (100ms), fast (150ms), moderate
-  (200ms), slow (300ms), slower (400ms), slowest (500ms)`.
+(200ms), slow (300ms), slower (400ms), slowest (500ms)`.
 - **Our override:** `'ultra-fast' (50ms), faster (100ms), fast (150ms), normal
-  (200ms), slow (300ms), slower (400ms), 'ultra-slow' (500ms)`.
+(200ms), slow (300ms), slower (400ms), 'ultra-slow' (500ms)`.
 
 Different key names for the extremes (`ultra-fast` vs `fastest`, `normal` vs
 `moderate`, `ultra-slow` vs `slowest`), same values; middle four keys (`faster,
@@ -343,8 +343,8 @@ add `moderate, fastest, slowest` aliases to our durations.
 ### easings
 
 - **v3 default:** `'ease-in' (cubic-bezier(0.42, 0, 1, 1))`, `'ease-out'
-  (cubic-bezier(0, 0, 0.58, 1))`, `'ease-in-out' (cubic-bezier(0.42, 0, 0.58,
-  1))`, `'ease-in-smooth' (cubic-bezier(0.32, 0.72, 0, 1))`.
+(cubic-bezier(0, 0, 0.58, 1))`, `'ease-in-out' (cubic-bezier(0.42, 0, 0.58,
+1))`, `'ease-in-smooth' (cubic-bezier(0.32, 0.72, 0, 1))`.
 - **Our override:** `'ease-in' (0.4, 0, 1, 1)`, `'ease-out' (0, 0, 0.2, 1)`,
   `'ease-in-out' (0.4, 0, 0.2, 1)`. **No `ease-in-smooth`.**
 
@@ -357,7 +357,7 @@ animation falls back to browser default. **TODO verify.**
 ### borders
 
 - **v3 default:** `xs (0.5px solid)`, `sm (1px solid)`, `md (2px solid)`, `lg
-  (4px solid)`, `xl (8px solid)`.
+(4px solid)`, `xl (8px solid)`.
 - **Our override:** _none_. v3 defaults in effect.
 
 **Drift:** None on our side. But [regression #2](#1-overview) showed that the
@@ -378,7 +378,7 @@ explicit.
 ### aspect-ratios
 
 - **v3 default:** `square (1/1), landscape (4/3), portrait (3/4), wide (16/9),
-  ultrawide (18/5), golden (1.618/1)`.
+ultrawide (18/5), golden (1.618/1)`.
 - **Our override:** _none_. New surface area exposed to consumers.
 
 ### blurs
@@ -389,8 +389,8 @@ explicit.
 ### cursor
 
 - **v3 default:** `button (pointer), checkbox (default), disabled (not-allowed),
-  menuitem (default), option (default), radio (default), slider (default),
-  switch (pointer)`.
+menuitem (default), option (default), radio (default), slider (default),
+switch (pointer)`.
 - **Our override:** _none_.
 
 **Drift:** v3 default recipes reference `cursor: 'button'` (Button base),
@@ -409,8 +409,8 @@ explicit.
 ### z-indices
 
 - **v3 default:** `hide(-1), base(0), docked(10), dropdown(1000), sticky(1100),
-  banner(1200), overlay(1300), modal(1400), popover(1500), skipNav(1600),
-  toast(1700), tooltip(1800), max(2147483647)`.
+banner(1200), overlay(1300), modal(1400), popover(1500), skipNav(1600),
+toast(1700), tooltip(1800), max(2147483647)`.
 - **Our override:** _none_.
 
 **Drift:** v3 default recipes reference `zIndex: 'popover'`, `zIndex: 'tooltip'`,
@@ -450,6 +450,7 @@ passed as `colorPalette`).
 `packages/camp/src/theme/semanticTokens/colors.ts`. Two sections:
 
 1. **Legacy v1-era `chakra-body-*` tokens** (light mode only):
+
    - `chakra-body-text` → `{colors.base.content.default}`
    - `chakra-body-bg` → `{colors.base.canvas.default}`
    - `chakra-border-color` → `{colors.base.divider.medium}`
@@ -458,6 +459,7 @@ passed as `colorPalette`).
    `main, sub, critical, warning, success, neutral, inverse`.
 
    Each defines a subset of:
+
    - `solid, solidHover, solidActive`
    - `fg` (precomputed for contrast)
    - `outlineBorder, outlineHover, outlineActive`
@@ -499,10 +501,10 @@ This means:
 
 `node_modules/@chakra-ui/react/dist/esm/theme/semantic-tokens/radii.js`:
 
-| Key | Resolves to |
-| --- | --- |
+| Key  | Resolves to             |
+| ---- | ----------------------- |
 | `l1` | `{radii.xs}` (0.125rem) |
-| `l2` | `{radii.sm}` (0.25rem) |
+| `l2` | `{radii.sm}` (0.25rem)  |
 | `l3` | `{radii.md}` (0.375rem) |
 
 v3 default recipes use `borderRadius: 'l1'`/`'l2'`/`'l3'` heavily. Examples:
@@ -522,16 +524,16 @@ v1 visual identity (4px) — equivalent to `l2`.
 
 `node_modules/@chakra-ui/react/dist/esm/theme/semantic-tokens/shadows.js`:
 
-| Key | Light value (truncated) | Dark value |
-| --- | --- | --- |
-| `xs` | `0px 1px 2px {gray.900/10}, 0px 0px 1px {gray.900/20}` | dark equivalent |
-| `sm` | `0px 2px 4px {gray.900/10}, …` | … |
-| `md` | `0px 4px 8px {gray.900/10}, …` | … |
-| `lg` | `0px 8px 16px {gray.900/10}, …` | … |
-| `xl` | `0px 16px 24px {gray.900/10}, …` | … |
-| `2xl` | `0px 24px 40px {gray.900/16}, …` | … |
-| `inner` | `inset 0 2px 4px 0 {black/5}` | `inset 0 2px 4px 0 black` |
-| `inset` | `inset 0 0 0 1px {black/5}` | `inset 0 0 0 1px {gray.300/5}` |
+| Key     | Light value (truncated)                                | Dark value                     |
+| ------- | ------------------------------------------------------ | ------------------------------ |
+| `xs`    | `0px 1px 2px {gray.900/10}, 0px 0px 1px {gray.900/20}` | dark equivalent                |
+| `sm`    | `0px 2px 4px {gray.900/10}, …`                         | …                              |
+| `md`    | `0px 4px 8px {gray.900/10}, …`                         | …                              |
+| `lg`    | `0px 8px 16px {gray.900/10}, …`                        | …                              |
+| `xl`    | `0px 16px 24px {gray.900/10}, …`                       | …                              |
+| `2xl`   | `0px 24px 40px {gray.900/16}, …`                       | …                              |
+| `inner` | `inset 0 2px 4px 0 {black/5}`                          | `inset 0 2px 4px 0 black`      |
+| `inset` | `inset 0 0 0 1px {black/5}`                            | `inset 0 0 0 1px {gray.300/5}` |
 
 These are **semantic** — they reference `gray.900`, `black`, etc. and adapt to
 `_light`/`_dark`. Since we override raw `shadows.sm` and `shadows.md` in
@@ -618,7 +620,9 @@ ancestor sets it.
 ### `*::placeholder, *[data-placeholder]`
 
 ```js
-{ color: 'fg.muted/80' }
+{
+  color: 'fg.muted/80'
+}
 ```
 
 This sets input placeholder colour globally to a slightly transparent fg.muted.
@@ -629,7 +633,9 @@ re-define placeholder colour unless they need to deviate.
 ### `*::selection`
 
 ```js
-{ bg: 'colorPalette.emphasized/80' }
+{
+  bg: 'colorPalette.emphasized/80'
+}
 ```
 
 Text selection colour follows the ambient `colorPalette`. With the default
@@ -644,26 +650,26 @@ opacity.
 
 `node_modules/@chakra-ui/react/dist/esm/theme/layer-styles.js`:
 
-| Key | Value (summary) |
-| --- | --- |
-| `fill.muted` | `{ bg: colorPalette.muted, color: colorPalette.fg }` |
-| `fill.subtle` | `{ bg: colorPalette.subtle, color: colorPalette.fg }` |
-| `fill.surface` | subtle + 1px shadow ring at `colorPalette.muted` |
-| `fill.solid` | `{ bg: colorPalette.solid, color: colorPalette.contrast }` |
-| `outline.subtle` | inset 1px shadow + `colorPalette.fg` text |
-| `outline.solid` | 1px border at `colorPalette.solid` + `colorPalette.fg` text |
-| `indicator.bottom` | `::before` pseudo with `--indicator-color-fallback: colors.colorPalette.solid` |
-| `indicator.top`/`start`/`end` | same idea, different position |
-| `disabled` | **`{ opacity: '0.5', cursor: 'not-allowed' }`** ← used by many default recipes |
-| `none` | `{}` |
+| Key                           | Value (summary)                                                                |
+| ----------------------------- | ------------------------------------------------------------------------------ |
+| `fill.muted`                  | `{ bg: colorPalette.muted, color: colorPalette.fg }`                           |
+| `fill.subtle`                 | `{ bg: colorPalette.subtle, color: colorPalette.fg }`                          |
+| `fill.surface`                | subtle + 1px shadow ring at `colorPalette.muted`                               |
+| `fill.solid`                  | `{ bg: colorPalette.solid, color: colorPalette.contrast }`                     |
+| `outline.subtle`              | inset 1px shadow + `colorPalette.fg` text                                      |
+| `outline.solid`               | 1px border at `colorPalette.solid` + `colorPalette.fg` text                    |
+| `indicator.bottom`            | `::before` pseudo with `--indicator-color-fallback: colors.colorPalette.solid` |
+| `indicator.top`/`start`/`end` | same idea, different position                                                  |
+| `disabled`                    | **`{ opacity: '0.5', cursor: 'not-allowed' }`** ← used by many default recipes |
+| `none`                        | `{}`                                                                           |
 
 ### Our layerStyles
 
 `packages/camp/src/theme/layerStyles.ts`:
 
 - `focusRing-default` → `_focusVisible: { boxShadow: 'none !important', outline:
-  '2px solid var(--chakra-colors-utility-focus-default)', outlineOffset:
-  '0.125rem' }`
+'2px solid var(--chakra-colors-utility-focus-default)', outlineOffset:
+'0.125rem' }`
 - `focusRing-inverse` → same with `--chakra-colors-utility-focus-inverse`.
 
 v3 defaults remain available (deep merge).
@@ -715,11 +721,11 @@ Only components we have a v1 equivalent for are listed.
 
 - **v3 source:** `node_modules/@chakra-ui/react/dist/esm/theme/recipes/button.js`
 - **v3 base:** `display: inline-flex; alignItems: center; justifyContent:
-  center; userSelect: none; position: relative; borderRadius: l2; whiteSpace:
-  nowrap; borderWidth: 1px; borderColor: transparent; cursor: button; outline:
-  0; lineHeight: 1.2; fontWeight: medium; transitionProperty: common;
-  transitionDuration: moderate; focusVisibleRing: outside; _disabled: {
-  layerStyle: 'disabled' }; _icon: { flexShrink: 0 }`
+center; userSelect: none; position: relative; borderRadius: l2; whiteSpace:
+nowrap; borderWidth: 1px; borderColor: transparent; cursor: button; outline:
+0; lineHeight: 1.2; fontWeight: medium; transitionProperty: common;
+transitionDuration: moderate; focusVisibleRing: outside; _disabled: {
+layerStyle: 'disabled' }; _icon: { flexShrink: 0 }`
 - **v3 variants:** `solid (default), subtle, surface, outline, ghost, plain`.
   Each uses `colorPalette.{solid|subtle|muted|fg|contrast|border}` slots.
 - **v3 sizes:** `2xs, xs, sm, md (default), lg, xl, 2xl`.
@@ -733,16 +739,16 @@ Only components we have a v1 equivalent for are listed.
   3. `focusVisibleRing: 'outside'` → references the ring CSS variables from
      `globalCss.*`.
   4. Default `lineHeight: '1.2'` (literal) may conflict with our `textStyle:
-     'subhead-1'` line-height. **TODO verify** which wins — see [Section 8
+'subhead-1'` line-height. **TODO verify** which wins — see [Section 8
      pitfall #6](#8-common-patterns-and-pitfalls).
 
 ### Input
 
 - **v3 source:** `node_modules/@chakra-ui/react/dist/esm/theme/recipes/input.js`
 - **v3 base:** `width: 100%; outline: 0; borderRadius: l2; height:
-  var(--input-height); _disabled: { layerStyle: 'disabled' }; --focus-color:
-  colors.colorPalette.focusRing; --error-color: colors.border.error; _invalid:
-  { focusRingColor: var(--error-color), borderColor: var(--error-color) }`
+var(--input-height); _disabled: { layerStyle: 'disabled' }; --focus-color:
+colors.colorPalette.focusRing; --error-color: colors.border.error; _invalid:
+{ focusRingColor: var(--error-color), borderColor: var(--error-color) }`
 - **v3 variants:** `outline (default), subtle, flushed`.
 - **v3 sizes:** `2xs..2xl` (default `md`, height = sizes.10 = 2.5rem).
 - **v3 defaultVariants:** `{ size: 'md', variant: 'outline' }`.
@@ -766,7 +772,7 @@ Only components we have a v1 equivalent for are listed.
 
 - **v3 source:** `node_modules/@chakra-ui/react/dist/esm/theme/recipes/number-input.js`
 - Slot recipe. v3 ships slots `root, control, incrementTrigger,
-  decrementTrigger, scrubber, input, label, valueText`. Inherits Input behavior.
+decrementTrigger, scrubber, input, label, valueText`. Inherits Input behavior.
 
 ### Select / NativeSelect
 
@@ -782,9 +788,9 @@ Only components we have a v1 equivalent for are listed.
   (slot recipe). The `control` slot inherits from `checkmarkRecipe.base`
   (`recipes/checkmark.js`).
 - **v3 base.root:** `display: inline-flex; gap: 2; alignItems: center;
-  position: relative`.
+position: relative`.
 - **v3 base.label:** `fontWeight: medium; userSelect: none; _disabled: {
-  opacity: 0.5 }`.
+opacity: 0.5 }`.
 - **v3 sizes:** `xs, sm, md (default), lg`.
 - **v3 variants:** `outline, solid (default), subtle`.
 - **v1 component:** `Checkbox.ts`.
@@ -800,7 +806,7 @@ Only components we have a v1 equivalent for are listed.
 - **v3 source:** `node_modules/@chakra-ui/react/dist/esm/theme/recipes/radio-group.js`
   (slot recipe). Control inherits from `radiomarkRecipe`.
 - Same shape as Checkbox: `xs, sm, md (default), lg` sizes and `outline,
-  subtle, solid (default)` variants.
+subtle, solid (default)` variants.
 - **v1 component:** `Radio.ts`.
 
 ### Switch
@@ -808,8 +814,8 @@ Only components we have a v1 equivalent for are listed.
 - **v3 source:** `node_modules/@chakra-ui/react/dist/esm/theme/recipes/switch.js`
   (slot recipe).
 - **v3 base.control:** `cursor: switch; borderRadius: full; _disabled: {
-  opacity: 0.5, cursor: not-allowed }; _invalid: { outline: 2px solid;
-  outlineColor: border.error; outlineOffset: 2px }`.
+opacity: 0.5, cursor: not-allowed }; _invalid: { outline: 2px solid;
+outlineColor: border.error; outlineOffset: 2px }`.
 - **v3 sizes:** referenced via `--switch-width` and `--switch-height` CSS
   custom properties.
 - **v1 component:** `Switch.ts`.
@@ -822,8 +828,8 @@ Only components we have a v1 equivalent for are listed.
   (slot recipe).
 - **v3 slots:** `root, label, helperText, errorText, requiredIndicator`.
 - **v3 base.label:** `display: flex; alignItems: center; textAlign: start;
-  textStyle: sm; fontWeight: medium; gap: 1; userSelect: none; _disabled: {
-  opacity: 0.5 }`.
+textStyle: sm; fontWeight: medium; gap: 1; userSelect: none; _disabled: {
+opacity: 0.5 }`.
 - **v3 base.errorText:** `color: fg.error; textStyle: xs`.
 - **v3 base.helperText:** `color: fg.muted; textStyle: xs`.
 - **v3 defaultVariants:** `{ orientation: 'vertical' }`.
@@ -838,9 +844,9 @@ Only components we have a v1 equivalent for are listed.
   (slot recipe).
 - **v3 slots:** `root, label, closeTrigger, startElement, endElement`.
 - **v3 base.root:** `display: inline-flex; alignItems: center; borderRadius:
-  l2; focusVisibleRing: outside`.
+l2; focusVisibleRing: outside`.
 - **v3 variants:** delegate to `badgeRecipe.variants?.variant` — `subtle,
-  solid, outline, surface`.
+solid, outline, surface`.
 - **v3 sizes:** `sm, md (default), lg, xl`.
 - **v3 defaultVariants:** `{ size: 'md', variant: 'surface' }`.
 - **v1 component:** `Tag.ts`, `TagInput.ts`.
@@ -855,8 +861,8 @@ Only components we have a v1 equivalent for are listed.
 
 - **v3 source:** `node_modules/@chakra-ui/react/dist/esm/theme/recipes/badge.js`
 - **v3 base:** `display: inline-flex; alignItems: center; borderRadius: l2;
-  gap: 1; fontWeight: medium; fontVariantNumeric: tabular-nums; whiteSpace:
-  nowrap; userSelect: none`.
+gap: 1; fontWeight: medium; fontVariantNumeric: tabular-nums; whiteSpace:
+nowrap; userSelect: none`.
 - **v3 variants:** `solid, subtle (default), outline, surface, plain`.
 - **v3 sizes:** `xs, sm (default), md, lg`.
 - **v1 component:** `Badge.ts`.
@@ -865,11 +871,11 @@ Only components we have a v1 equivalent for are listed.
 
 - **v3 source:** `node_modules/@chakra-ui/react/dist/esm/theme/recipes/spinner.js`
 - **v3 base:** `display: inline-block; borderColor: currentColor; borderStyle:
-  solid; borderWidth: 2px; borderRadius: full; width: var(--spinner-size);
-  height: var(--spinner-size); animation: spin; animationDuration: slowest;
-  --spinner-track-color: transparent; borderBottomColor:
-  var(--spinner-track-color); borderInlineStartColor:
-  var(--spinner-track-color)`.
+solid; borderWidth: 2px; borderRadius: full; width: var(--spinner-size);
+height: var(--spinner-size); animation: spin; animationDuration: slowest;
+--spinner-track-color: transparent; borderBottomColor:
+var(--spinner-track-color); borderInlineStartColor:
+var(--spinner-track-color)`.
 - **v3 sizes:** `inherit (1em), xs, sm, md (default), lg, xl`.
 - **v1 component:** `packages/camp/src/Spinner` (already in v3).
 - **Pitfall:** `animationDuration: 'slowest'` references duration token
@@ -890,31 +896,31 @@ Only components we have a v1 equivalent for are listed.
 - **v3 source:** `node_modules/@chakra-ui/react/dist/esm/theme/recipes/tabs.js`
 - Slot recipe with slots `root, list, trigger, content, indicator`.
 - **v3 base.root:** `--tabs-trigger-radius: radii.l2; --tabs-indicator-shadow:
-  shadows.xs; --tabs-indicator-bg: colors.bg`.
+shadows.xs; --tabs-indicator-bg: colors.bg`.
 - **v3 base.trigger:** `fontWeight: medium; cursor: button; gap: 2;
-  _focusVisible: { outline: 2px solid; outlineColor: colorPalette.focusRing };
-  _disabled: { cursor: not-allowed; opacity: 0.5 }`.
+_focusVisible: { outline: 2px solid; outlineColor: colorPalette.focusRing };
+_disabled: { cursor: not-allowed; opacity: 0.5 }`.
 - **v3 variants:** `fitted, justify, orientation, variant (line, subtle,
-  enclosed, outline, plain)`, sizes.
+enclosed, outline, plain)`, sizes.
 - **v1 component:** `Tabs.ts`.
 - **Pitfalls:**
   1. `colorPalette.focusRing` slot — undefined on our brand palettes; the
      focus ring renders as the CSS variable name (invalid).
   2. Tabs are the only component (along with Switch) that has a `--*-bg:
-     colors.bg` token that resolves through the `bg` semantic color, which our
+colors.bg` token that resolves through the `bg` semantic color, which our
      overrides don't define directly.
 
 ### Menu
 
 - **v3 source:** `node_modules/@chakra-ui/react/dist/esm/theme/recipes/menu.js`
 - Slot recipe with slots `content, item, itemText, itemIndicator,
-  itemGroupLabel, indicator, itemCommand, separator`.
+itemGroupLabel, indicator, itemCommand, separator`.
 - **v3 base.content:** `bg: var(--menu-bg) where --menu-bg: colors.bg.panel;
-  boxShadow: lg; color: fg; borderRadius: l2; _open: { animationStyle:
-  slide-fade-in; animationDuration: fast }; _closed: { animationStyle:
-  slide-fade-out; animationDuration: faster }`.
+boxShadow: lg; color: fg; borderRadius: l2; _open: { animationStyle:
+slide-fade-in; animationDuration: fast }; _closed: { animationStyle:
+slide-fade-out; animationDuration: faster }`.
 - **v3 base.item:** `borderRadius: l1; cursor: menuitem; _disabled: {
-  layerStyle: 'disabled' }`.
+layerStyle: 'disabled' }`.
 - **v3 base.itemCommand:** `letterSpacing: widest; fontFamily: inherit`.
 - **v1 component:** `Menu.ts`.
 
@@ -923,9 +929,9 @@ Only components we have a v1 equivalent for are listed.
 - **v3 source:** `node_modules/@chakra-ui/react/dist/esm/theme/recipes/popover.js`
 - Slot recipe with slots `content, header, body, footer, arrow, arrowTip`.
 - **v3 base.content:** `bg: var(--popover-bg); --popover-bg: colors.bg.panel;
-  boxShadow: lg; --popover-size: sizes.xs; borderRadius: l3; zIndex:
-  calc(var(--popover-z-index) + var(--layer-index, 0)) where --popover-z-index:
-  zIndex.popover`.
+boxShadow: lg; --popover-size: sizes.xs; borderRadius: l3; zIndex:
+calc(var(--popover-z-index) + var(--layer-index, 0)) where --popover-z-index:
+zIndex.popover`.
 - **v3 sizes:** `xs, sm (default), md, lg`.
 - **v1 component:** `Popover.ts` (in v1 codebase but no foundation file present
   — see `git show main:packages/camp/src/theme/components/`).
@@ -937,8 +943,8 @@ Only components we have a v1 equivalent for are listed.
 - **v3 source:** `node_modules/@chakra-ui/react/dist/esm/theme/recipes/tooltip.js`
 - Slot recipe with slots `content, arrow, arrowTip`.
 - **v3 base.content:** `--tooltip-bg: colors.bg.inverted; bg: var(--tooltip-bg);
-  color: fg.inverted; px: 2.5; py: 1; borderRadius: l2; fontWeight: medium;
-  textStyle: xs; boxShadow: md; maxW: xs; zIndex: tooltip`.
+color: fg.inverted; px: 2.5; py: 1; borderRadius: l2; fontWeight: medium;
+textStyle: xs; boxShadow: md; maxW: xs; zIndex: tooltip`.
 - **v1 component:** `Tooltip.ts`.
 - **Pitfalls:**
   1. References `bg.inverted` and `fg.inverted` — semantic tokens for an
@@ -950,13 +956,13 @@ Only components we have a v1 equivalent for are listed.
 
 - **v3 source:** `node_modules/@chakra-ui/react/dist/esm/theme/recipes/dialog.js`
 - Slot recipe with slots `backdrop, positioner, content, header, body, footer,
-  title, description, closeTrigger`.
+title, description, closeTrigger`.
 - **v3 base.backdrop:** `bg: blackAlpha.500; pos: fixed; w: 100dvw; h: 100dvh;
-  --dialog-z-index: zIndex.popover; _open: { animationName: fade-in;
-  animationDuration: slow }; _closed: { animationName: fade-out;
-  animationDuration: moderate }`.
+--dialog-z-index: zIndex.popover; _open: { animationName: fade-in;
+animationDuration: slow }; _closed: { animationName: fade-out;
+animationDuration: moderate }`.
 - **v3 base.content:** `borderRadius: l3; textStyle: sm; bg: bg.panel;
-  boxShadow: lg`.
+boxShadow: lg`.
 - **v1 component:** `Modal.ts`.
 - **Pitfalls:**
   1. **Component renamed** Modal → Dialog. Our wrapper will need to either
@@ -971,8 +977,8 @@ Only components we have a v1 equivalent for are listed.
 - **v3 source:** `node_modules/@chakra-ui/react/dist/esm/theme/recipes/drawer.js`
 - Slot recipe, very similar shape to Dialog.
 - **v3 base.content:** `bg: bg.panel; boxShadow: lg; _open: { animationDuration:
-  slowest; animationTimingFunction: ease-in-smooth }; _closed: {
-  animationDuration: slower; animationTimingFunction: ease-in-smooth }`.
+slowest; animationTimingFunction: ease-in-smooth }; _closed: {
+animationDuration: slower; animationTimingFunction: ease-in-smooth }`.
 - **Pitfalls:**
   1. `ease-in-smooth` — not defined in our easings table. **TODO verify**.
   2. `slowest` duration — same concern as durations note.
@@ -983,7 +989,7 @@ Only components we have a v1 equivalent for are listed.
 - Slot recipe with slots `list, link, item, separator, ellipsis, currentLink`.
 - **v3 base.list:** `display: flex; alignItems: center; color: fg.muted`.
 - **v3 base.link:** `outline: 0; textDecoration: none; borderRadius: l1;
-  focusRing: outside; display: inline-flex; alignItems: center; gap: 2`.
+focusRing: outside; display: inline-flex; alignItems: center; gap: 2`.
 - **v3 variants:** `underline, plain`.
 - **v3 sizes:** `sm, md (default), lg`.
 - **v1 component:** `Breadcrumb.ts`.
@@ -992,7 +998,7 @@ Only components we have a v1 equivalent for are listed.
 
 - **v3 source:** `node_modules/@chakra-ui/react/dist/esm/theme/recipes/link.js`
 - **v3 base:** `display: inline-flex; alignItems: center; outline: none; gap:
-  1.5; cursor: pointer; borderRadius: l1; focusRing: outside`.
+1.5; cursor: pointer; borderRadius: l1; focusRing: outside`.
 - **v3 variants:** `underline, plain (default)`.
 - **v1 component:** `Link.ts`.
 
@@ -1013,11 +1019,11 @@ Only components we have a v1 equivalent for are listed.
 
 - **v3 source:** `node_modules/@chakra-ui/react/dist/esm/theme/recipes/accordion.js`
 - Slot recipe with slots `root, item, itemTrigger, itemBody, itemContent,
-  itemIndicator`.
+itemIndicator`.
 - **v3 base.root:** `--accordion-radius: radii.l2`.
 - **v3 base.itemTrigger:** `fontWeight: medium; _focusVisible: { outline: 2px
-  solid; outlineColor: colorPalette.focusRing }; _disabled: { layerStyle:
-  'disabled' }`.
+solid; outlineColor: colorPalette.focusRing }; _disabled: { layerStyle:
+'disabled' }`.
 - **v3 variants:** `outline, subtle, enclosed, plain`.
 - **v1 component:** `Accordion.ts`.
 
@@ -1026,7 +1032,7 @@ Only components we have a v1 equivalent for are listed.
 - **v3 source:** `node_modules/@chakra-ui/react/dist/esm/theme/recipes/progress.js`
 - Slot recipe with slots `root, track, range, label, valueText`.
 - **v3 base.range:** `transitionDuration: slow; bgColor: var(--track-color);
-  _indeterminate: { animation: position 1s ease infinite normal none running }`.
+_indeterminate: { animation: position 1s ease infinite normal none running }`.
 - **v3 variants.variant:** `outline, subtle`. **No `solid` variant.**
 - **v3 shape:** `square, rounded, full`.
 - **v1 component:** `Progress.ts`.
@@ -1035,9 +1041,9 @@ Only components we have a v1 equivalent for are listed.
 
 - **v3 source:** `node_modules/@chakra-ui/react/dist/esm/theme/recipes/slider.js`
 - Slot recipe with many slots (`root, label, control, track, range, markerGroup,
-  marker, markerIndicator, thumb`).
+marker, markerIndicator, thumb`).
 - **v3 base.thumb:** `_focusVisible: { ring: 3px; ringColor:
-  colorPalette.focusRing/50 }`.
+colorPalette.focusRing/50 }`.
 - **v1 component:** (none — slider is new for some consumers).
 
 ### Toast
@@ -1058,7 +1064,7 @@ A checklist distilled from the foundation PR's regressions:
    shorthand splits into longhands including `border-color: currentColor`,
    which overrides v3's default `borderColor: 'transparent'` (Button base)
    and any consumer-set border colour. Use `borderWidth: '1px'; borderStyle:
-   'solid'` longhands or `border: '1px solid transparent'` (or the colour you
+'solid'` longhands or `border: '1px solid transparent'` (or the colour you
    want).
 
 2. **`defaultVariants.colorPalette` is rejected by `defineRecipe` types.**
@@ -1071,11 +1077,12 @@ A checklist distilled from the foundation PR's regressions:
    ```
 
    Without a wrapper default, the consumer relies on `globalCss.html.colorPalette:
-   'gray'`, which renders our brand colours as `gray.<slot>` — i.e. v3's
+'gray'`, which renders our brand colours as `gray.<slot>` — i.e. v3's
    defaults.
 
 3. **Verify token name exists before referencing in recipes.** The list of v2
    names that **no longer exist** in v3 (or whose values have changed):
+
    - `radii.base` → use `sm`
    - `radii.sm` (4px) → now `xs` (2px) (value-shifted)
    - `lineHeights.normal/none/tall` → renamed in v3 to `moderate/short/tall`
@@ -1127,12 +1134,12 @@ A checklist distilled from the foundation PR's regressions:
    `focusVisibleRing: 'outside'` or `focusVisibleRing: 'inside'`. These macros
    expand to CSS using the `--ring-*` variables defined in `globalCss.*`. Our
    Button recipe instead uses an explicit `_focusVisible: { boxShadow: '0 0
-   0 2px var(--chakra-colors-utility-focus-default)' }`. If a new recipe
+0 2px var(--chakra-colors-utility-focus-default)' }`. If a new recipe
    author wants the v3 ring macro, they should know it picks up its colour
    from `colorPalette.focusRing` — undefined on our brand palettes.
 
 10. **`color`/`bg` semantic token defaults exist.** `color: 'fg'` and `bg:
-    'bg'` work because v3 defines `bg` and `fg` semantic tokens with `_light`
+'bg'` work because v3 defines `bg` and `fg` semantic tokens with `_light`
     variants. Don't write `color: 'fg.default'` (that resolves to the same
     DEFAULT value via Chakra's resolution).
 
@@ -1151,55 +1158,105 @@ A checklist distilled from the foundation PR's regressions:
 
 ---
 
-## 9. Open verification questions
+## 9. Verification results and remaining questions
 
-The following questions were not answerable from source-reading alone. Each
-follow-up spec should re-verify by inspecting the emitted CSS (e.g. via
-`pnpm --filter @opengovsg/design-system-react build && grep …
-dist/…/index.css`) or by inspecting browser-rendered components in Storybook.
+The following questions were originally open at the time of writing. Several
+have since been answered empirically by probing the merged system with
+`system.token(<path>)` on the built CJS output. Results below.
 
-1. **Token merge: replacement vs deep merge.** Does setting
-   `theme.tokens.durations = { ... our keys ... }` in our config **replace**
-   v3's defaults or **merge per key**? Test by checking emitted CSS for
-   `--chakra-durations-moderate` (v3's value). If absent → replacement; if
-   present → merge.
+### 9.1 — Token merge: ✅ deep merge confirmed
 
-   The same question applies to `easings`, `letterSpacings`, `lineHeights`,
-   `fonts`, `spacing`, `sizes`, `fontWeights`, `fontSizes`, `shadows`. If
-   replacement, **add aliases** for v3-default keys we don't override (e.g.
-   `moderate` for 200ms, `slowest` for 500ms) so v3 default recipes resolve.
+**Verified.** `createSystem(defaultConfig, ourConfig)` performs **per-key deep
+merge** of token categories. Both v3 defaults AND our additions coexist in the
+final system:
 
-2. **`globalCss` `*` selector merge.** Does our `*` rule preserve v3's
+| Probe                             | Resolves to             | Source     |
+| --------------------------------- | ----------------------- | ---------- |
+| `durations.moderate`              | `200ms`                 | v3 default |
+| `durations.slowest`               | `500ms`                 | v3 default |
+| `durations.normal`                | `200ms`                 | ours       |
+| `durations.ultra-fast`            | `50ms`                  | ours       |
+| `easings.ease-in-smooth`          | `cubic-bezier(...)`     | v3 default |
+| `radii.l1` / `l2` / `l3`          | `var(--chakra-radii-…)` | v3 default |
+| `radii.full`                      | `9999px`                | v3 default |
+| `radii.base`                      | **`undefined`**         | (neither)  |
+| `colors.gray.500`                 | `#71717a`               | v3 default |
+| `colors.interaction.main.default` | `#1361F0`               | ours       |
+
+**Implications:**
+
+- v3 default recipes that reference `transitionDuration: 'moderate'`,
+  `transitionDuration: 'fastest'`, `easing: 'ease-in-smooth'`,
+  `borderRadius: 'l2'`, etc., **will resolve correctly**.
+- We do **not** need to add aliases for v3-default keys we don't override.
+- Old v2 keys that v3 dropped (e.g. `radii.base`) return `undefined`. Any
+  reference to such a key emits a broken CSS variable (silent visual
+  regression). All such references must be updated to the v3 equivalent.
+
+### 9.2 — ⚠️ Dark-mode defaults leak into our light-only theme
+
+**Critical discovery during probe.** `system.token('colors.fg')` returns
+`var(--chakra-colors-gray-50)` — the **dark-mode** value of v3's semantic
+`fg.DEFAULT` token (`_light: '{colors.black}'`, `_dark: '{colors.gray.50}'`).
+Our README explicitly states dark mode is unsupported, so this is a real risk
+for any v3 default recipe that references `colors.fg`, `colors.bg`,
+`colors.border`, `colors.gray.*` (semantic slots), and similar.
+
+The most likely failure mode: a user on Chrome with `prefers-color-scheme:
+dark` renders any component that uses a v3 default recipe — and gets the dark
+variant of those colors (e.g. `gray-50` foreground on `gray-50` background →
+invisible text). Our brand palettes don't have this issue because we defined
+them with literal hex values, not `_light`/`_dark` pairs.
+
+**Mitigations to apply in follow-up specs (one of):**
+
+1. **Force light mode** via `data-theme="light"` on `<html>` (set in
+   `ThemeProvider`, ensures all `_light` variants resolve).
+2. **Override every semantic colour token** v3 ships with a flat (non-`_light`/
+   `_dark`) value at the foundation level. Tedious but explicit.
+3. **Avoid v3 default recipes entirely** and re-author every component recipe
+   ourselves. We're already doing this for many components.
+
+Recommended: option (1) is cheapest. The next follow-up spec should add
+`data-theme="light"` (or v3's actual color-mode attribute — verify the exact
+attribute name v3 expects) to the root element. Test by viewing Storybook with
+OS dark mode enabled and confirming light-mode colors persist.
+
+### 9.3 — Remaining open questions
+
+The following are still source-only inferences; verify in follow-up specs:
+
+1. **`globalCss` `*` selector merge.** Does our `*` rule preserve v3's
    `--ring-*` and `--brightness/--contrast/etc.` variables? Test by grepping
    for `--ring-color` in the emitted CSS. Focus rings on v3 default recipes
    that use the `focusVisibleRing` macro will silently fail if these
    variables are dropped.
 
-3. **`textStyle` vs bare-property priority.** When our `buttonRecipe.base`
+2. **`textStyle` vs bare-property priority.** When our `buttonRecipe.base`
    sets `textStyle: 'subhead-1'` (which inlines `lineHeight: '1.5rem'`), does
    it win over v3's `buttonRecipe.base.lineHeight: '1.2'` after the recipe
    merge? Test by inspecting computed `line-height` on a `<Button>` in
    Storybook.
 
-4. **Raw vs semantic shadow precedence.** We define raw `shadows.sm` and
+3. **Raw vs semantic shadow precedence.** We define raw `shadows.sm` and
    `shadows.md` in `tokens/shadows.ts`. v3 ships semantic `shadows.sm/md` with
    `_light`/`_dark` values. When a recipe writes `shadow: 'md'`, which one
    wins? Test by inspecting computed `box-shadow` on a Tooltip (`shadow:
-   'md'`).
+'md'`).
 
-5. **`fonts.code` vs `fonts.mono` for v3 default recipes.** We name the
+4. **`fonts.code` vs `fonts.mono` for v3 default recipes.** We name the
    monospace font `code`. v3 default recipes (Code, Kbd, Menu.itemCommand)
-   reference `fontFamily: 'mono'`. Does our override leave `mono` defined (from
-   v3) or replace it with our `code`-only object? Test by computing
-   `font-family` on a `<Code>`.
+   reference `fontFamily: 'mono'`. Token merge is confirmed (see 9.1), so
+   `mono` should remain defined from v3 even after our override. Verify by
+   computing `font-family` on a `<Code>`.
 
-6. **`colorPalette.focusRing/subtle/muted/emphasized/contrast` on brand
+5. **`colorPalette.focusRing/subtle/muted/emphasized/contrast` on brand
    palettes.** Our `main/sub/critical/warning/success/neutral/inverse` palettes
-   don't define these slots. Confirm what v3 emits when a consumer writes
-   `<Box colorPalette="main" bg="colorPalette.subtle">` — likely the literal
-   variable name as a CSS value (broken), but worth confirming.
+   don't define these slots. v3 emits the literal `var(--chakra-colors-main-subtle)`
+   even when undefined (broken silently). Either define the slots on our
+   palettes, or avoid these references in our own recipes.
 
-7. **Per-palette slots presence in colors override.** Confirm whether shadowing
+6. **Per-palette slots presence in colors override.** Confirm whether shadowing
    `colors.blue/red/green/yellow` with our brand hexes also re-defines the
    per-palette semantic-token slots (`blue.solid`, `red.subtle`, etc.) or
    leaves them resolving to v3's hex at stops 50–950. Our overrides go up to
@@ -1209,22 +1266,22 @@ dist/…/index.css`) or by inspecting browser-rendered components in Storybook.
 
 ## Appendix A: File index
 
-| Path | Purpose |
-| --- | --- |
-| `packages/camp/src/theme/config.ts` | Top-level `defineConfig` call |
-| `packages/camp/src/theme/system.ts` | `createSystem(defaultConfig, config)` |
-| `packages/camp/src/theme/breakpoints.ts` | Breakpoints override |
-| `packages/camp/src/theme/tokens/*.ts` | Token overrides (one file per category) |
-| `packages/camp/src/theme/semanticTokens/colors.ts` | Semantic colour overrides |
-| `packages/camp/src/theme/textStyles.ts` | textStyles overrides |
-| `packages/camp/src/theme/layerStyles.ts` | layerStyles overrides |
-| `packages/camp/src/theme/recipes/button.recipe.ts` | Button recipe |
-| `node_modules/@chakra-ui/react/dist/esm/theme/tokens/*.js` | v3 default tokens |
-| `node_modules/@chakra-ui/react/dist/esm/theme/semantic-tokens/*.js` | v3 default semantic tokens |
-| `node_modules/@chakra-ui/react/dist/esm/theme/recipes/*.js` | v3 default recipes |
-| `node_modules/@chakra-ui/react/dist/esm/theme/global-css.js` | v3 default globalCss |
-| `node_modules/@chakra-ui/react/dist/esm/theme/layer-styles.js` | v3 default layerStyles |
-| `node_modules/@chakra-ui/react/dist/esm/theme/text-styles.js` | v3 default textStyles |
+| Path                                                                | Purpose                                 |
+| ------------------------------------------------------------------- | --------------------------------------- |
+| `packages/camp/src/theme/config.ts`                                 | Top-level `defineConfig` call           |
+| `packages/camp/src/theme/system.ts`                                 | `createSystem(defaultConfig, config)`   |
+| `packages/camp/src/theme/breakpoints.ts`                            | Breakpoints override                    |
+| `packages/camp/src/theme/tokens/*.ts`                               | Token overrides (one file per category) |
+| `packages/camp/src/theme/semanticTokens/colors.ts`                  | Semantic colour overrides               |
+| `packages/camp/src/theme/textStyles.ts`                             | textStyles overrides                    |
+| `packages/camp/src/theme/layerStyles.ts`                            | layerStyles overrides                   |
+| `packages/camp/src/theme/recipes/button.recipe.ts`                  | Button recipe                           |
+| `node_modules/@chakra-ui/react/dist/esm/theme/tokens/*.js`          | v3 default tokens                       |
+| `node_modules/@chakra-ui/react/dist/esm/theme/semantic-tokens/*.js` | v3 default semantic tokens              |
+| `node_modules/@chakra-ui/react/dist/esm/theme/recipes/*.js`         | v3 default recipes                      |
+| `node_modules/@chakra-ui/react/dist/esm/theme/global-css.js`        | v3 default globalCss                    |
+| `node_modules/@chakra-ui/react/dist/esm/theme/layer-styles.js`      | v3 default layerStyles                  |
+| `node_modules/@chakra-ui/react/dist/esm/theme/text-styles.js`       | v3 default textStyles                   |
 
 ## Appendix B: v1 component theme files
 
