@@ -124,35 +124,61 @@ export const buttonRecipe = defineRecipe({
       },
     },
     size: {
-      // px: '15px' set in every size to override v3 default size's px (e.g. md
-      // sets px: '4' = 16px). 15px = 16px - 1px border so total inset matches
-      // v1.
+      // Each size redeclares the same `px`/`_icon` overrides because v3's
+      // default Button size variants set per-size `px` and `_icon` width/height
+      // (e.g. md: { px: '4', _icon: { width: '5', height: '5' } }). Setting
+      // these at our `base` level wouldn't be enough — same-property collisions
+      // between our base and v3-default's size variant resolve in v3-default's
+      // favour. Setting them in our size variants overrides v3-default's at
+      // the same axis.
+      //
+      // - px: '15px' = 16px - 1px border, matches v1 inset.
+      // - `_icon` reverts to `em`-based sizing so the consumer's `fontSize` on
+      //   the icon (e.g. `<BxUpload fontSize="1.5rem" />`) wins, matching v1.
       xs: {
         textStyle: 'subhead-2',
         minH: '2.25rem',
         minW: '2.25rem',
         px: '15px',
+        _icon: { width: '1em', height: '1em' },
       },
       sm: {
         textStyle: 'subhead-1',
         minH: '2.5rem',
         minW: '2.5rem',
         px: '15px',
+        _icon: { width: '1em', height: '1em' },
       },
       md: {
         textStyle: 'subhead-1',
         minH: '2.75rem',
         minW: '2.75rem',
         px: '15px',
+        _icon: { width: '1em', height: '1em' },
       },
       lg: {
         textStyle: 'subhead-1',
         minH: '3rem',
         minW: '3rem',
         px: '15px',
+        _icon: { width: '1em', height: '1em' },
       },
     },
   },
+  compoundVariants: [
+    // The `link` variant needs to defeat the px:'15px' set in every size
+    // variant — single-axis variants alone can't, because size variants are
+    // declared after `variant` here and so emit later in the cascade.
+    // compoundVariants take higher specificity than either axis. Matches v1's
+    // effective padding (Link.variants.standalone set `p: '0.25rem'`).
+    {
+      variant: 'link',
+      css: {
+        px: '0.25rem',
+        py: '0.25rem',
+      },
+    },
+  ],
   defaultVariants: {
     variant: 'solid',
     size: 'md',
