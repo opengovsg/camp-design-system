@@ -17,18 +17,20 @@ const ButtonGroupTemplate: StoryFn<ButtonProps> = (args) => {
   return (
     <SimpleGrid
       columns={2}
-      spacing={8}
+      gap={8}
       templateColumns="min-content auto"
       alignItems="center"
     >
       <Text>Default</Text>
       <ButtonGroup>
         <Button {...args}>Button</Button>
-        <Button leftIcon={<BxUpload fontSize="1.5rem" />} {...args}>
+        <Button {...args}>
+          <BxUpload fontSize="1.5rem" />
           Leading
         </Button>
-        <Button rightIcon={<BxRightArrowAlt fontSize="1.5rem" />} {...args}>
+        <Button {...args}>
           Trailing
+          <BxRightArrowAlt fontSize="1.5rem" />
         </Button>
       </ButtonGroup>
       <Text>Hover</Text>
@@ -36,63 +38,51 @@ const ButtonGroupTemplate: StoryFn<ButtonProps> = (args) => {
         <Button data-hover {...args}>
           Button
         </Button>
-        <Button data-hover leftIcon={<BxUpload fontSize="1.5rem" />} {...args}>
+        <Button data-hover {...args}>
+          <BxUpload fontSize="1.5rem" />
           Leading
         </Button>
-        <Button
-          data-hover
-          rightIcon={<BxRightArrowAlt fontSize="1.5rem" />}
-          {...args}
-        >
+        <Button data-hover {...args}>
           Trailing
+          <BxRightArrowAlt fontSize="1.5rem" />
         </Button>
       </ButtonGroup>
       <Text>Active</Text>
       <ButtonGroup>
-        <Button isActive {...args}>
+        <Button data-active {...args}>
           Button
         </Button>
-        <Button isActive leftIcon={<BxUpload fontSize="1.5rem" />} {...args}>
+        <Button data-active {...args}>
+          <BxUpload fontSize="1.5rem" />
           Leading
         </Button>
-        <Button
-          isActive
-          rightIcon={<BxRightArrowAlt fontSize="1.5rem" />}
-          {...args}
-        >
+        <Button data-active {...args}>
           Trailing
+          <BxRightArrowAlt fontSize="1.5rem" />
         </Button>
       </ButtonGroup>
       <Text>Disabled</Text>
       <ButtonGroup>
-        <Button isDisabled {...args}>
+        <Button disabled {...args}>
           Button
         </Button>
-        <Button isDisabled leftIcon={<BxUpload fontSize="1.5rem" />} {...args}>
+        <Button disabled {...args}>
+          <BxUpload fontSize="1.5rem" />
           Leading
         </Button>
-        <Button
-          isDisabled
-          rightIcon={<BxRightArrowAlt fontSize="1.5rem" />}
-          {...args}
-        >
+        <Button disabled {...args}>
           Trailing
+          <BxRightArrowAlt fontSize="1.5rem" />
         </Button>
       </ButtonGroup>
       <Text>Loading</Text>
       <ButtonGroup>
-        <Button isLoading {...args}>
+        <Button loading {...args}>
           Button
         </Button>
+        <Button loading loadingText="Leading" {...args}></Button>
         <Button
-          isLoading
-          leftIcon={<BxUpload fontSize="1.5rem" />}
-          loadingText="Leading"
-          {...args}
-        ></Button>
-        <Button
-          isLoading
-          rightIcon={<BxRightArrowAlt fontSize="1.5rem" />}
+          loading
           loadingText="Trailing"
           spinnerPlacement="end"
           {...args}
@@ -123,13 +113,13 @@ export const SolidDefault = ButtonGroupTemplate.bind({})
 export const SolidCritical = ButtonGroupTemplate.bind({})
 SolidCritical.args = {
   variant: 'solid',
-  colorScheme: 'critical',
+  colorPalette: 'critical',
 }
 
 export const SolidSuccess = ButtonGroupTemplate.bind({})
 SolidSuccess.args = {
   variant: 'solid',
-  colorScheme: 'success',
+  colorPalette: 'success',
 }
 
 export const OutlineDefault = ButtonGroupTemplate.bind({})
@@ -140,19 +130,19 @@ OutlineDefault.args = {
 export const OutlineCritical = ButtonGroupTemplate.bind({})
 OutlineCritical.args = {
   variant: 'outline',
-  colorScheme: 'critical',
+  colorPalette: 'critical',
 }
 
 export const OutlineNeutral = ButtonGroupTemplate.bind({})
 OutlineNeutral.args = {
   variant: 'outline',
-  colorScheme: 'neutral',
+  colorPalette: 'neutral',
 }
 
 export const OutlineInverse = ButtonGroupTemplate.bind({})
 OutlineInverse.args = {
   variant: 'outline',
-  colorScheme: 'inverse',
+  colorPalette: 'inverse',
 }
 OutlineInverse.parameters = {
   backgrounds: { default: 'dark' },
@@ -166,13 +156,13 @@ ClearDefault.args = {
 export const ClearNeutral = ButtonGroupTemplate.bind({})
 ClearNeutral.args = {
   variant: 'clear',
-  colorScheme: 'neutral',
+  colorPalette: 'neutral',
 }
 
 export const ClearInverse = ButtonGroupTemplate.bind({})
 ClearInverse.args = {
   variant: 'clear',
-  colorScheme: 'inverse',
+  colorPalette: 'inverse',
 }
 ClearInverse.parameters = {
   backgrounds: { default: 'dark' },
@@ -186,7 +176,7 @@ ReverseDefault.args = {
 export const LinkPrimary = ButtonGroupTemplate.bind({})
 LinkPrimary.args = {
   variant: 'link',
-  colorScheme: 'brand.primary',
+  colorPalette: 'main',
 }
 
 export const Sizes = () => (
@@ -201,7 +191,7 @@ export const Sizes = () => (
     <Button size="xs" variant="outline">
       extra small
     </Button>
-    <Button size="xs" variant="clear" colorScheme="neutral">
+    <Button size="xs" variant="clear" colorPalette="neutral">
       extra small
     </Button>
     <Button size="xs" variant="reverse">
@@ -213,7 +203,7 @@ export const Sizes = () => (
     <Button size="sm" variant="outline">
       small
     </Button>
-    <Button size="sm" variant="clear" colorScheme="neutral">
+    <Button size="sm" variant="clear" colorPalette="neutral">
       small
     </Button>
     <Button size="sm" variant="reverse">
@@ -225,7 +215,7 @@ export const Sizes = () => (
     <Button size="md" variant="outline">
       medium
     </Button>
-    <Button size="md" variant="clear" colorScheme="neutral">
+    <Button size="md" variant="clear" colorPalette="neutral">
       medium
     </Button>
     <Button size="md" variant="reverse">
@@ -237,7 +227,7 @@ export const Sizes = () => (
     <Button size="lg" variant="outline">
       large
     </Button>
-    <Button size="lg" variant="clear" colorScheme="neutral">
+    <Button size="lg" variant="clear" colorPalette="neutral">
       large
     </Button>
     <Button size="lg" variant="reverse">
