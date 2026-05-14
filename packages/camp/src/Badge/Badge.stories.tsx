@@ -94,6 +94,8 @@ const TemplateGroup: StoryFn<BadgeProps> = (args) => (
     <Badge {...args} colorPalette="main" />
     <Text>sub</Text>
     <Badge {...args} colorPalette="sub" />
+    <Text>info</Text>
+    <Badge {...args} colorPalette="info" />
     <Text>warning</Text>
     <Badge {...args} colorPalette="warning" />
     <Text>success</Text>

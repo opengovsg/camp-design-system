@@ -136,6 +136,15 @@ const palettes = {
     linkDefault: { value: '{colors.interaction.links.inverse-default}' },
     linkHover: { value: '{colors.interaction.links.inverse-hover}' },
   },
+  // `info` shares solid hex with `main` (both #1361F0) but uses a lighter
+  // subtle background (#F7F9FE vs main's #E7EFFC). Kept as a distinct palette
+  // so v1 `colorScheme="info"` consumers see the same visual in v2.
+  info: {
+    solid: { value: '{colors.utility.feedback.info}' },
+    fg: { value: '#FFFFFF' },
+    subtleBg: { value: '{colors.utility.feedback.info-subtle}' },
+    subtleFg: { value: '{colors.utility.feedback.info}' },
+  },
 }
 
 export const semanticTokenColors = defineSemanticTokens.colors({

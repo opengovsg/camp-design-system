@@ -3,6 +3,7 @@ import { defineRecipe } from '@chakra-ui/react'
 export type BadgeColorPalette =
   | 'main'
   | 'sub'
+  | 'info'
   | 'neutral'
   | 'success'
   | 'warning'

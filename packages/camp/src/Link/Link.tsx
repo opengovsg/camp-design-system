@@ -1,9 +1,7 @@
-import { forwardRef, type ReactElement, type Ref } from 'react'
+import { forwardRef, type ReactElement } from 'react'
 import {
   Link as ChakraLink,
   type LinkProps as ChakraLinkProps,
-  Text,
-  type TextProps,
 } from '@chakra-ui/react'
 
 import { BxLinkExternal } from '~/icons'
@@ -15,9 +13,10 @@ const ExternalIcon = () => (
 
 export interface LinkProps extends Omit<ChakraLinkProps, 'colorPalette'> {
   /**
-   * Renders as a non-interactive `<Text as="a" aria-disabled>` when true.
-   * Preserves v1's design choice that disabled links should be fully
-   * non-interactive (not just visually muted).
+   * Renders the link as non-interactive (no navigation, no focus, no hover)
+   * while preserving the recipe's styled appearance. Matches v1 behaviour:
+   * the link is visually disabled (muted colour, not-allowed cursor) AND
+   * cannot be clicked or focused.
    */
   disabled?: boolean
   /**
@@ -37,37 +36,28 @@ const LinkInner = forwardRef<HTMLAnchorElement, LinkProps>(
       external,
       externalIcon = <ExternalIcon />,
       colorPalette = 'main',
+      href,
       children,
       ...props
     },
     ref,
   ) => {
-    if (disabled) {
-      // Chakra's `Text` is typed for `HTMLParagraphElement`; v3 doesn't narrow
-      // the ref/event-handler types when `as="a"` is used. Cast the props as
-      // `TextProps` so the spread is accepted — at runtime the rendered element
-      // is `<a>`, and the consumer's anchor-typed event handlers fire on it as
-      // expected. Preserves v1's design choice of a fully non-interactive
-      // disabled link.
-      return (
-        <Text
-          as="a"
-          ref={ref as Ref<HTMLParagraphElement>}
-          aria-disabled
-          alignItems="center"
-          {...(props as TextProps)}
-        >
-          {children}
-          {external && externalIcon}
-        </Text>
-      )
-    }
     return (
       <ChakraLink
         ref={ref}
         colorPalette={colorPalette}
         display="inline-flex"
         alignItems="center"
+        // When disabled, strip the href so it can't be navigated, kill
+        // pointer events + focus, and surface the recipe's _disabled state
+        // via the data-disabled attribute (which v3 maps to the `_disabled`
+        // pseudo). This preserves v1's "fully non-interactive but styled"
+        // intent without rendering as a separately-styled Text element.
+        href={disabled ? undefined : href}
+        aria-disabled={disabled || undefined}
+        data-disabled={disabled || undefined}
+        tabIndex={disabled ? -1 : props.tabIndex}
+        pointerEvents={disabled ? 'none' : undefined}
         {...props}
       >
         {children}
