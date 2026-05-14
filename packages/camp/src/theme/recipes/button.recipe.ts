@@ -124,10 +124,33 @@ export const buttonRecipe = defineRecipe({
       },
     },
     size: {
-      xs: { textStyle: 'subhead-2', minH: '2.25rem', minW: '2.25rem' },
-      sm: { textStyle: 'subhead-1', minH: '2.5rem', minW: '2.5rem' },
-      md: { textStyle: 'subhead-1', minH: '2.75rem', minW: '2.75rem' },
-      lg: { textStyle: 'subhead-1', minH: '3rem', minW: '3rem' },
+      // px: '15px' set in every size to override v3 default size's px (e.g. md
+      // sets px: '4' = 16px). 15px = 16px - 1px border so total inset matches
+      // v1.
+      xs: {
+        textStyle: 'subhead-2',
+        minH: '2.25rem',
+        minW: '2.25rem',
+        px: '15px',
+      },
+      sm: {
+        textStyle: 'subhead-1',
+        minH: '2.5rem',
+        minW: '2.5rem',
+        px: '15px',
+      },
+      md: {
+        textStyle: 'subhead-1',
+        minH: '2.75rem',
+        minW: '2.75rem',
+        px: '15px',
+      },
+      lg: {
+        textStyle: 'subhead-1',
+        minH: '3rem',
+        minW: '3rem',
+        px: '15px',
+      },
     },
   },
   defaultVariants: {
