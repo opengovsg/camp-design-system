@@ -782,6 +782,172 @@ height: '1em' }` in each of our `size.*` variants so consumer-set
       universal `globalCss` rule is intentional, and form text should render
       with the same character variants as the surrounding body text.
 
+### Avatar (already migrated)
+
+- **v3 source:** `node_modules/@chakra-ui/react/dist/esm/theme/recipes/avatar.js`.
+- **v3 base.root:** `display: inline-flex; alignItems: center; justifyContent:
+center; fontWeight: medium; position: relative; verticalAlign: top;
+flexShrink: 0; userSelect: none; width: var(--avatar-size); height:
+var(--avatar-size); fontSize: var(--avatar-font-size); borderRadius:
+var(--avatar-radius); &[data-group-item]: { borderWidth: 2px; borderColor: bg }`.
+- **v3 base.image:** `width: 100%; height: 100%; objectFit: cover; borderRadius:
+var(--avatar-radius)`.
+- **v3 base.fallback:** `lineHeight: 1; textTransform: uppercase; fontWeight:
+medium; fontSize: var(--avatar-font-size); borderRadius: var(--avatar-radius)`.
+- **v3 variants:** `solid, subtle (default), outline`. v3's `solid` uses
+  `colorPalette.solid` + `colorPalette.contrast`; `subtle` uses
+  `colorPalette.muted` + `colorPalette.fg`.
+- **v3 sizes:** `full, 2xs, xs, sm, md (default), lg, xl, 2xl` — each sets
+  `--avatar-size` and `--avatar-font-size` as CSS variables.
+- **v3 shape variants:** `square, rounded, full (default)`; `full` sets
+  `--avatar-radius: radii.full`.
+- **v3 defaultVariants:** `{ size: 'md', shape: 'full', variant: 'subtle' }`.
+- **v1 component:** `git show main:packages/camp/src/theme/components/Avatar.ts`
+  - `AvatarMenu.ts`. v1 had no React wrapper — only theme-level overrides.
+- **Pitfalls (all already addressed):**
+
+  1.  v3 `AvatarBadge` slot does not exist in v3 (Ark anatomy has only
+      `root/image/fallback`). v1's status-dot affordance is gone; consumers
+      must compose a positioned `Box` themselves.
+  2.  **v3 default `subtle` references `colorPalette.muted`, undefined on our
+      brand palettes.** Fix applied: added `subtleBg`/`subtleFg` semantic
+      tokens to the 5 brand palettes (`main/sub/critical/warning/success`) and
+      override the `subtle` variant to use them. The `solid` variant likewise
+      uses `colorPalette.fg` rather than v3's `colorPalette.contrast` (which
+      our palettes also do not define).
+  3.  **Default variant flipped to `solid`.** v1 defaulted to a filled avatar;
+      v3 ships `subtle` as default. The slot recipe's `defaultVariants.variant`
+      is set to `solid` to preserve v1 semantics.
+  4.  **Size variants redeclare `--avatar-size` + `textStyle` per § 8 #14.**
+      v3 default `size.X.root` writes `--avatar-size` and
+      `--avatar-font-size` as CSS variables that beat our base. We redeclare
+      `--avatar-size` and inline a textStyle (`legal`/`caption-1`/`subhead-2`)
+      for sizes `2xs/xs/sm/md`. `lg/xl/2xl` accept v3's defaults since v1 had
+      no override at those sizes.
+  5.  `defaultVariants.colorPalette` is rejected by the slot-recipe types per
+      § 8 #2 — applied at the consumer level (no `Avatar` wrapper ships with
+      this package; namespace is re-exported from `@chakra-ui/react`).
+
+### Badge (already migrated)
+
+- **v3 source:** `node_modules/@chakra-ui/react/dist/esm/theme/recipes/badge.js`.
+- **v3 base:** `display: inline-flex; alignItems: center; borderRadius: l2;
+gap: 1; fontWeight: medium; fontVariantNumeric: tabular-nums; whiteSpace:
+nowrap; userSelect: none`.
+- **v3 variants:** `solid, subtle (default), outline, surface, plain`. Each
+  references `colorPalette.{solid|subtle|contrast|fg|muted|border}` slots.
+- **v3 sizes:** `xs, sm (default), md, lg` — each sets `textStyle`, `px`, and
+  `minH`.
+- **v3 defaultVariants:** `{ variant: 'subtle', size: 'sm' }`.
+- **v1 component:** `git show main:packages/camp/src/theme/components/Badge.ts`
+  - `git show main:packages/camp/src/Badge/Badge.tsx`.
+- **Pitfalls (all already addressed):**
+
+  1.  `BadgeLeftIcon` / `BadgeRightIcon` helpers retired. The recipe's
+      `gap: '0.25rem'` (matches v1's `marginEnd`/`marginStart`) handles
+      icon spacing for plain children. Documented in the migration guide.
+  2.  **v3 default `subtle` references `colorPalette.subtle` + `colorPalette.fg`
+      — neither defined on our brand palettes.** Fix applied: 6-palette
+      coverage (`main/sub/neutral/critical/warning/success`) with new
+      `subtleBg`/`subtleFg`/`solid`/`fg` semantic-token slots on `neutral`
+      specifically (Avatar's 5-palette set didn't include `neutral`). The
+      `subtle` variant references `colorPalette.subtleBg/subtleFg`.
+  3.  **`warning.subtleFg` would resolve to `#FFDA68` (Avatar reuse) — too pale
+      on the yellow `subtle` background.** Fix applied: `compoundVariants:
+[{ variant: 'subtle', colorPalette: 'warning', css: { color: 'yellow.700' } }]`.
+      Avatar's warning subtle behaviour stays unchanged because Avatar doesn't
+      use compoundVariants.
+  4.  **Size variants override `px`/`py` per § 8 #14.** v3 default
+      `size.sm` sets `px: '1.5'` and `minH: '5'`; v1 wanted `px: '0.5rem'` +
+      `py: '0.25rem'`. Each of our `size.*` variants redeclares these. v1's
+      `xs`/`sm` sizes are kept (the spec called for `sm`/`md`, but matching
+      v1 was prioritised after Phase 1 review).
+  5.  **Default variant set to `solid` (recipe-level), not `subtle`.** v1
+      defaulted to `solid`; the recipe's `defaultVariants.variant` overrides
+      v3's `subtle` default to preserve v1 semantics.
+  6.  `radii.base` is undefined in v3 (§ 8 #3); the recipe inherits v3's
+      `borderRadius: 'l2'` from base — equivalent hex to v1's `'base'` (4px).
+  7.  `defaultVariants.colorPalette` rejected by types per § 8 #2 — the
+      `Badge` wrapper applies `colorPalette = 'main'` as a default.
+
+### IconButton (already migrated)
+
+- **v3 source:** no separate recipe — IconButton is a thin wrapper that
+  composes the Button recipe (see
+  `node_modules/@chakra-ui/react/dist/esm/components/icon-button/icon-button.js`).
+- **Recipe used:** `buttonRecipe` (see the Button entry above for v3 base,
+  variants, sizes, defaultVariants).
+- **v3 component shape:** `<IconButton aria-label="…">` accepts the icon as
+  `children`; v1's `icon={<BxFoo />}` prop is gone.
+- **v1 component:** `git show main:packages/camp/src/IconButton/IconButton.tsx`
+  (no theme file; the v1 component delegated entirely to Chakra's Button
+  theme).
+- **Pitfalls (all already addressed):**
+
+  1.  **Icon child rendering changed: v1 used `icon` prop, v3 accepts
+      children.** The wrapper passes `children` straight through. Documented
+      in the migration guide; the Chakra codemod handles consumer call sites.
+  2.  **Per-size icon sizing preserved from v1.** v1 derived `fontSize` from
+      `size` (`size === 'lg'` → `1.5rem`, else `1.25rem`); the wrapper
+      reimplements this with `useMemo` and applies the computed `fontSize`
+      to both the rendered icon and the `Spinner` shown while loading.
+      Consumer-set `fontSize` overrides this. Note this complements Button's
+      pitfall #6 (`_icon` width/height = `1em`) — IconButton's `fontSize`
+      controls the icon size through that same `1em` chain.
+  3.  **`colorPalette` widened to `ChakraIconButtonProps['colorPalette'] |
+ButtonColorPalette`** so brand palette names autocomplete alongside
+      v3's defaults. The wrapper defaults `colorPalette = 'main'` per § 8 #2.
+
+### Link (already migrated)
+
+- **v3 source:** `node_modules/@chakra-ui/react/dist/esm/theme/recipes/link.js`.
+- **v3 base:** `display: inline-flex; alignItems: center; outline: none; gap:
+1.5; cursor: pointer; borderRadius: l1; focusRing: outside`.
+- **v3 variants:** `underline, plain (default)`. v3 has no `size` variants —
+  text size comes from inherited type.
+- **v3 defaultVariants:** `{ variant: 'plain' }`.
+- **v1 component:** `git show main:packages/camp/src/theme/components/Link.ts`
+  - `git show main:packages/camp/src/Link/Link.tsx`.
+- **Pitfalls (all already addressed):**
+
+  1.  **v3 default variants `underline`/`plain` reference `colorPalette.fg` —
+      undefined on our brand palettes.** Fix applied: 7-palette coverage
+      (`main/sub/critical/warning/success/neutral/inverse`) with new
+      `linkDefault`/`linkHover` semantic-token slots on every palette. The
+      recipe's base sets `color: 'colorPalette.linkDefault'` and `_hover:
+{ color: 'colorPalette.linkHover' }`.
+  2.  **Variant set replaced.** v1's `inline`/`standalone` distinction
+      preserved; v3's `underline`/`plain` not surfaced. `inline` (default)
+      is underline-on-hover (new design intent — text-flow links no longer
+      read as underlined until interaction); `standalone` is always
+      underlined and adds `p: '0.25rem'` for focus-ring breathing room.
+  3.  **Sizes added.** v3 ships no `size` variants; we add `xs/sm/md (default)`
+      mapping to `caption-1`/`subhead-2`/`subhead-1` textStyles. Because v3
+      defines no `size` axis, there are no § 8 #14 collisions here.
+  4.  **Focus ring reauthored.** v3 base writes `focusRing: 'outside'` which
+      expands to ring CSS variables driven by `colorPalette.focusRing`
+      (undefined on our palettes per § 8 #9). The recipe replaces the macro
+      with `_focusVisible: { boxShadow: 'none', outline: '2px solid
+var(--chakra-colors-utility-focus-default)', outlineOffset: 0 }`.
+  5.  **`borderRadius: 'l1'` (v3 default) replaced with `'sm'`** to match v1's
+      effective 4px corner radius. `radii.base` (v1's value) is undefined in
+      v3 (§ 8 #3).
+  6.  **Wrapper renders `<Text as="a" aria-disabled>` when `disabled`** to
+      preserve v1's choice that disabled links are fully non-interactive (not
+      just visually muted). v3's `Text` is typed for `HTMLParagraphElement`
+      and doesn't narrow ref/event types when `as="a"`; the wrapper casts
+      `ref as Ref<HTMLParagraphElement>` and spreads `props as TextProps`.
+      At runtime the rendered element is `<a>`, and anchor-typed event
+      handlers fire as expected.
+  7.  **`Link.ExternalIcon` retained as a static helper** (`Object.assign`
+      on the wrapper). All other v1 sub-helpers dropped. The wrapper
+      auto-appends the icon when `external` is true; consumers can override
+      via `externalIcon` prop.
+  8.  v1 prop renames (`isDisabled`/`isExternal`/`externalLinkIcon` →
+      `disabled`/`external`/`externalIcon`) documented in the migration
+      guide; handled by the Chakra codemod for the standard `is*` boolean
+      pattern, manual for `externalLinkIcon`.
+
 ### Input
 
 - **v3 source:** `node_modules/@chakra-ui/react/dist/esm/theme/recipes/input.js`
@@ -897,16 +1063,6 @@ solid, outline, surface`.
   2. `surface` is the default variant (uses `bg: colorPalette.subtle` + inset
      shadow) — different from v1's solid-like default.
 
-### Badge
-
-- **v3 source:** `node_modules/@chakra-ui/react/dist/esm/theme/recipes/badge.js`
-- **v3 base:** `display: inline-flex; alignItems: center; borderRadius: l2;
-gap: 1; fontWeight: medium; fontVariantNumeric: tabular-nums; whiteSpace:
-nowrap; userSelect: none`.
-- **v3 variants:** `solid, subtle (default), outline, surface, plain`.
-- **v3 sizes:** `xs, sm (default), md, lg`.
-- **v1 component:** `Badge.ts`.
-
 ### Spinner
 
 - **v3 source:** `node_modules/@chakra-ui/react/dist/esm/theme/recipes/spinner.js`
@@ -921,15 +1077,6 @@ var(--spinner-track-color)`.
 - **Pitfall:** `animationDuration: 'slowest'` references duration token
   `slowest` (500ms). Our override has `ultra-slow` for 500ms; `slowest` may
   resolve to undefined if our durations table replaces. **TODO verify.**
-
-### Avatar
-
-- **v3 source:** `node_modules/@chakra-ui/react/dist/esm/theme/recipes/avatar.js`
-- Slot recipe with slots `root, image, fallback`.
-- **v3 sizes:** `full, 2xs, xs, sm, md (default), lg, xl, 2xl`.
-- **v3 base.root:** uses `var(--avatar-size)`, `var(--avatar-radius)`,
-  `var(--avatar-font-size)`.
-- **v1 component:** `Avatar.ts`, `AvatarMenu.ts`.
 
 ### Tabs
 
@@ -1033,14 +1180,6 @@ focusRing: outside; display: inline-flex; alignItems: center; gap: 2`.
 - **v3 variants:** `underline, plain`.
 - **v3 sizes:** `sm, md (default), lg`.
 - **v1 component:** `Breadcrumb.ts`.
-
-### Link
-
-- **v3 source:** `node_modules/@chakra-ui/react/dist/esm/theme/recipes/link.js`
-- **v3 base:** `display: inline-flex; alignItems: center; outline: none; gap:
-1.5; cursor: pointer; borderRadius: l1; focusRing: outside`.
-- **v3 variants:** `underline, plain (default)`.
-- **v1 component:** `Link.ts`.
 
 ### Alert (Banner / Infobox in v1)
 

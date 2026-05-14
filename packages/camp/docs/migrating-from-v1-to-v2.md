@@ -116,6 +116,40 @@ Standard v3 boolean-prop renames apply across all components:
 + <Button gap={2}><BxUpload /> Upload</Button>
 ```
 
+### Badge: `BadgeLeftIcon` / `BadgeRightIcon` removed
+
+These helpers were thin icon-with-margin wrappers. Replace with plain icon
+children — the recipe's `gap: '0.25rem'` handles spacing.
+
+```diff
+- <Badge><BadgeLeftIcon as={BxStar} /> Featured</Badge>
++ <Badge><BxStar /> Featured</Badge>
+```
+
+The Chakra codemod does not auto-fix this — search consumer code for
+`BadgeLeftIcon` / `BadgeRightIcon` imports and replace manually.
+
+### Link: prop renames + `Link.ExternalIcon` retained
+
+| v1 prop            | v2 prop        |
+| ------------------ | -------------- |
+| `isDisabled`       | `disabled`     |
+| `isExternal`       | `external`     |
+| `externalLinkIcon` | `externalIcon` |
+
+The codemod handles these renames at consumer call sites. `Link.ExternalIcon`
+is retained as a static helper:
+
+```tsx
+<Link external href="https://example.com">
+  Read more
+  {/* uses <Link.ExternalIcon /> by default; customise via externalIcon prop */}
+</Link>
+```
+
+When `disabled`, Link renders as a non-interactive `<Text as="a"
+aria-disabled>` (preserving v1 semantics — fully unclickable).
+
 ### `sx` → `css` with `&` selector
 
 ```diff
@@ -288,9 +322,13 @@ const myButtonRecipe = defineRecipe({
 
 This release (v2.0.0) ships:
 
+- `Avatar` (migrated — `Avatar.Root` / `Avatar.Image` / `Avatar.Fallback` namespace re-exported from `@chakra-ui/react`; v1's `AvatarBadge` slot removed by Chakra v3 and is no longer available)
+- `Badge` (migrated; `BadgeLeftIcon`/`BadgeRightIcon` helpers removed — replace with plain icon children)
 - `Button` (migrated)
+- `IconButton` (migrated; icons pass as `children` rather than via the v1 `icon` prop)
+- `Link` (migrated; `Link.ExternalIcon` retained as the only sub-helper; `disabled` renders as a non-interactive `<Text as="a">`)
 - `Spinner` (migrated)
-- `ThemeProvider`, `system`, theme tokens (migrated)
+- `ThemeProvider`, `system`, `config`, `buttonRecipe`, `badgeRecipe`, `linkRecipe`, `avatarSlotRecipe`, theme tokens (migrated; consumer-side extension via `extendConfig` prop on `ThemeProvider`)
 - Icons (`Bx*`, minus the two animated-icon helpers retired in this release)
 
 Other components from v1 are not yet available in v2. They will land in
