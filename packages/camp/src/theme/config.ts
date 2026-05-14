@@ -9,9 +9,19 @@ import * as tokens from './tokens'
 
 export const config = defineConfig({
   globalCss: {
-    // Apply via universal selector so child elements aren't reset by
-    // Chakra v3's default `* { fontFeatureSettings: '"cv11"' }` rule.
+    // Match v1's `body { fontFeatureSettings: 'tnum on, cv05 on' }` rule.
+    // The features are applied at the body level and propagate to descendants
+    // via CSS inheritance — `font-feature-settings` IS inherited per spec.
+    //
+    // v3's defaultConfig sets `* { fontFeatureSettings: '"cv11"' }` which
+    // would break inheritance by explicitly resetting every descendant.
+    // Override that universal rule with `inherit` so descendants pick up the
+    // body-level value instead of v3's cv11. Body has higher specificity than
+    // `*`, so the body rule wins on the body element itself.
     '*': {
+      fontFeatureSettings: 'inherit',
+    },
+    body: {
       fontFeatureSettings: "'tnum' on, 'cv05' on",
     },
   },
