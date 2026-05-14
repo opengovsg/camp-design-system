@@ -14,4 +14,14 @@ export { AvatarGroup } from '@chakra-ui/react'
 //
 // v1 used Chakra v2's `<AvatarBadge />`; v3 removed the slot entirely.
 // `Avatar.Badge` is our re-implementation — see ./AvatarBadge.tsx.
-export const Avatar = Object.assign(ChakraAvatar, { Badge: AvatarBadge })
+//
+// Note: v3's `Avatar` namespace is frozen (`Object.isExtensible === false`),
+// so we cannot `Object.assign` onto it — that throws "Cannot add property
+// Badge, object is not extensible" at runtime. Spread into a new object
+// instead. The explicit type annotation avoids TS2742 (the inferred type
+// would reference an internal Chakra path that doesn't survive declaration
+// emit).
+export const Avatar: typeof ChakraAvatar & { Badge: typeof AvatarBadge } = {
+  ...ChakraAvatar,
+  Badge: AvatarBadge,
+}

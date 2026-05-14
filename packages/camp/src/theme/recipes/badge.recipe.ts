@@ -28,27 +28,8 @@ export const badgeRecipe = defineRecipe({
     gap: '0.25rem',
   },
   variants: {
-    variant: {
-      solid: {
-        bg: 'colorPalette.solid',
-        color: 'colorPalette.fg',
-      },
-      subtle: {
-        bg: 'colorPalette.subtleBg',
-        color: 'colorPalette.subtleFg',
-      },
-      // v1 had a `clear` variant rendering as default-coloured text on a
-      // transparent background, with icon children tinted by colorPalette.
-      // Used as the notification-dot pattern (e.g. `<Badge variant="clear"
-      // colorPalette="success"><BxsCircle /> Online</Badge>`).
-      clear: {
-        bg: 'transparent',
-        color: 'base.content.default',
-        _icon: {
-          color: 'colorPalette.solid',
-        },
-      },
-    },
+    // `size` is declared BEFORE `variant` so the variant block wins in CSS
+    // cascade order — `variant.clear` overrides `size.sm`'s `textStyle`.
     size: {
       // Each size redeclares `px`/`py` because v3's default Badge size
       // variants set per-size `px` and `minH` (e.g. sm: `px: '1.5'`, `minH: '5'`).
@@ -65,6 +46,39 @@ export const badgeRecipe = defineRecipe({
         py: '0.25rem',
       },
     },
+    variant: {
+      solid: {
+        bg: 'colorPalette.solid',
+        color: 'colorPalette.fg',
+      },
+      subtle: {
+        bg: 'colorPalette.subtleBg',
+        color: 'colorPalette.subtleFg',
+      },
+      // v1's `clear` variant rendered as default-coloured text on a
+      // transparent background, with icon children tinted by colorPalette.
+      // Used as the notification-dot pattern (e.g. `<Badge variant="clear"
+      // colorPalette="success"><BxsCircle /> Online</Badge>`). `fontWeight`
+      // here overrides the v3 default Badge base `fontWeight: medium` —
+      // unlike `compoundVariants.css.fontWeight`, a recipe-variant property
+      // reliably wins over base.
+      clear: {
+        bg: 'transparent',
+        color: 'base.content.default',
+        // `font-weight` is forced via `!important` (nested under `&` so it
+        // emits as raw CSS, not a Chakra token reference) because v3's
+        // default Badge `base.fontWeight = medium` (500) outranks every
+        // variant-level override the recipe engine accepts as a typed prop.
+        // Verified via getComputedStyle on the rendered Clear story — only
+        // raw CSS with `!important` wins.
+        '&': {
+          fontWeight: '400 !important',
+        },
+        _icon: {
+          color: 'colorPalette.solid',
+        },
+      },
+    },
   },
   compoundVariants: [
     // v1 Badge's `subtleColorTokenMap` mapped `warning` to `yellow.700` for
@@ -78,6 +92,20 @@ export const badgeRecipe = defineRecipe({
       colorPalette: 'warning',
       css: {
         color: 'yellow.700',
+      },
+    },
+    // v1's `clear` variant at sm size ran at body-2 typography (14/20/400)
+    // rather than caption-1 (12/16/500) from `size.sm`. `textStyle` brings
+    // font-size, line-height, letter-spacing, font-family across; `fontWeight`
+    // is set as a token name (`'normal'` = 400) because v3's default Badge
+    // base sets `fontWeight: 'medium'` and the recipe engine only overrides
+    // it when the override uses a matching token alias.
+    {
+      variant: 'clear',
+      size: 'sm',
+      css: {
+        textStyle: 'body-2',
+        fontWeight: 'normal',
       },
     },
   ],

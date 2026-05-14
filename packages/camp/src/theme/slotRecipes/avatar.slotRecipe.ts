@@ -46,6 +46,21 @@ export const avatarSlotRecipe = defineSlotRecipe({
       // bg/color — colour came entirely from variant + colorPalette).
       // `borderRadius` is set by v3's `shape` variant via `--avatar-radius`;
       // we keep v3's `shape: 'full'` default → circular.
+      //
+      // v1 (via Chakra v2's default Avatar theme) rendered fallback initials
+      // as uppercased, center-aligned text. v3 dropped both. Set on `root`
+      // so they're observable on the avatar element (text-transform/align
+      // inherit to the fallback slot child).
+      textTransform: 'uppercase',
+      textAlign: 'center',
+      // v1 Avatar (chakra v2 default) had `border: 2px solid white` on every
+      // avatar so overlapping avatars in an `AvatarGroup` showed white
+      // separators. v3 only applies the border on `&[data-group-item]`, which
+      // means a standalone Avatar drops the white outline our v1 design relied
+      // on. Restore it on root so the bordered look survives outside groups
+      // and the group-item case (which keeps `borderColor: bg` from v3) still
+      // matches white once `bg` resolves to `base.canvas.default`.
+      borderColor: 'white',
     },
     fallback: {
       // v1 set `fontWeight: medium` per-size via textStyle (subhead-2 etc.).

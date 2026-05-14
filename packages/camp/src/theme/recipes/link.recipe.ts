@@ -24,6 +24,10 @@ export const linkRecipe = defineRecipe({
     width: 'fit-content',
     position: 'relative',
     textUnderlineOffset: '0.125rem',
+    // v1 had no flex gap; the external-icon spacing came from the icon's own
+    // `ml="0.25rem"`. v3 default's `gap: 1.5` adds an extra 6px between icon
+    // and text — reset to 0 so the icon spacing matches v1.
+    gap: 0,
     // v3 default uses `borderRadius: 'l1'` (link-specific layer radius). v1 used
     // `'base'`, which dropped in v3; `'sm'` is the matching hex (= 4px).
     borderRadius: 'sm',
@@ -47,29 +51,49 @@ export const linkRecipe = defineRecipe({
   },
   variants: {
     variant: {
-      // v1's `inline` had `textDecorationLine: 'underline'` always-on. The
-      // spec inverts this to underline-on-hover for the inline variant, which
-      // is the new v3 design intent (text-flow links don't read as underlined
-      // until interaction).
+      // v1's `inline` had `textDecorationLine: 'underline'` always-on. Match
+      // v1 exactly — design team preference, verified via drift audit against
+      // the main baseline. Inline links inherit all typography from the
+      // surrounding text (font-size, font-weight, line-height, letter-spacing,
+      // family); the `size` prop has no effect when `variant === 'inline'`
+      // (see compoundVariants below).
       inline: {
-        textDecorationLine: 'none',
-        _hover: { textDecorationLine: 'underline' },
-      },
-      // `standalone` is always underlined and gets a small padding to give the
-      // focus ring breathing room.
-      standalone: {
         textDecorationLine: 'underline',
+      },
+      // `standalone` reads as a button-like control — no underline, with a
+      // small padding to give the focus ring breathing room. v1 baseline
+      // confirms `text-decoration-line: none` (drift audit, May 2026).
+      standalone: {
         p: '0.25rem',
       },
     },
-    // v3 default Link recipe does NOT define `size` variants, so there are no
-    // collisions to redeclare per audit § 8 #14.
+    // Size affects standalone links only; inline links inherit from context
+    // (overridden in the compoundVariants block below). v3 default Link
+    // recipe does NOT define `size` variants, so there are no collisions to
+    // redeclare per audit § 8 #14.
     size: {
       xs: { textStyle: 'caption-1' },
       sm: { textStyle: 'subhead-2' },
       md: { textStyle: 'subhead-1' },
     },
   },
+  // v1's `inline` variant inherited the surrounding paragraph's typography
+  // entirely. The size variant above sets `textStyle` which would apply to
+  // inline links too, so explicitly reset every font property to `inherit`
+  // when variant === 'inline'. Standalone keeps the full textStyle.
+  compoundVariants: [
+    {
+      variant: 'inline',
+      css: {
+        font: 'inherit',
+        fontSize: 'inherit',
+        fontWeight: 'inherit',
+        fontFamily: 'inherit',
+        lineHeight: 'inherit',
+        letterSpacing: 'inherit',
+      },
+    },
+  ],
   defaultVariants: {
     variant: 'inline',
     size: 'md',
