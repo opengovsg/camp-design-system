@@ -7,3 +7,8 @@ storybook-static
 **/token-gen/tokens-generated
 
 .turbo
+
+# superpowers specs and plans are working documents, not source artifacts —
+# keep them local and uncommitted
+docs/superpowers/
+.context/
