@@ -4,6 +4,7 @@ import { badgeRecipe } from './recipes/badge.recipe'
 import { buttonRecipe } from './recipes/button.recipe'
 import { linkRecipe } from './recipes/link.recipe'
 import { avatarSlotRecipe } from './slotRecipes/avatar.slotRecipe'
+import { tagSlotRecipe } from './slotRecipes/tag.slotRecipe'
 import { breakpoints } from './breakpoints'
 import { layerStyles } from './layerStyles'
 import { semanticTokenColors } from './semanticTokens'
@@ -45,6 +46,7 @@ export const config = defineConfig({
     },
     slotRecipes: {
       avatar: avatarSlotRecipe,
+      tag: tagSlotRecipe,
     },
   },
 })
