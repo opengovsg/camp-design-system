@@ -728,19 +728,47 @@ transitionDuration: moderate; focusVisibleRing: outside; _disabled: {
 layerStyle: 'disabled' }; _icon: { flexShrink: 0 }`
 - **v3 variants:** `solid (default), subtle, surface, outline, ghost, plain`.
   Each uses `colorPalette.{solid|subtle|muted|fg|contrast|border}` slots.
-- **v3 sizes:** `2xs, xs, sm, md (default), lg, xl, 2xl`.
+- **v3 sizes (every size sets these per-size):** `h: <n>` (height in `sizes.<n>`),
+  `minW: <n>` (min-width), `textStyle: '<size>'`, `px: <n>` (horizontal
+  padding), `gap: <n>` (flex gap between children), `_icon: { width: <n>;
+height: <n> }` (pixel-size SVG children).
+- **v3 sizes table:** `2xs, xs, sm, md (default), lg, xl, 2xl`.
 - **v3 defaultVariants:** `{ size: 'md', variant: 'solid' }`.
 - **v1 component:** `git show main:packages/camp/src/theme/components/Button.ts`.
-- **Pitfalls:**
+- **Pitfalls (caught during foundation PR — all already fixed):**
   1. `borderColor: transparent` in v3 base → use `borderWidth: '1px'` +
      `borderStyle: 'solid'` longhands (NOT `border: '1px solid'` shorthand).
-  2. `transitionDuration: moderate` → ensure `moderate` resolves in our
-     durations table.
+  2. `transitionDuration: moderate` → resolves correctly (merge confirmed,
+     §9.1).
   3. `focusVisibleRing: 'outside'` → references the ring CSS variables from
      `globalCss.*`.
   4. Default `lineHeight: '1.2'` (literal) may conflict with our `textStyle:
-'subhead-1'` line-height. **TODO verify** which wins — see [Section 8
-     pitfall #6](#8-common-patterns-and-pitfalls).
+'subhead-1'` line-height. Computed line-height was correct in our Button
+     stories (`24px`), suggesting `textStyle`-inlined properties win after
+     merge. **TODO verify** for non-Button recipes in §8 pitfall #6.
+  5. **v3 default `size.X.px` overrides our `base.px`.** Caused a 2px width
+     regression. **Fix applied:** redeclare `px: '15px'` in each of our
+     `size.*` variants. See [§8 pitfall #14](#8-common-patterns-and-pitfalls).
+  6. **v3 default `size.X._icon: { width, height }` clobbers consumer
+     `fontSize` on icon children.** Caused icons to render at 20px instead of
+     consumer-driven 24px. **Fix applied:** set `_icon: { width: '1em',
+height: '1em' }` in each of our `size.*` variants so consumer-set
+     `fontSize` controls icon size (matching v1 behaviour where icons were
+     `<BxUpload fontSize="1.5rem" />`).
+  7. **Variant-specific overrides need `compoundVariants` if size variants
+     touch the same property.** Caused the `link` variant to inherit
+     `px: '15px'` from `size.md` instead of v1's effective `p: '0.25rem'` (4px,
+     inherited from `Link.variants.standalone`). **Fix applied:** added
+     `compoundVariants: [{ variant: 'link', css: { px: '0.25rem', py:
+'0.25rem' } }]`. compoundVariants beat single-axis variants in cascade.
+  8. **v3 default `radii.base` does not exist.** Caused `borderRadius: 'base'`
+     to silently render no rounding. **Fix applied:** use `borderRadius: 'sm'`
+     (v3's `sm` = v2's `base` = 0.25rem). Similarly v2's `sm` (0.125rem) is
+     now `xs`. See [§3 radii](#radii) for the full conversion table.
+  9. **v3 globalCss `* { fontFeatureSettings: '"cv11"' }` defeats `body
+{ ... }` inheritance.** Caused `tnum` and `cv05` to not apply to
+     descendants. **Fix applied:** `globalCss['*']` instead of
+     `globalCss.body` in our config.
 
 ### Input
 
@@ -1155,6 +1183,51 @@ A checklist distilled from the foundation PR's regressions:
     use `l1/l2/l3` heavily. Spec authors may keep these for compatibility
     (they resolve to v3's `xs/sm/md`) or override with our v1-style names.
     Our Button uses `'sm'` directly.
+
+14. **A v3-default size variant beats our `base` and our `variant` for any
+    property it sets.** This is the single most common source of foundation-PR
+    regressions, and applies to every recipe v3 ships defaults for.
+
+    Mechanism: in `createSystem(defaultConfig, ourConfig)`, the merged recipe
+    has `variants.size.X` and `variants.variant.Y` declared in the order they
+    appear in the merged source — and v3 default recipes typically declare
+    `size` before `variant`. Multiple `variants` keys all emit their own CSS
+    classes, and the cascade resolves between same-property collisions by
+    source order. The size-variant CSS is emitted later → wins.
+
+    Concrete examples from the Button foundation PR:
+
+    | v3 default sets, in `size.md`               | What we wanted                                   | How we forced it                                                              |
+    | ------------------------------------------- | ------------------------------------------------ | ----------------------------------------------------------------------------- |
+    | `px: '4'` (16px)                            | `15px` (v1)                                      | Set `px: '15px'` in each of our `size.*` variants                             |
+    | `_icon: { width: '5', height: '5' }` (20px) | `1em` (consumer-controlled, ~24px in v1 stories) | Set `_icon: { width: '1em', height: '1em' }` in each of our `size.*` variants |
+    | `gap: '2'` (8px)                            | (no opinion)                                     | Accepted — matches v1's old `iconSpacing`                                     |
+    | `h: '10'` (40px)                            | `2.75rem` min (44px)                             | Our `minH` is set in size — wins via min-vs-h cascade                         |
+
+    For variant-specific overrides that need to defeat v3-default size:
+
+    | Case                                                                 | Approach                                                                                              |
+    | -------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+    | All variants need the same property (e.g. `px: '15px'` everywhere)   | Redeclare in each of our `size.*` blocks                                                              |
+    | Only one variant needs a different value (e.g. `link.px: '0.25rem'`) | Use `compoundVariants: [{ variant: 'link', css: {...} }]` — higher specificity than either axis alone |
+
+    **Before authoring any recipe in a follow-up spec, do this audit:**
+
+    1. Read the v3 default recipe at
+       `node_modules/@chakra-ui/react/dist/esm/theme/recipes/<name>.js`.
+    2. List every property v3 sets in **size variants** (these will beat your
+       base).
+    3. For each, decide: accept v3's value, override at the size-variant level,
+       or override via compoundVariants when behaviour differs per variant.
+    4. Also check `_icon`, `_disabled`, `_hover` etc. inside v3's base — v3
+       commonly references `layerStyle: 'disabled'` which sets
+       `opacity/cursor` you may not want.
+
+15. **Document regression fixes inline as code comments.** When you redeclare
+    a property because of (#14), leave a one-line comment naming the v3
+    default that forced the redeclaration. Future maintainers and reviewers
+    can verify the override is still needed if v3 ships a new minor version
+    that changes defaults.
 
 ---
 
