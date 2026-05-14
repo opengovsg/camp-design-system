@@ -322,7 +322,7 @@ const myButtonRecipe = defineRecipe({
 
 This release (v2.0.0) ships:
 
-- `Avatar` (migrated — `Avatar.Root` / `Avatar.Image` / `Avatar.Fallback` namespace re-exported from `@chakra-ui/react`; v1's `AvatarBadge` slot removed by Chakra v3 and is no longer available)
+- `Avatar` (migrated — `Avatar.Root` / `Avatar.Image` / `Avatar.Fallback` namespace re-exported from `@chakra-ui/react`. v1's `<AvatarBadge />` is restored as `<Avatar.Badge />` — same notification-dot rendering, new compound-API shape; consumer migration is mechanical: `import { AvatarBadge }` becomes `<Avatar.Badge />` inside `<Avatar.Root>`)
 - `Badge` (migrated; `BadgeLeftIcon`/`BadgeRightIcon` helpers removed — replace with plain icon children)
 - `Button` (migrated)
 - `IconButton` (migrated; icons pass as `children` rather than via the v1 `icon` prop)

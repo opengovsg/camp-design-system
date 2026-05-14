@@ -6,3 +6,4 @@ build
 build
 build-storybook.log
 storybook-static
+scripts/audit-report.json

@@ -41,11 +41,13 @@ const SizesTemplate: StoryFn<AvatarRootProps> = (args) => {
           </Avatar.Root>
           <Avatar.Root {...args} size={size} variant="subtle">
             <Avatar.Fallback name="ABC" />
+            <Avatar.Badge />
           </Avatar.Root>
           <Avatar.Root {...args} size={size}>
             <Avatar.Icon>
               <BxsUser />
             </Avatar.Icon>
+            <Avatar.Badge />
           </Avatar.Root>
         </Fragment>
       ))}
@@ -78,6 +80,7 @@ const ColoursTemplate: StoryFn<AvatarRootProps> = ({ variant, ...args }) => {
               variant={variant ?? 'subtle'}
             >
               <Avatar.Fallback name="ABC" />
+              <Avatar.Badge />
             </Avatar.Root>
             <Avatar.Root
               {...args}
@@ -87,6 +90,7 @@ const ColoursTemplate: StoryFn<AvatarRootProps> = ({ variant, ...args }) => {
               <Avatar.Icon>
                 <BxsUser />
               </Avatar.Icon>
+              <Avatar.Badge />
             </Avatar.Root>
           </Fragment>
         ),
@@ -133,6 +137,15 @@ export const WithImage: StoryFn<AvatarRootProps> = (args) => {
 export const WithBorder = Template.bind({})
 WithBorder.args = {
   boxShadow: `0 0 0 4px var(--chakra-colors-blue-300)`,
+}
+
+export const WithNotification: StoryFn<AvatarRootProps> = (args) => {
+  return (
+    <Avatar.Root {...args}>
+      <Avatar.Fallback name="ABC" />
+      <Avatar.Badge />
+    </Avatar.Root>
+  )
 }
 
 export const Sizes = SizesTemplate.bind({})
