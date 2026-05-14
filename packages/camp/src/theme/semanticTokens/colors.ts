@@ -85,6 +85,16 @@ const palettes = {
     reverseActive: { value: '{colors.interaction.success.active}' },
   },
   neutral: {
+    // `subtleBg` / `subtleFg` back the Badge `subtle` variant for the neutral
+    // palette. v1 Badge used `interaction.neutral-subtle.default` for the bg
+    // and `interaction.neutral.default` for the fg. Avatar didn't support
+    // `neutral` so these weren't added in the Avatar migration.
+    subtleBg: { value: '{colors.interaction.neutral-subtle.default}' },
+    subtleFg: { value: '{colors.interaction.neutral.default}' },
+    // v1 Badge `solid.neutral` rendered `interaction.neutral.default` on the
+    // bg with `base.content.inverse` text (passed contrast check in v1).
+    solid: { value: '{colors.interaction.neutral.default}' },
+    fg: { value: '{colors.base.content.inverse}' },
     outlineBorder: { value: '{colors.base.content.strong}' },
     outlineHover: { value: '{colors.interaction.tinted.neutral.hover}' },
     outlineActive: { value: '{colors.interaction.tinted.neutral.active}' },
