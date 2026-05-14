@@ -9,7 +9,9 @@ import * as tokens from './tokens'
 
 export const config = defineConfig({
   globalCss: {
-    body: {
+    // Apply via universal selector so child elements aren't reset by
+    // Chakra v3's default `* { fontFeatureSettings: '"cv11"' }` rule.
+    '*': {
       fontFeatureSettings: "'tnum' on, 'cv05' on",
     },
   },
