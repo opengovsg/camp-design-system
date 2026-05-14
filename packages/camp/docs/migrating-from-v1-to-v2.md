@@ -128,6 +128,151 @@ Standard v3 boolean-prop renames apply across all components:
 - `@emotion/styled` no longer needed.
 - `framer-motion` no longer needed.
 
+## Extending the theme (custom palettes, variants, overrides)
+
+v2 exposes the `config` (mergeable `defineConfig` output) so downstream apps
+can add tokens/recipes/variants without recreating the system. There are two
+patterns.
+
+### Pattern A: pass `extendConfig` to `ThemeProvider`
+
+The simplest path. Best for adding a custom palette, a custom variant, or
+overriding a token globally for your app.
+
+```tsx
+import { defineConfig } from '@chakra-ui/react'
+import { ThemeProvider } from '@opengovsg/design-system-react'
+
+const tenantTheme = defineConfig({
+  theme: {
+    tokens: {
+      colors: { tenantBrand: { value: '#ff8800' } },
+    },
+    semanticTokens: {
+      colors: {
+        // A new colorPalette with the four button slots the recipe expects.
+        tenant: {
+          solid: { value: '{colors.tenantBrand}' },
+          solidHover: { value: '{colors.tenantBrand}' },
+          solidActive: { value: '{colors.tenantBrand}' },
+          fg: { value: '#ffffff' },
+          outlineBorder: { value: '{colors.tenantBrand}' },
+          reverseFg: { value: '{colors.tenantBrand}' },
+        },
+      },
+    },
+    recipes: {
+      button: {
+        variants: {
+          variant: {
+            tertiary: {
+              bg: 'transparent',
+              color: 'tenantBrand',
+              textDecoration: 'underline',
+            },
+          },
+        },
+      },
+    },
+  },
+})
+
+export const App = () => (
+  <ThemeProvider extendConfig={tenantTheme}>
+    <YourApp />
+  </ThemeProvider>
+)
+```
+
+The merge order is `defaultConfig` → OGP config → your `extendConfig`. Your
+values win on collision. Recipes deep-merge per-variant, so `tertiary`
+above slots in next to OGP's `solid/reverse/outline/clear/link/inputAttached`
+rather than replacing them.
+
+### Pattern B: build your own `system` with `config`
+
+Use when you need full control — e.g. multi-tenant apps that render
+different `ChakraProvider`s per route, or when you want to layer multiple
+configs in a specific order.
+
+```tsx
+import {
+  ChakraProvider,
+  createSystem,
+  defaultConfig,
+  defineConfig,
+} from '@chakra-ui/react'
+import { config as ogpConfig } from '@opengovsg/design-system-react'
+
+const mySystem = createSystem(
+  defaultConfig,
+  ogpConfig,
+  defineConfig({
+    /* your overrides */
+  }),
+)
+
+export const App = () => (
+  <ChakraProvider value={mySystem}>
+    <YourApp />
+  </ChakraProvider>
+)
+```
+
+You bypass our `ThemeProvider` in this pattern.
+
+### TypeScript autocomplete for custom variants
+
+Custom variants you add via `extendConfig` won't appear in `<Button
+variant="…">` autocomplete unless you regenerate types from your merged
+system. Add a script that points `chakra typegen` at your assembled system
+module and run it after installs.
+
+```json
+// package.json
+{
+  "scripts": {
+    "gen:theme-types": "chakra typegen ./src/theme/system.ts",
+    "postinstall": "npm run gen:theme-types"
+  }
+}
+```
+
+Without this step, your custom variant still renders correctly at runtime —
+only the TypeScript value union is missing it.
+
+### What you can extend, and what you can't
+
+| Action                                                           | Supported?                                                               |
+| ---------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| Add a new `colorPalette` (with the slots our recipes reference)  | ✅                                                                       |
+| Add a new variant to an existing recipe (e.g. `Button.tertiary`) | ✅                                                                       |
+| Override an existing token value                                 | ✅                                                                       |
+| Override an existing recipe variant's properties                 | ✅                                                                       |
+| Add brand new recipes / slot recipes                             | ✅                                                                       |
+| Remove a variant our recipe ships                                | ❌ (Chakra has no "delete variant" primitive; redefine the whole recipe) |
+| Change variant identity (e.g. rename `solid` → `primary`)        | ❌ (same — full recipe redefinition needed)                              |
+
+The `config` and individual recipes (e.g. `buttonRecipe`) are exported from
+`@opengovsg/design-system-react`, so you can also clone-and-modify a specific
+recipe if you need surgical control:
+
+```ts
+import { buttonRecipe } from '@opengovsg/design-system-react'
+import { defineRecipe } from '@chakra-ui/react'
+
+const myButtonRecipe = defineRecipe({
+  ...buttonRecipe,
+  variants: {
+    ...buttonRecipe.variants,
+    variant: {
+      ...buttonRecipe.variants?.variant,
+      // your additions / overrides
+    },
+  },
+})
+```
+
 ### Status of components in this package
 
 This release (v2.0.0) ships:

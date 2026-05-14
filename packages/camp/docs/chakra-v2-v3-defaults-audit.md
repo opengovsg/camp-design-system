@@ -737,54 +737,55 @@ height: <n> }` (pixel-size SVG children).
 - **v1 component:** `git show main:packages/camp/src/theme/components/Button.ts`.
 - **Pitfalls (caught during foundation PR — all already fixed):**
 
-  1. `borderColor: transparent` in v3 base → use `borderWidth: '1px'` +
-     `borderStyle: 'solid'` longhands (NOT `border: '1px solid'` shorthand).
-  2. `transitionDuration: moderate` → resolves correctly (merge confirmed,
-     §9.1).
-  3. `focusVisibleRing: 'outside'` → references the ring CSS variables from
-     `globalCss.*`.
-  4. Default `lineHeight: '1.2'` (literal) may conflict with our `textStyle:
+  1.  `borderColor: transparent` in v3 base → use `borderWidth: '1px'` +
+      `borderStyle: 'solid'` longhands (NOT `border: '1px solid'` shorthand).
+  2.  `transitionDuration: moderate` → resolves correctly (merge confirmed,
+      §9.1).
+  3.  `focusVisibleRing: 'outside'` → references the ring CSS variables from
+      `globalCss.*`.
+  4.  Default `lineHeight: '1.2'` (literal) may conflict with our `textStyle:
 'subhead-1'` line-height. Computed line-height was correct in our Button
-     stories (`24px`), suggesting `textStyle`-inlined properties win after
-     merge. **TODO verify** for non-Button recipes in §8 pitfall #6.
-  5. **v3 default `size.X.px` overrides our `base.px`.** Caused a 2px width
-     regression. **Fix applied:** redeclare `px: '15px'` in each of our
-     `size.*` variants. See [§8 pitfall #14](#8-common-patterns-and-pitfalls).
-  6. **v3 default `size.X._icon: { width, height }` clobbers consumer
-     `fontSize` on icon children.** Caused icons to render at 20px instead of
-     consumer-driven 24px. **Fix applied:** set `_icon: { width: '1em',
+      stories (`24px`), suggesting `textStyle`-inlined properties win after
+      merge. **TODO verify** for non-Button recipes in §8 pitfall #6.
+  5.  **v3 default `size.X.px` overrides our `base.px`.** Caused a 2px width
+      regression. **Fix applied:** redeclare `px: '15px'` in each of our
+      `size.*` variants. See [§8 pitfall #14](#8-common-patterns-and-pitfalls).
+  6.  **v3 default `size.X._icon: { width, height }` clobbers consumer
+      `fontSize` on icon children.** Caused icons to render at 20px instead of
+      consumer-driven 24px. **Fix applied:** set `_icon: { width: '1em',
 height: '1em' }` in each of our `size.*` variants so consumer-set
-     `fontSize` controls icon size (matching v1 behaviour where icons were
-     `<BxUpload fontSize="1.5rem" />`).
-  7. **Variant-specific overrides need `compoundVariants` if size variants
-     touch the same property.** Caused the `link` variant to inherit
-     `px: '15px'` from `size.md` instead of v1's effective `p: '0.25rem'` (4px,
-     inherited from `Link.variants.standalone`). **Fix applied:** added
-     `compoundVariants: [{ variant: 'link', css: { px: '0.25rem', py:
+      `fontSize` controls icon size (matching v1 behaviour where icons were
+      `<BxUpload fontSize="1.5rem" />`).
+  7.  **Variant-specific overrides need `compoundVariants` if size variants
+      touch the same property.** Caused the `link` variant to inherit
+      `px: '15px'` from `size.md` instead of v1's effective `p: '0.25rem'` (4px,
+      inherited from `Link.variants.standalone`). **Fix applied:** added
+      `compoundVariants: [{ variant: 'link', css: { px: '0.25rem', py:
 '0.25rem' } }]`. compoundVariants beat single-axis variants in cascade.
-  8. **v3 default `radii.base` does not exist.** Caused `borderRadius: 'base'`
-     to silently render no rounding. **Fix applied:** use `borderRadius: 'sm'`
-     (v3's `sm` = v2's `base` = 0.25rem). Similarly v2's `sm` (0.125rem) is
-     now `xs`. See [§3 radii](#radii) for the full conversion table.
-  9. **v3 globalCss `* { fontFeatureSettings: '"cv11"' }` defeats `body
+  8.  **v3 default `radii.base` does not exist.** Caused `borderRadius: 'base'`
+      to silently render no rounding. **Fix applied:** use `borderRadius: 'sm'`
+      (v3's `sm` = v2's `base` = 0.25rem). Similarly v2's `sm` (0.125rem) is
+      now `xs`. See [§3 radii](#radii) for the full conversion table.
+  9.  **v3 globalCss `* { fontFeatureSettings: '"cv11"' }` defeats `body
 { ... }` inheritance.** v1 set `body { fontFeatureSettings: 'tnum on,
 cv05 on' }` and relied on inheritance — but in v3 the universal cv11
-     rule explicitly resets every descendant, breaking inheritance. **Fix
-     applied:** `globalCss: { '*': { fontFeatureSettings: "'tnum' on, 'cv05'
+      rule explicitly resets every descendant, breaking inheritance. **Fix
+      applied:** `globalCss: { '*': { fontFeatureSettings: "'tnum' on, 'cv05'
 on" } }` — apply our features at the same universal scope so cv11 is
-     overridden everywhere.
+      overridden everywhere.
 
-     This is **intentionally broader than v1**: v1's `body` rule left
-     buttons/inputs/textareas at the browser UA default `normal` (no cv05
-     tail on `l`); v3 applies cv05/tnum to those form elements as well. The
-     design team confirmed this universal application is the desired
-     behaviour going forward.
+           This is **intentionally broader than v1**: v1's `body` rule left
+           buttons/inputs/textareas at the browser UA default `normal` (no cv05
+           tail on `l`); v3 applies cv05/tnum to those form elements as well. The
+           design team confirmed this universal application is the desired
+           behaviour going forward.
 
-     **For follow-up specs:** do **not** add per-recipe `fontFeatureSettings:
-'normal'` resets on form elements like `Input`, `Textarea`, `Select`,
+           **For follow-up specs:** do **not** add per-recipe `fontFeatureSettings:
+
+      'normal'`resets on form elements like`Input`, `Textarea`, `Select`,
      `Checkbox`, `Radio`, `Switch`. The universal `globalCss` rule is
-     intentional, and form text should render with the same character
-     variants as the surrounding body text.
+      intentional, and form text should render with the same character
+      variants as the surrounding body text.
 
 ### Input
 
