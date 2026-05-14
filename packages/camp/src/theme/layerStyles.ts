@@ -1,21 +1,22 @@
-export const layerStyles = {
-  focusRing: {
-    default: {
+import { defineLayerStyles } from '@chakra-ui/react'
+
+export const layerStyles = defineLayerStyles({
+  'focusRing-default': {
+    value: {
       _focusVisible: {
         boxShadow: 'none !important',
-        outline: `2px solid var(--chakra-colors-utility-focus-default)`,
-        outlineOffset: '0.125rem',
-        _dark: {
-          outline: `2px solid var(--chakra-colors-utility-focus-inverse)`,
-        },
-      },
-    },
-    inverse: {
-      _focusVisible: {
-        boxShadow: 'none !important',
-        outline: `2px solid var(--chakra-colors-utility-focus-inverse)`,
+        outline: '2px solid var(--chakra-colors-utility-focus-default)',
         outlineOffset: '0.125rem',
       },
     },
   },
-}
+  'focusRing-inverse': {
+    value: {
+      _focusVisible: {
+        boxShadow: 'none !important',
+        outline: '2px solid var(--chakra-colors-utility-focus-inverse)',
+        outlineOffset: '0.125rem',
+      },
+    },
+  },
+})
