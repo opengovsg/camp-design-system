@@ -92,11 +92,13 @@ export const buttonRecipe = defineRecipe({
         _active: { bg: 'colorPalette.outlineActive' },
       },
       link: {
+        // Visual identity only — sizing, padding, gap, font weight, line height,
+        // and underline behaviour are handled in `compoundVariants` so they
+        // beat the v3-default size variant and our textStyle inlining.
         border: 'none',
-        minHeight: 'auto',
-        fontWeight: 'normal',
+        borderWidth: 0,
+        borderStyle: 'none',
         w: 'fit-content',
-        textDecoration: 'underline',
         bg: 'transparent',
         color: 'colorPalette.outlineBorder',
         _disabled: { bg: 'transparent' },
@@ -166,16 +168,34 @@ export const buttonRecipe = defineRecipe({
     },
   },
   compoundVariants: [
-    // The `link` variant needs to defeat the px:'15px' set in every size
-    // variant — single-axis variants alone can't, because size variants are
-    // declared after `variant` here and so emit later in the cascade.
-    // compoundVariants take higher specificity than either axis. Matches v1's
-    // effective padding (Link.variants.standalone set `p: '0.25rem'`).
+    // The `link` variant renders as inline text, not as a button-shaped box.
+    // It must defeat:
+    //   - v3 default `base.fontWeight: 'medium'` (→ inline text is `normal`)
+    //   - textStyle `subhead-1` inlining `lineHeight: '1.5rem'` (→ should be
+    //     `normal` for inline rendering)
+    //   - v3 default `size.md.h: '10'` (→ height should follow content)
+    //   - v3 default `size.md.gap: '2'` (→ no gap; icons sit inline)
+    //   - Our own size-variant `px: '15px'`, `minH: '2.75rem'` etc.
+    //
+    // All these collisions resolve in favour of the size variant or textStyle
+    // unless promoted to compoundVariant specificity. v1 effective state
+    // (preserved here): height: auto; padding: 0; gap: 0; font-weight: 400;
+    // line-height: normal; underline on hover only.
     {
       variant: 'link',
       css: {
-        px: '0.25rem',
-        py: '0.25rem',
+        h: 'auto',
+        minH: 'auto',
+        px: 0,
+        py: 0,
+        gap: 0,
+        fontWeight: 'normal',
+        lineHeight: 'normal',
+        textDecorationLine: 'none',
+        textUnderlineOffset: '0.125rem',
+        _hover: {
+          textDecorationLine: 'underline',
+        },
       },
     },
   ],
