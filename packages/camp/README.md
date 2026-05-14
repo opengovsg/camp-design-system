@@ -1,5 +1,10 @@
 # @opengovsg/design-system-react
 
+> **v2.0.0 (Chakra UI v3) migration in progress.** See
+> [`docs/migrating-from-v1-to-v2.md`](docs/migrating-from-v1-to-v2.md) for the
+> consumer migration guide. Until v2.0.0 stable releases, this package's
+> `latest` tag remains on the v1.x line.
+
 This design system extends from the wonderful [Chakra UI library](https://github.com/chakra-ui/chakra-ui).
 
 The available components can be viewed at our [Storybook](https://design.open.gov.sg)
