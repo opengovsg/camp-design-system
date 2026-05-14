@@ -1241,6 +1241,17 @@ A checklist distilled from the foundation PR's regressions:
     can verify the override is still needed if v3 ships a new minor version
     that changes defaults.
 
+16. **Do not set `className` in `defineRecipe` / `defineSlotRecipe`.** v3
+    defaults each recipe's class name to `chakra-<key>` (e.g.
+    `chakra-button`, `chakra-link`). Overriding to a custom prefix
+    (`ogp-button`) silently breaks any downstream tooling, test selector,
+    or future Chakra internal that relies on the standard `chakra-` class,
+    and forces every recipe author to remember to set the field. Brand
+    identity is communicated via the import path and wrapper exports — no
+    CSS-class hook needed. If we ever need to namespace explicitly, it's a
+    one-line addition per recipe; easier to add later than to predict
+    breakage from premature inclusion.
+
 ---
 
 ## 9. Verification results and remaining questions

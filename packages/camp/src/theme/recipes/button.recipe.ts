@@ -15,7 +15,6 @@ export type ButtonColorPalette =
 export type ThemeButtonColorScheme = ButtonColorPalette
 
 export const buttonRecipe = defineRecipe({
-  className: 'ogp-button',
   base: {
     textStyle: 'subhead-1',
     whiteSpace: 'pre-wrap',
