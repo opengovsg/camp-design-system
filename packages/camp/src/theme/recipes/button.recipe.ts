@@ -124,9 +124,9 @@ export const buttonRecipe = defineRecipe({
     },
     size: {
       xs: { textStyle: 'subhead-2', minH: '2.25rem', minW: '2.25rem' },
-      sm: { textStyle: 'subhead-1', minH: '2.5rem',  minW: '2.5rem' },
+      sm: { textStyle: 'subhead-1', minH: '2.5rem', minW: '2.5rem' },
       md: { textStyle: 'subhead-1', minH: '2.75rem', minW: '2.75rem' },
-      lg: { textStyle: 'subhead-1', minH: '3rem',    minW: '3rem' },
+      lg: { textStyle: 'subhead-1', minH: '3rem', minW: '3rem' },
     },
   },
   defaultVariants: {

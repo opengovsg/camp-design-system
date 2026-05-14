@@ -15,10 +15,7 @@ const spin = keyframes({
   },
 })
 
-export const SpinnerIcon = ({
-  speed = '2.5s',
-  ...props
-}: SpinnerIconProps) => {
+export const SpinnerIcon = ({ speed = '2.5s', ...props }: SpinnerIconProps) => {
   const [prefersReducedMotion] = useMediaQuery([
     '(prefers-reduced-motion: reduce)',
   ])

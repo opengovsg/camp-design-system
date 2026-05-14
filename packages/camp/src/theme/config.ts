@@ -1,10 +1,10 @@
 import { defineConfig } from '@chakra-ui/react'
 
-import { breakpoints } from './breakpoints'
 import { buttonRecipe } from './recipes/button.recipe'
+import { breakpoints } from './breakpoints'
+import { layerStyles } from './layerStyles'
 import { semanticTokenColors } from './semanticTokens'
 import { textStyles } from './textStyles'
-import { layerStyles } from './layerStyles'
 import * as tokens from './tokens'
 
 export const config = defineConfig({

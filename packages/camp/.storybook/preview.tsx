@@ -26,10 +26,7 @@ export const parameters: Preview['parameters'] = {
     },
   },
   backgrounds: {
-    values: [
-      ...Object.values(backgrounds),
-      { name: 'blue', value: '#1361F0' },
-    ],
+    values: [...Object.values(backgrounds), { name: 'blue', value: '#1361F0' }],
   },
 }
 
