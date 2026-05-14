@@ -62,8 +62,8 @@ handles this automatically.
 The following v1 export names are still importable in v2.x for migration ease,
 but are marked `@deprecated` and will be removed in v3.0.
 
-| v1 name | v2 name | Status |
-|---|---|---|
+| v1 name                         | v2 name              | Status                                    |
+| ------------------------------- | -------------------- | ----------------------------------------- |
 | `ThemeButtonColorScheme` (type) | `ButtonColorPalette` | `ThemeButtonColorScheme` deprecated alias |
 
 (More entries land as follow-up component migrations ship. Check `CHANGELOG.md`
