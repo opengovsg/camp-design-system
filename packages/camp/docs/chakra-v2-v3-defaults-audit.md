@@ -766,26 +766,21 @@ height: '1em' }` in each of our `size.*` variants so consumer-set
       to silently render no rounding. **Fix applied:** use `borderRadius: 'sm'`
       (v3's `sm` = v2's `base` = 0.25rem). Similarly v2's `sm` (0.125rem) is
       now `xs`. See [§3 radii](#radii) for the full conversion table.
-  9.  **v3 globalCss `* { fontFeatureSettings: '"cv11"' }` defeats `body
-{ ... }` inheritance.** v1 set `body { fontFeatureSettings: 'tnum on,
-cv05 on' }` and relied on inheritance — but in v3 the universal cv11
-      rule explicitly resets every descendant, breaking inheritance. **Fix
-      applied:** `globalCss: { '*': { fontFeatureSettings: "'tnum' on, 'cv05'
-on" } }` — apply our features at the same universal scope so cv11 is
-      overridden everywhere.
-
-                 This is **intentionally broader than v1**: v1's `body` rule left
-                 buttons/inputs/textareas at the browser UA default `normal` (no cv05
-                 tail on `l`); v3 applies cv05/tnum to those form elements as well. The
-                 design team confirmed this universal application is the desired
-                 behaviour going forward.
-
-                 **For follow-up specs:** do **not** add per-recipe `fontFeatureSettings:
-
-            'normal'`resets on form elements like`Input`, `Textarea`, `Select`,
-           `Checkbox`, `Radio`, `Switch`. The universal `globalCss` rule is
-            intentional, and form text should render with the same character
-            variants as the surrounding body text.
+  9.  **v3 globalCss `* { fontFeatureSettings: '"cv11"' }` defeats `body { ... }` inheritance.**
+      v1 set `body { fontFeatureSettings: 'tnum on, cv05 on' }` and relied on
+      inheritance — but in v3 the universal cv11 rule explicitly resets every
+      descendant, breaking inheritance. **Fix applied:**
+      `globalCss: { '*': { fontFeatureSettings: "'tnum' on, 'cv05' on" } }` —
+      apply our features at the same universal scope so cv11 is overridden
+      everywhere. This is **intentionally broader than v1**: v1's `body` rule
+      left buttons/inputs/textareas at the browser UA default `normal` (no cv05
+      tail on `l`); v3 applies cv05/tnum to those form elements as well. The
+      design team confirmed this universal application is the desired
+      behaviour going forward. **For follow-up specs:** do **not** add
+      per-recipe `fontFeatureSettings: 'normal'` resets on form elements like
+      `Input`, `Textarea`, `Select`, `Checkbox`, `Radio`, `Switch`. The
+      universal `globalCss` rule is intentional, and form text should render
+      with the same character variants as the surrounding body text.
 
 ### Input
 
