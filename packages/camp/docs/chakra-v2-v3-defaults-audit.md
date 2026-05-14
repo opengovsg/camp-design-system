@@ -736,6 +736,7 @@ height: <n> }` (pixel-size SVG children).
 - **v3 defaultVariants:** `{ size: 'md', variant: 'solid' }`.
 - **v1 component:** `git show main:packages/camp/src/theme/components/Button.ts`.
 - **Pitfalls (caught during foundation PR — all already fixed):**
+
   1. `borderColor: transparent` in v3 base → use `borderWidth: '1px'` +
      `borderStyle: 'solid'` longhands (NOT `border: '1px solid'` shorthand).
   2. `transitionDuration: moderate` → resolves correctly (merge confirmed,
@@ -766,9 +767,28 @@ height: '1em' }` in each of our `size.*` variants so consumer-set
      (v3's `sm` = v2's `base` = 0.25rem). Similarly v2's `sm` (0.125rem) is
      now `xs`. See [§3 radii](#radii) for the full conversion table.
   9. **v3 globalCss `* { fontFeatureSettings: '"cv11"' }` defeats `body
-{ ... }` inheritance.** Caused `tnum` and `cv05` to not apply to
-     descendants. **Fix applied:** `globalCss['*']` instead of
-     `globalCss.body` in our config.
+{ ... }` inheritance.** Caused `tnum`/`cv05` to not propagate to descendant
+     text. **Fix applied (final):** keep v1's `body` rule, plus `* {
+     fontFeatureSettings: 'inherit' }` to neutralize v3's cv11 and restore
+     CSS inheritance from body. **Earlier attempt with `globalCss['*']`
+     alone over-applied features to buttons** (broke #10).
+
+  10. **Form-element font reset.** v1 buttons rendered with
+      `font-feature-settings: normal` because the browser UA stylesheet
+      resets font properties on `<button>`/`<input>`/`<textarea>`/`<select>`
+      (UA defaults don't inherit body fonts on form elements). Visually this
+      meant Inter's cv05 character variant did NOT apply to button text —
+      the lowercase `l` rendered without its serif tail. In v3 with our
+      `globalCss` and v3's default `*` rule, features WOULD propagate into
+      buttons. **Fix applied:** explicitly set `fontFeatureSettings: 'normal'`
+      in the Button recipe base to mirror UA-default behaviour.
+
+      **For follow-up specs:** every form-element recipe (`Input`, `Textarea`,
+      `NumberInput`, `Select`, `Checkbox` label, `Radio` label, `Switch`
+      label) needs to decide whether to inherit body's tnum/cv05 or reset to
+      `normal`. The v1 behaviour was reset; the design intent may differ
+      per-component (e.g. NumberInput may legitimately want `tnum` for
+      tabular digit alignment).
 
 ### Input
 
