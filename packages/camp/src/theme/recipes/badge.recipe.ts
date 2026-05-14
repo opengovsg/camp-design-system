@@ -36,6 +36,17 @@ export const badgeRecipe = defineRecipe({
         bg: 'colorPalette.subtleBg',
         color: 'colorPalette.subtleFg',
       },
+      // v1 had a `clear` variant rendering as default-coloured text on a
+      // transparent background, with icon children tinted by colorPalette.
+      // Used as the notification-dot pattern (e.g. `<Badge variant="clear"
+      // colorPalette="success"><BxsCircle /> Online</Badge>`).
+      clear: {
+        bg: 'transparent',
+        color: 'base.content.default',
+        _icon: {
+          color: 'colorPalette.solid',
+        },
+      },
     },
     size: {
       // Each size redeclares `px`/`py` because v3's default Badge size

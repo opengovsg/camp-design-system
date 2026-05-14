@@ -1,7 +1,7 @@
 import { SimpleGrid, Stack, Text } from '@chakra-ui/react'
 import { Meta, StoryFn } from '@storybook/react'
 
-import { BxBulb, BxsBank, BxsHeart } from '~/icons'
+import { BxBulb, BxsBank, BxsCircle, BxsHeart } from '~/icons'
 
 import { Badge, BadgeProps } from './Badge'
 
@@ -52,6 +52,24 @@ SubtleWithIcon.args = {
   colorPalette: 'warning',
 }
 
+export const Clear = Template.bind({})
+Clear.args = {
+  children: 'Badge name',
+  variant: 'clear',
+}
+
+export const ClearWithIcon = Template.bind({})
+ClearWithIcon.args = {
+  children: (
+    <>
+      <BxsCircle fontSize="0.5rem" />
+      Badge name
+    </>
+  ),
+  variant: 'clear',
+  colorPalette: 'warning',
+}
+
 export const Sizes: StoryFn<BadgeProps> = () => (
   <Stack gap={8}>
     <Badge>
@@ -97,4 +115,15 @@ export const SolidColours = TemplateGroup.bind({})
 SolidColours.args = {
   children: 'Solid',
   variant: 'solid',
+}
+
+export const ClearColours = TemplateGroup.bind({})
+ClearColours.args = {
+  children: (
+    <>
+      <BxsCircle fontSize="0.5rem" />
+      Clear
+    </>
+  ),
+  variant: 'clear',
 }
