@@ -10,11 +10,8 @@ import type { BreadcrumbColorPalette } from '~/theme/slotRecipes/breadcrumb.slot
 export interface BreadcrumbProps
   extends Omit<ChakraBreadcrumbRootProps, 'colorPalette'> {
   /**
-   * Each child should be a `<Breadcrumb.Item>` (the wrapper auto-injects
-   * `<Breadcrumb.Separator>` between consecutive items).
-   *
-   * The legacy v1 `<BreadcrumbItem>` / `<BreadcrumbLink>` exports still work
-   * via deprecated re-exports.
+   * Each child should be a `<Breadcrumb.Item>`. Separators are auto-inserted
+   * between consecutive items.
    */
   children: React.ReactNode
   /**
@@ -29,23 +26,18 @@ export interface BreadcrumbProps
 }
 
 /**
- * Convenience wrapper around v3's `Breadcrumb` compound. Auto-builds the
+ * Wrapper around the Chakra `Breadcrumb` compound. Builds the
  * `Breadcrumb.Root` / `Breadcrumb.List` scaffold and interleaves
- * `Breadcrumb.Separator` nodes between consumer-provided items — preserving
- * v1's `<Breadcrumb separator="/">` ergonomics.
- *
- * For full slot composition (mixing separators per item, conditional
- * `Ellipsis`, etc.) use the compound API directly:
+ * `Breadcrumb.Separator` nodes between children, so consumers can write:
  *
  * ```tsx
- * <Breadcrumb.Root>
- *   <Breadcrumb.List>
- *     <Breadcrumb.Item>...</Breadcrumb.Item>
- *     <Breadcrumb.Separator><BxChevronRight /></Breadcrumb.Separator>
- *     <Breadcrumb.Item>...</Breadcrumb.Item>
- *   </Breadcrumb.List>
- * </Breadcrumb.Root>
+ * <Breadcrumb separator="/">
+ *   <Breadcrumb.Item>…</Breadcrumb.Item>
+ *   <Breadcrumb.Item>…</Breadcrumb.Item>
+ * </Breadcrumb>
  * ```
+ *
+ * For per-item separator control, use the compound API directly.
  */
 const BreadcrumbInner = forwardRef<HTMLElement, BreadcrumbProps>(
   ({ children, separator = <BxChevronRight />, ...rootProps }, ref) => {
@@ -71,13 +63,8 @@ const BreadcrumbInner = forwardRef<HTMLElement, BreadcrumbProps>(
 )
 BreadcrumbInner.displayName = 'Breadcrumb'
 
-// Attach all v3 sub-components to the wrapper namespace so consumers can
-// reach for `Breadcrumb.Item`, `Breadcrumb.Link`, etc. without a separate
-// import. v3's namespace itself is frozen — spread (Avatar / Tag precedent).
 export const Breadcrumb: typeof BreadcrumbInner & typeof ChakraBreadcrumb =
   Object.assign(BreadcrumbInner, { ...ChakraBreadcrumb })
-
-// --- Deprecated v1 aliases ---------------------------------------------------
 
 /** @deprecated Use `Breadcrumb.Item` instead. */
 export const BreadcrumbItem = ChakraBreadcrumb.Item
