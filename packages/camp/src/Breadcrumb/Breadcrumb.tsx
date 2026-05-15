@@ -13,7 +13,7 @@ export interface BreadcrumbProps
    * Each child should be a `<Breadcrumb.Item>`. Separators are auto-inserted
    * between consecutive items.
    */
-  children: React.ReactNode
+  children?: React.ReactNode
   /**
    * Separator rendered between items. Defaults to a chevron-right icon.
    * Pass a string (e.g. `'/'`) or any `ReactElement` to override; pass
