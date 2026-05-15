@@ -1,5 +1,4 @@
 import {
-  type ComponentPropsWithoutRef,
   createContext,
   type ElementType,
   forwardRef,
@@ -8,6 +7,7 @@ import {
 } from 'react'
 import {
   chakra,
+  type HTMLChakraProps,
   HStack,
   Icon,
   Text,
@@ -28,8 +28,7 @@ const useTileStyles = () => {
   return styles
 }
 
-export interface TileProps
-  extends Omit<ComponentPropsWithoutRef<'button'>, 'title'> {
+export interface TileProps extends Omit<HTMLChakraProps<'button'>, 'title'> {
   /** Icon to render in the tile header. */
   icon?: ElementType
   children: React.ReactNode
