@@ -8,6 +8,7 @@ import { bannerSlotRecipe } from './slotRecipes/banner.slotRecipe'
 import { breadcrumbSlotRecipe } from './slotRecipes/breadcrumb.slotRecipe'
 import { infoboxSlotRecipe } from './slotRecipes/infobox.slotRecipe'
 import { tagSlotRecipe } from './slotRecipes/tag.slotRecipe'
+import { tileSlotRecipe } from './slotRecipes/tile.slotRecipe'
 import { breakpoints } from './breakpoints'
 import { layerStyles } from './layerStyles'
 import { semanticTokenColors } from './semanticTokens'
@@ -53,6 +54,7 @@ export const config = defineConfig({
       breadcrumb: breadcrumbSlotRecipe,
       infobox: infoboxSlotRecipe,
       tag: tagSlotRecipe,
+      tile: tileSlotRecipe,
     },
   },
 })
