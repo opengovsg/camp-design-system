@@ -13,14 +13,12 @@ const ExternalIcon = () => (
 
 export interface LinkProps extends Omit<ChakraLinkProps, 'colorPalette'> {
   /**
-   * Renders the link as non-interactive (no navigation, no focus, no hover)
-   * while preserving the recipe's styled appearance. Matches v1 behaviour:
-   * the link is visually disabled (muted colour, not-allowed cursor) AND
-   * cannot be clicked or focused.
+   * Renders the link as non-interactive while preserving the styled
+   * appearance. The link cannot be clicked or focused.
    */
   disabled?: boolean
   /**
-   * Element appended to the link contents when `external` is true.
+   * Element appended after the link contents when `external` is true.
    * Defaults to `<Link.ExternalIcon />`.
    */
   externalIcon?: ReactElement
@@ -48,11 +46,6 @@ const LinkInner = forwardRef<HTMLAnchorElement, LinkProps>(
         colorPalette={colorPalette}
         display="inline-flex"
         alignItems="center"
-        // When disabled, strip the href so it can't be navigated, kill
-        // pointer events + focus, and surface the recipe's _disabled state
-        // via the data-disabled attribute (which v3 maps to the `_disabled`
-        // pseudo). This preserves v1's "fully non-interactive but styled"
-        // intent without rendering as a separately-styled Text element.
         href={disabled ? undefined : href}
         aria-disabled={disabled || undefined}
         data-disabled={disabled || undefined}

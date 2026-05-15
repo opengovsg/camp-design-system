@@ -17,15 +17,8 @@ const PLACEMENT_STYLES = {
 
 /**
  * A notification indicator dot positioned at a corner of an `Avatar.Root`.
- * v1 used Chakra v2's `<AvatarBadge />`; v3 dropped that slot, so this is a
- * thin re-implementation that absolutely-positions a circular `Box` inside
- * the avatar. Default colour is `utility.feedback.critical` (red — common
- * for unread/notification dots); pass `bg` to override.
- *
- * The size is computed as 20% of the parent avatar (+ 2px to account for the
- * 1px white border on each side), mirroring v1's behaviour. The parent
- * `Avatar.Root` is `position: relative` by default (v3 recipe), so absolute
- * positioning anchors correctly without extra setup.
+ * Defaults to a red dot at `bottom-end`; pass `bg` and `placement` to
+ * override.
  *
  * @example
  * ```tsx
