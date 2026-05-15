@@ -11,6 +11,7 @@ import { paginationSlotRecipe } from './slotRecipes/pagination.slotRecipe'
 import { switchSlotRecipe } from './slotRecipes/switch.slotRecipe'
 import { tagSlotRecipe } from './slotRecipes/tag.slotRecipe'
 import { tileSlotRecipe } from './slotRecipes/tile.slotRecipe'
+import { toggleSlotRecipe } from './slotRecipes/toggle.slotRecipe'
 import { breakpoints } from './breakpoints'
 import { layerStyles } from './layerStyles'
 import { semanticTokenColors } from './semanticTokens'
@@ -59,6 +60,7 @@ export const config = defineConfig({
       switch: switchSlotRecipe,
       tag: tagSlotRecipe,
       tile: tileSlotRecipe,
+      toggle: toggleSlotRecipe,
     },
   },
 })
