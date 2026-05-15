@@ -48,12 +48,6 @@ export const badgeRecipe = defineRecipe({
       clear: {
         bg: 'transparent',
         color: 'base.content.default',
-        // `!important` is required because Chakra's default Badge base sets
-        // `fontWeight: medium` and the recipe engine drops typed overrides
-        // from variant blocks; only raw CSS with `!important` wins.
-        '&': {
-          fontWeight: '400 !important',
-        },
         _icon: {
           color: 'colorPalette.solid',
         },
