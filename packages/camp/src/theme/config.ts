@@ -4,6 +4,7 @@ import { badgeRecipe } from './recipes/badge.recipe'
 import { buttonRecipe } from './recipes/button.recipe'
 import { linkRecipe } from './recipes/link.recipe'
 import { avatarSlotRecipe } from './slotRecipes/avatar.slotRecipe'
+import { bannerSlotRecipe } from './slotRecipes/banner.slotRecipe'
 import { breadcrumbSlotRecipe } from './slotRecipes/breadcrumb.slotRecipe'
 import { infoboxSlotRecipe } from './slotRecipes/infobox.slotRecipe'
 import { tagSlotRecipe } from './slotRecipes/tag.slotRecipe'
@@ -48,6 +49,7 @@ export const config = defineConfig({
     },
     slotRecipes: {
       avatar: avatarSlotRecipe,
+      banner: bannerSlotRecipe,
       breadcrumb: breadcrumbSlotRecipe,
       infobox: infoboxSlotRecipe,
       tag: tagSlotRecipe,
