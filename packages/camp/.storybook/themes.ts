@@ -5,7 +5,12 @@ import PackageInfo from '../package.json'
 // @ts-expect-error png module
 import brandImage from './assets/restricted_ogp_logo.png'
 
-export const StorybookTheme = {
+type StorybookThemeShape = {
+  manager: ReturnType<typeof create>
+  docs: ReturnType<typeof create>
+}
+
+export const StorybookTheme: StorybookThemeShape = {
   manager: create({
     base: 'light',
     brandTitle: `OGP Design System@${PackageInfo.version}`,

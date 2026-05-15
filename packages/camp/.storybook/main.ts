@@ -8,12 +8,7 @@ const getAbsolutePath = (packageName: string) =>
   dirname(require.resolve(path.join(packageName, 'package.json')))
 export default {
   features: {},
-  stories: [
-    './introduction/Welcome/Welcome.stories.tsx',
-    './introduction/Principles/Principles.stories.tsx',
-    './foundations/**/*.@(mdx|stories.@(js|jsx|ts|tsx))',
-    '../src/**/*.@(mdx|stories.@(js|jsx|ts|tsx))',
-  ],
+  stories: ['../src/**/*.@(mdx|stories.@(js|jsx|ts|tsx))'],
   addons: [
     '@storybook/addon-links',
     '@storybook/addon-essentials',
