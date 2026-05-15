@@ -9,11 +9,8 @@ import * as tokens from './tokens'
 
 export const config = defineConfig({
   globalCss: {
-    // Apply tnum + cv05 to every element via universal selector, overriding
-    // Chakra v3's default `* { fontFeatureSettings: '"cv11"' }`. v1 set this
-    // on `body` only and relied on inheritance (which the browser UA reset
-    // on form elements like `<button>` interrupted) — v3's universal cascade
-    // is the desired behaviour going forward.
+    // Universal selector applies tabular-nums + cv05 even to form elements,
+    // which UA stylesheets reset to system defaults.
     '*': {
       fontFeatureSettings: "'tnum' on, 'cv05' on",
     },

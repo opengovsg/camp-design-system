@@ -1,22 +1,14 @@
 import { defineSemanticTokens } from '@chakra-ui/react'
 
-// Preserves v1 chakra-body tokens (light mode only — dark mode is not supported
-// by this design system; see README).
+// Light-mode-only body tokens (dark mode is not supported; see README).
 const baseTokens = {
   'chakra-body-text': { value: '{colors.base.content.default}' },
   'chakra-body-bg': { value: '{colors.base.canvas.default}' },
   'chakra-border-color': { value: '{colors.base.divider.medium}' },
 }
 
-// Per-palette slot tokens. Component recipes reference
-// `colorPalette.solid`, `colorPalette.fg`, etc.; Chakra rewrites them to the
-// matching scheme based on the consumer's `colorPalette="main"` prop.
-//
-// Source backgrounds (from tokens/colors.ts):
-//   main:     #1361F0  sub:      #5d6785  critical: #c03434
-//   warning:  #FFDA68  success:  #0F796F  neutral:  #666C7A
-//
-// `fg` is pre-computed via getContrastColor('#FFFFFF', <bg>, '#1F1F1F').
+// Per-palette slot tokens referenced by recipes via `colorPalette.<slot>`.
+// `fg` values precomputed via getContrastColor against each `solid` bg.
 const palettes = {
   main: {
     solid: { value: '{colors.interaction.main.default}' },
@@ -59,7 +51,6 @@ const palettes = {
     solidHover: { value: '{colors.interaction.warning.hover}' },
     solidActive: { value: '{colors.interaction.warning.active}' },
     fg: { value: '#1F1F1F' },
-    // warning has no v1-distinct outline/reverse hover/active states; reuse the same hex chain
     outlineBorder: { value: '{colors.interaction.warning.default}' },
     outlineHover: { value: '{colors.interaction.warning.hover}' },
     outlineActive: { value: '{colors.interaction.warning.active}' },

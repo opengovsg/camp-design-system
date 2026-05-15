@@ -9,9 +9,7 @@ export type ButtonColorPalette =
   | 'neutral'
   | 'inverse'
 
-/**
- * @deprecated Renamed to `ButtonColorPalette`. Will be removed in v3.
- */
+/** @deprecated Renamed to `ButtonColorPalette`. */
 export type ThemeButtonColorScheme = ButtonColorPalette
 
 export const buttonRecipe = defineRecipe({
@@ -91,9 +89,8 @@ export const buttonRecipe = defineRecipe({
         _active: { bg: 'colorPalette.outlineActive' },
       },
       link: {
-        // Visual identity only — sizing, padding, gap, font weight, line height,
-        // and underline behaviour are handled in `compoundVariants` so they
-        // beat the v3-default size variant and our textStyle inlining.
+        // Inline-text identity only; layout / typography are reset to inline
+        // defaults in `compoundVariants` so they beat the size variant.
         border: 'none',
         borderWidth: 0,
         borderStyle: 'none',
