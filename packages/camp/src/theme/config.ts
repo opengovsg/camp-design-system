@@ -12,6 +12,7 @@ import { checkboxSlotRecipe } from './slotRecipes/checkbox.slotRecipe'
 import { fieldSlotRecipe } from './slotRecipes/field.slotRecipe'
 import { infoboxSlotRecipe } from './slotRecipes/infobox.slotRecipe'
 import { paginationSlotRecipe } from './slotRecipes/pagination.slotRecipe'
+import { radioGroupSlotRecipe } from './slotRecipes/radioGroup.slotRecipe'
 import { switchSlotRecipe } from './slotRecipes/switch.slotRecipe'
 import { tagSlotRecipe } from './slotRecipes/tag.slotRecipe'
 import { tileSlotRecipe } from './slotRecipes/tile.slotRecipe'
@@ -65,6 +66,7 @@ export const config = defineConfig({
       field: fieldSlotRecipe,
       infobox: infoboxSlotRecipe,
       pagination: paginationSlotRecipe,
+      radioGroup: radioGroupSlotRecipe,
       switch: switchSlotRecipe,
       tag: tagSlotRecipe,
       tile: tileSlotRecipe,
