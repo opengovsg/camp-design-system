@@ -6,6 +6,7 @@ import { linkRecipe } from './recipes/link.recipe'
 import { avatarSlotRecipe } from './slotRecipes/avatar.slotRecipe'
 import { bannerSlotRecipe } from './slotRecipes/banner.slotRecipe'
 import { breadcrumbSlotRecipe } from './slotRecipes/breadcrumb.slotRecipe'
+import { fieldSlotRecipe } from './slotRecipes/field.slotRecipe'
 import { infoboxSlotRecipe } from './slotRecipes/infobox.slotRecipe'
 import { paginationSlotRecipe } from './slotRecipes/pagination.slotRecipe'
 import { switchSlotRecipe } from './slotRecipes/switch.slotRecipe'
@@ -55,6 +56,7 @@ export const config = defineConfig({
       avatar: avatarSlotRecipe,
       banner: bannerSlotRecipe,
       breadcrumb: breadcrumbSlotRecipe,
+      field: fieldSlotRecipe,
       infobox: infoboxSlotRecipe,
       pagination: paginationSlotRecipe,
       switch: switchSlotRecipe,

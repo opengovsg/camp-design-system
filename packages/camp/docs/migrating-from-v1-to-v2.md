@@ -150,6 +150,42 @@ is retained as a static helper:
 When `disabled`, Link renders as a non-interactive `<Text as="a"
 aria-disabled>` (preserving v1 semantics — fully unclickable).
 
+### `FormControl` → `Field` compound
+
+`FormControl`, `FormLabel`, `FormHelperText`, and `FormErrorMessage` are
+replaced by the `Field` compound. The Chakra codemod rewrites these
+identifiers automatically — both the import and the JSX call sites.
+
+```diff
+- import { FormControl, FormLabel, FormHelperText, FormErrorMessage } from '@opengovsg/design-system-react'
++ import { Field } from '@opengovsg/design-system-react'
+
+- <FormControl isInvalid isRequired>
+-   <FormLabel>Email</FormLabel>
+-   <Input />
+-   <FormHelperText>Used for delivery only.</FormHelperText>
+-   <FormErrorMessage>Invalid email.</FormErrorMessage>
+- </FormControl>
++ <Field.Root invalid required>
++   <Field.Label isRequired>Email</Field.Label>
++   <Input />
++   <Field.HelperText>Used for delivery only.</Field.HelperText>
++   <Field.ErrorText>Invalid email.</Field.ErrorText>
++ </Field.Root>
+```
+
+Camp's `Field.Label` extends Chakra's with v1 features: `questionNumber`,
+`tooltipText`, `description`, and an automatic `(optional)` indicator that
+appears when `isRequired` is falsy. `Field.HelperText` supports a
+`variant="success"` that renders a green check icon. `Field.ErrorText`
+auto-prepends an error icon — matching v1.
+
+The chakra codemod does not preserve our v1-only props (`questionNumber`,
+`tooltipText`, `description`). They survive at the type level (the new
+`Field.Label` accepts them) but the codemod will not move them off
+`<FormLabel>` if they were passed there — they sit on `<Field.Label>` after
+the rename. No manual cleanup needed in most cases.
+
 ### `sx` → `css` with `&` selector
 
 ```diff
