@@ -11,6 +11,7 @@ export type {
 } from './breadcrumb.slotRecipe'
 export { breadcrumbSlotRecipe } from './breadcrumb.slotRecipe'
 export { checkboxSlotRecipe } from './checkbox.slotRecipe'
+export { dialogSlotRecipe } from './dialog.slotRecipe'
 export { fieldSlotRecipe } from './field.slotRecipe'
 export type { InfoboxVariant } from './infobox.slotRecipe'
 export { infoboxSlotRecipe } from './infobox.slotRecipe'
