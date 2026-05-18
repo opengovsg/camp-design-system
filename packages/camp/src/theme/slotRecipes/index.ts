@@ -25,6 +25,7 @@ export type {
   ThemeSwitchColorScheme,
 } from './switch.slotRecipe'
 export { switchSlotRecipe } from './switch.slotRecipe'
+export { tabsSlotRecipe } from './tabs.slotRecipe'
 export type { TagColorPalette, ThemeTagColorScheme } from './tag.slotRecipe'
 export { tagSlotRecipe } from './tag.slotRecipe'
 export type { TileVariant } from './tile.slotRecipe'
