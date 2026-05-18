@@ -74,7 +74,7 @@ const MenuDivider = ChakraMenu.Separator as React.FC<ChakraMenuSeparatorProps>
 export interface MenuProps extends Omit<ChakraMenuRootProps, 'children'> {
   /** Alias for `matchWidth` — stretches the menu list to the trigger's width. */
   isStretch?: boolean
-  children?: ReactNode
+  children?: ReactNode | ((state: { isOpen: boolean }) => ReactNode)
 }
 
 /**
