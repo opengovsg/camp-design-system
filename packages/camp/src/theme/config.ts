@@ -1,6 +1,9 @@
 import { defineConfig } from '@chakra-ui/react'
 
+import { badgeRecipe } from './recipes/badge.recipe'
 import { buttonRecipe } from './recipes/button.recipe'
+import { linkRecipe } from './recipes/link.recipe'
+import { avatarSlotRecipe } from './slotRecipes/avatar.slotRecipe'
 import { breakpoints } from './breakpoints'
 import { layerStyles } from './layerStyles'
 import { semanticTokenColors } from './semanticTokens'
@@ -36,8 +39,12 @@ export const config = defineConfig({
     textStyles,
     layerStyles,
     recipes: {
+      badge: badgeRecipe,
       button: buttonRecipe,
+      link: linkRecipe,
     },
-    slotRecipes: {},
+    slotRecipes: {
+      avatar: avatarSlotRecipe,
+    },
   },
 })
