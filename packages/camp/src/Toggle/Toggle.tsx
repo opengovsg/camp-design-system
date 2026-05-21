@@ -37,14 +37,14 @@ export const Toggle = forwardRef<HTMLInputElement, ToggleProps>(
     const styles = useMemo(() => recipe({}), [recipe])
 
     return (
-      <Flex css={[styles.overallContainer, containerStyles]}>
+      <Flex css={{ ...styles.overallContainer, ...containerStyles }}>
         {(label || description) && (
           <Box>
-            <Box as="label" css={[styles.label, labelStyles]}>
+            <Box as="label" css={{ ...styles.label, ...labelStyles }}>
               {label}
             </Box>
             {description && (
-              <Box css={[styles.description, descriptionStyles]}>
+              <Box css={{ ...styles.description, ...descriptionStyles }}>
                 {description}
               </Box>
             )}
