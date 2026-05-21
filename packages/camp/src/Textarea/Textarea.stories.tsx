@@ -51,5 +51,81 @@ export const Sizes: StoryFn = () => (
     <Textarea placeholder="Extra Small" size="xs" defaultValue="xs filled" />
     <Textarea placeholder="Small" size="sm" defaultValue="sm filled" />
     <Textarea placeholder="Medium" size="md" defaultValue="md filled" />
+
+    <Textarea
+      placeholder="Extra Small"
+      size="xs"
+      isSuccess
+      defaultValue="xs success"
+    />
+    <Textarea
+      placeholder="Small"
+      size="sm"
+      isSuccess
+      defaultValue="sm success"
+    />
+    <Textarea
+      placeholder="Medium"
+      size="md"
+      isSuccess
+      defaultValue="md success"
+    />
+
+    <Textarea
+      placeholder="Extra Small"
+      size="xs"
+      disabled
+      defaultValue="xs disabled"
+    />
+    <Textarea
+      placeholder="Small"
+      size="sm"
+      disabled
+      defaultValue="sm disabled"
+    />
+    <Textarea
+      placeholder="Medium"
+      size="md"
+      disabled
+      defaultValue="md disabled"
+    />
+
+    <Textarea
+      placeholder="Extra Small"
+      size="xs"
+      defaultValue="xs prefilled"
+      isPrefilled
+    />
+    <Textarea
+      placeholder="Small"
+      size="sm"
+      defaultValue="sm prefilled"
+      isPrefilled
+    />
+    <Textarea
+      placeholder="Medium"
+      size="md"
+      defaultValue="md prefilled"
+      isPrefilled
+    />
+
+    <Textarea
+      placeholder="Extra Small"
+      size="xs"
+      defaultValue="xs error"
+      aria-invalid
+    />
+    <Textarea
+      placeholder="Small"
+      size="sm"
+      defaultValue="sm error"
+      aria-invalid
+    />
+    <Textarea
+      placeholder="Medium"
+      size="md"
+      defaultValue="md error"
+      aria-invalid
+    />
   </SimpleGrid>
 )

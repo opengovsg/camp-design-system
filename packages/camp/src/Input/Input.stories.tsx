@@ -46,5 +46,52 @@ export const Sizes: StoryFn = () => (
     />
     <Input placeholder="Small" size="sm" isSuccess defaultValue="sm success" />
     <Input placeholder="Medium" size="md" isSuccess defaultValue="md success" />
+
+    <Input
+      placeholder="Extra Small"
+      size="xs"
+      disabled
+      defaultValue="xs disabled"
+    />
+    <Input placeholder="Small" size="sm" disabled defaultValue="sm disabled" />
+    <Input placeholder="Medium" size="md" disabled defaultValue="md disabled" />
+
+    <Input
+      placeholder="Extra Small"
+      size="xs"
+      defaultValue="xs prefilled"
+      isPrefilled
+    />
+    <Input
+      placeholder="Small"
+      size="sm"
+      defaultValue="sm prefilled"
+      isPrefilled
+    />
+    <Input
+      placeholder="Medium"
+      size="md"
+      defaultValue="md prefilled"
+      isPrefilled
+    />
+
+    <Input
+      placeholder="Extra Small"
+      size="xs"
+      defaultValue="xs error"
+      aria-invalid
+    />
+    <Input
+      placeholder="Small"
+      size="sm"
+      defaultValue="sm error"
+      aria-invalid
+    />
+    <Input
+      placeholder="Medium"
+      size="md"
+      defaultValue="md error"
+      aria-invalid
+    />
   </SimpleGrid>
 )
