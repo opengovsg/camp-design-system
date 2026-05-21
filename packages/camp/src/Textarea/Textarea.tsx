@@ -32,9 +32,10 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     return (
       <ChakraTextarea
         ref={ref}
-        // `as={ResizeTextarea}` swaps the underlying element; the resize
-        // props (minRows / maxRows) live on ResizeTextarea, not Textarea,
-        // so cast the merged props through to silence the type.
+        // Chakra's default minH would override the autosize starting height.
+        // Setting it here (rather than on the recipe) keeps non-autosize
+        // textareas unaffected.
+        minH="unset"
         {...({
           as: ResizeTextarea,
           minRows: minAutosizeRows,
