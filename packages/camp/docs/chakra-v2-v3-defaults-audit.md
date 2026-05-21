@@ -1044,24 +1044,53 @@ opacity: 0.5 }`.
 - **Pitfall:** the rename `FormControl → Field` is part of v3; our wrapper layer
   may need to keep `FormControl` as a deprecated alias.
 
-### Tag
+### Tag (already migrated)
 
 - **v3 source:** `node_modules/@chakra-ui/react/dist/esm/theme/recipes/tag.js`
   (slot recipe).
-- **v3 slots:** `root, label, closeTrigger, startElement, endElement`.
+- **v3 slots:** `root, label, closeTrigger, startElement, endElement` (v1
+  used `container, label, closeButton, icon`).
 - **v3 base.root:** `display: inline-flex; alignItems: center; borderRadius:
 l2; focusVisibleRing: outside`.
-- **v3 variants:** delegate to `badgeRecipe.variants?.variant` — `subtle,
-solid, outline, surface`.
+- **v3 variants:** `subtle, solid, outline, surface (default)`.
 - **v3 sizes:** `sm, md (default), lg, xl`.
 - **v3 defaultVariants:** `{ size: 'md', variant: 'surface' }`.
-- **v1 component:** `Tag.ts`, `TagInput.ts`.
-- **Pitfalls:**
-  1. Variants are not defined in `tag.js` directly — they pull from
-     `badgeRecipe`. If we re-author Badge, Tag variant behavior changes
-     transitively.
-  2. `surface` is the default variant (uses `bg: colorPalette.subtle` + inset
-     shadow) — different from v1's solid-like default.
+- **v1 component:** `git show main:packages/camp/src/theme/components/Tag.ts`,
+  `git show main:packages/camp/src/Tag/Tag.tsx`.
+- **Pitfalls (all addressed):**
+
+  1. **Variant default replaced.** v3 default `surface` swapped back to v1's
+     `subtle`. v1's two variants (`subtle`/`solid`) preserved; v3's
+     `outline`/`surface` inherited but unused.
+  2. **Size set replaced.** v1's `xs/sm/md` overrides v3's `sm/md/lg/xl`
+     fully — chosen over a rename to avoid breaking every consumer site.
+     The per-size `--tag-element-size` and `--tag-element-offset` CSS
+     variables must be redeclared (audit § 8 #14) or v3 defaults win.
+  3. **`borderRadius: 'l2'` (v3 default) replaced with `'sm'`** to match
+     v1's effective 4px (`radii.base` undefined in v3, § 8 #3).
+  4. **`minH` and `minW` overridden per size.** Chakra v2 default Tag
+     enforced `minH/minW: 'sizes.6'` (24px); v3 dropped these and tags
+     compress below v1 dimensions. Restored explicitly in xs/sm/md.
+  5. **Per-size `gap: 0`.** v3-default `size.X.root.gap: '1'` (4px) would
+     change icon spacing — v1 used per-icon margins instead. Reset to 0
+     so spacing matches v1.
+  6. **Disabled state via combined selector:**
+     `&[aria-disabled='true'], &[data-disabled]`. v1 used the declarative
+     `aria-disabled` attribute on the root; v3 uses `data-disabled`. Both
+     idioms work without a wrapper component.
+  7. **closeTrigger focus ring** rewritten from v3's `focusVisibleRing:
+inside` to `outline: 2px solid var(--chakra-colors-utility-focus-default)`
+     so the focus token matches Link/Button/IconButton.
+  8. **Compound variant: subtle warning → `yellow.700` text** (legibility
+     against pale-yellow `subtleBg`). Same override Badge needed; see
+     `badge.recipe.ts` precedent.
+  9. **v3 namespace is frozen.** `Object.assign(ChakraTag, { ... })` throws
+     at runtime; the wrapper uses `{ ...ChakraTag }` spread (Avatar
+     precedent).
+  10. **Deprecated helper aliases.** `TagLeftIcon`, `TagRightIcon`,
+      `TagLabel`, `TagCloseButton` re-exported as `Tag.StartElement` /
+      `Tag.EndElement` / `Tag.Label` / `Tag.CloseTrigger` with `@deprecated`
+      JSDoc so v1 consumer code compiles unchanged.
 
 ### Spinner
 
