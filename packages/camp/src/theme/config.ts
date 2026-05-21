@@ -8,6 +8,7 @@ import { textareaRecipe } from './recipes/textarea.recipe'
 import { avatarSlotRecipe } from './slotRecipes/avatar.slotRecipe'
 import { bannerSlotRecipe } from './slotRecipes/banner.slotRecipe'
 import { breadcrumbSlotRecipe } from './slotRecipes/breadcrumb.slotRecipe'
+import { checkboxSlotRecipe } from './slotRecipes/checkbox.slotRecipe'
 import { fieldSlotRecipe } from './slotRecipes/field.slotRecipe'
 import { infoboxSlotRecipe } from './slotRecipes/infobox.slotRecipe'
 import { paginationSlotRecipe } from './slotRecipes/pagination.slotRecipe'
@@ -60,6 +61,7 @@ export const config = defineConfig({
       avatar: avatarSlotRecipe,
       banner: bannerSlotRecipe,
       breadcrumb: breadcrumbSlotRecipe,
+      checkbox: checkboxSlotRecipe,
       field: fieldSlotRecipe,
       infobox: infoboxSlotRecipe,
       pagination: paginationSlotRecipe,
