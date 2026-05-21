@@ -17,6 +17,7 @@ import { menuSlotRecipe } from './slotRecipes/menu.slotRecipe'
 import { paginationSlotRecipe } from './slotRecipes/pagination.slotRecipe'
 import { radioGroupSlotRecipe } from './slotRecipes/radioGroup.slotRecipe'
 import { switchSlotRecipe } from './slotRecipes/switch.slotRecipe'
+import { tabsSlotRecipe } from './slotRecipes/tabs.slotRecipe'
 import { tagSlotRecipe } from './slotRecipes/tag.slotRecipe'
 import { tileSlotRecipe } from './slotRecipes/tile.slotRecipe'
 import { toggleSlotRecipe } from './slotRecipes/toggle.slotRecipe'
@@ -75,6 +76,7 @@ export const config = defineConfig({
       pagination: paginationSlotRecipe,
       radioGroup: radioGroupSlotRecipe,
       switch: switchSlotRecipe,
+      tabs: tabsSlotRecipe,
       tag: tagSlotRecipe,
       tile: tileSlotRecipe,
       toggle: toggleSlotRecipe,
