@@ -3,6 +3,8 @@ export type {
   ThemeAvatarColorScheme,
 } from './avatar.slotRecipe'
 export { avatarSlotRecipe } from './avatar.slotRecipe'
+export type { BannerVariant } from './banner.slotRecipe'
+export { bannerSlotRecipe } from './banner.slotRecipe'
 export type {
   BreadcrumbColorPalette,
   ThemeBreadcrumbColorScheme,
