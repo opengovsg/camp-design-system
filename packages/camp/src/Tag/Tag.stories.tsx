@@ -129,7 +129,13 @@ const TemplateGroup: StoryFn<TagRootProps> = ({ variant }) => (
             colorPalette={palette}
             variant={variant}
           >
-            <Tag.Label>Tag</Tag.Label>
+            <Tag.StartElement>
+              <BxsInfoCircle />
+            </Tag.StartElement>
+            <Tag.Label>{variant} tag</Tag.Label>
+            <Tag.EndElement>
+              <Tag.CloseTrigger aria-label="Remove" />
+            </Tag.EndElement>
           </Tag.Root>,
           <Tag.Root
             key={`${palette}-${size}-disabled`}
@@ -138,7 +144,13 @@ const TemplateGroup: StoryFn<TagRootProps> = ({ variant }) => (
             variant={variant}
             aria-disabled
           >
-            <Tag.Label>Tag</Tag.Label>
+            <Tag.StartElement>
+              <BxsInfoCircle />
+            </Tag.StartElement>
+            <Tag.Label>{variant} tag</Tag.Label>
+            <Tag.EndElement>
+              <Tag.CloseTrigger aria-label="Remove" />
+            </Tag.EndElement>
           </Tag.Root>,
         ])}
       </Fragment>
