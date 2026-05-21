@@ -14,6 +14,11 @@ export type { InfoboxVariant } from './infobox.slotRecipe'
 export { infoboxSlotRecipe } from './infobox.slotRecipe'
 export type { PaginationVariant } from './pagination.slotRecipe'
 export { paginationSlotRecipe } from './pagination.slotRecipe'
+export type {
+  SwitchColorPalette,
+  ThemeSwitchColorScheme,
+} from './switch.slotRecipe'
+export { switchSlotRecipe } from './switch.slotRecipe'
 export type { TagColorPalette, ThemeTagColorScheme } from './tag.slotRecipe'
 export { tagSlotRecipe } from './tag.slotRecipe'
 export type { TileVariant } from './tile.slotRecipe'
