@@ -54,6 +54,24 @@ export const avatarSlotRecipe = defineSlotRecipe({
           textStyle: 'subhead-2',
         },
       },
+      lg: {
+        root: {
+          '--avatar-size': '4rem',
+          textStyle: 'subhead-1',
+        },
+      },
+      xl: {
+        root: {
+          '--avatar-size': '6rem',
+          textStyle: 'h5',
+        },
+      },
+      '2xl': {
+        root: {
+          '--avatar-size': '8rem',
+          textStyle: 'h4',
+        },
+      },
     },
     variant: {
       solid: {
