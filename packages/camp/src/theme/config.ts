@@ -11,6 +11,7 @@ import { breadcrumbSlotRecipe } from './slotRecipes/breadcrumb.slotRecipe'
 import { checkboxSlotRecipe } from './slotRecipes/checkbox.slotRecipe'
 import { fieldSlotRecipe } from './slotRecipes/field.slotRecipe'
 import { infoboxSlotRecipe } from './slotRecipes/infobox.slotRecipe'
+import { menuSlotRecipe } from './slotRecipes/menu.slotRecipe'
 import { paginationSlotRecipe } from './slotRecipes/pagination.slotRecipe'
 import { radioGroupSlotRecipe } from './slotRecipes/radioGroup.slotRecipe'
 import { switchSlotRecipe } from './slotRecipes/switch.slotRecipe'
@@ -66,6 +67,7 @@ export const config = defineConfig({
       checkbox: checkboxSlotRecipe,
       field: fieldSlotRecipe,
       infobox: infoboxSlotRecipe,
+      menu: menuSlotRecipe,
       pagination: paginationSlotRecipe,
       radioGroup: radioGroupSlotRecipe,
       switch: switchSlotRecipe,
