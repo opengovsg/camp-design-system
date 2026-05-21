@@ -5,6 +5,7 @@ import { buttonRecipe } from './recipes/button.recipe'
 import { linkRecipe } from './recipes/link.recipe'
 import { avatarSlotRecipe } from './slotRecipes/avatar.slotRecipe'
 import { breadcrumbSlotRecipe } from './slotRecipes/breadcrumb.slotRecipe'
+import { infoboxSlotRecipe } from './slotRecipes/infobox.slotRecipe'
 import { tagSlotRecipe } from './slotRecipes/tag.slotRecipe'
 import { breakpoints } from './breakpoints'
 import { layerStyles } from './layerStyles'
@@ -48,6 +49,7 @@ export const config = defineConfig({
     slotRecipes: {
       avatar: avatarSlotRecipe,
       breadcrumb: breadcrumbSlotRecipe,
+      infobox: infoboxSlotRecipe,
       tag: tagSlotRecipe,
     },
   },
