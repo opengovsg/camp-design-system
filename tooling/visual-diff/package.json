@@ -1,0 +1,18 @@
+{
+  "name": "@camp-design-system/visual-diff",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Per-PR visual diff tool: compares local Storybook against design.open.gov.sg",
+  "scripts": {
+    "diff": "node run.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "pixelmatch": "^6.0.0",
+    "playwright": "^1.49.0",
+    "pngjs": "^7.0.0"
+  }
+}
