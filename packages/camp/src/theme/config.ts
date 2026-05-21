@@ -9,6 +9,7 @@ import { avatarSlotRecipe } from './slotRecipes/avatar.slotRecipe'
 import { bannerSlotRecipe } from './slotRecipes/banner.slotRecipe'
 import { breadcrumbSlotRecipe } from './slotRecipes/breadcrumb.slotRecipe'
 import { checkboxSlotRecipe } from './slotRecipes/checkbox.slotRecipe'
+import { dialogSlotRecipe } from './slotRecipes/dialog.slotRecipe'
 import { fieldSlotRecipe } from './slotRecipes/field.slotRecipe'
 import { infoboxSlotRecipe } from './slotRecipes/infobox.slotRecipe'
 import { menuSlotRecipe } from './slotRecipes/menu.slotRecipe'
@@ -65,6 +66,7 @@ export const config = defineConfig({
       banner: bannerSlotRecipe,
       breadcrumb: breadcrumbSlotRecipe,
       checkbox: checkboxSlotRecipe,
+      dialog: dialogSlotRecipe,
       field: fieldSlotRecipe,
       infobox: infoboxSlotRecipe,
       menu: menuSlotRecipe,
