@@ -16,6 +16,7 @@ export type { InfoboxVariant } from './infobox.slotRecipe'
 export { infoboxSlotRecipe } from './infobox.slotRecipe'
 export type { PaginationVariant } from './pagination.slotRecipe'
 export { paginationSlotRecipe } from './pagination.slotRecipe'
+export { radioGroupSlotRecipe } from './radioGroup.slotRecipe'
 export type {
   SwitchColorPalette,
   ThemeSwitchColorScheme,
