@@ -12,7 +12,9 @@ export const Default: StoryFn<MenuProps> = (args) => (
   <Menu {...args}>
     {({ isOpen }) => (
       <>
-        <Menu.Button isOpen={isOpen}>Open menu</Menu.Button>
+        <Menu.Button variant="outline" isOpen={isOpen}>
+          Menu Default
+        </Menu.Button>
         <Menu.List>
           <Menu.Item value="option-a">Option A</Menu.Item>
           <Menu.Item value="option-b">Option B</Menu.Item>
