@@ -270,12 +270,12 @@ const useProvideDateRangePicker = ({
   ) => {
     const date = parse(event.target.value, dateFormat, new Date())
     setStartInputDisplay(event.target.value)
-    let clonedValue = [...internalValue] as DateRangeValue
+    const clonedValue = [...internalValue] as DateRangeValue
 
     if (!isValid(date)) {
-      if (clonedValue.length > 0) {
-        clonedValue = [null, null]
-      }
+      // Mirror handleEndDateChange: an invalid keystroke must only clear
+      // its own side, never wipe a valid date from the other input.
+      clonedValue[0] = null
     } else {
       clonedValue[0] = date
     }
