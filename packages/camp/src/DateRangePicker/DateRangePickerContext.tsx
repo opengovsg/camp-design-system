@@ -270,34 +270,21 @@ const useProvideDateRangePicker = ({
   ) => {
     const date = parse(event.target.value, dateFormat, new Date())
     setStartInputDisplay(event.target.value)
-    let clonedValue = [...internalValue] as DateRangeValue
-
-    if (!isValid(date)) {
-      if (clonedValue.length > 0) {
-        clonedValue = [null, null]
-      }
-    } else {
+    if (isValid(date)) {
+      const clonedValue = [...internalValue] as DateRangeValue
       clonedValue[0] = date
+      setInternalValue(clonedValue)
     }
-
-    setInternalValue(clonedValue)
   }
 
   const handleEndDateChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     const date = parse(event.target.value, dateFormat, new Date())
     setEndInputDisplay(event.target.value)
-    const [startDate, endDate] = internalValue
-    let clonedValue = [...internalValue] as DateRangeValue
-
-    if (!isValid(date)) {
-      if (startDate && endDate) {
-        clonedValue = [startDate, null]
-      }
-    } else {
+    if (isValid(date)) {
+      const clonedValue = [...internalValue] as DateRangeValue
       clonedValue[1] = date
+      setInternalValue(clonedValue)
     }
-
-    setInternalValue(clonedValue)
   }
 
   const handleCalendarDateChange = useCallback(
