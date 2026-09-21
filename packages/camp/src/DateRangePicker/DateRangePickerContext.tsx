@@ -218,14 +218,31 @@ const useProvideDateRangePicker = ({
     (e) => {
       const startDate = parse(startInputDisplay, dateFormat, new Date())
       const endDate = parse(endInputDisplay, dateFormat, new Date())
-      // Clear if input is invalid on blur if invalid dates are not allowed.
-      if (!allowInvalidDates && !isValid(startDate)) {
-        setStartInputDisplay('')
+      // Same manual-input blur UX as DatePicker for consistency.
+      if (!allowInvalidDates) {
+        if (!isValid(startDate)) {
+          setStartInputDisplay('')
+        }
+        if (!isValid(endDate)) {
+          setEndInputDisplay('')
+        }
+        handleUpdateInputsAndRender([startDate, endDate])
+      } else {
+        const [currentStart, currentEnd] = internalValue
+        const nextStart = isValid(startDate)
+          ? startDate
+          : startInputDisplay === ''
+            ? null
+            : currentStart
+        const nextEnd = isValid(endDate)
+          ? endDate
+          : endInputDisplay === ''
+            ? null
+            : currentEnd
+        if (nextStart !== currentStart || nextEnd !== currentEnd) {
+          setInternalValue([nextStart, nextEnd] as DateRangeValue)
+        }
       }
-      if (!allowInvalidDates && !isValid(endDate)) {
-        setEndInputDisplay('')
-      }
-      handleUpdateInputsAndRender([startDate, endDate])
       onBlur?.(e)
     },
     [
@@ -234,6 +251,8 @@ const useProvideDateRangePicker = ({
       endInputDisplay,
       allowInvalidDates,
       handleUpdateInputsAndRender,
+      internalValue,
+      setInternalValue,
       onBlur,
     ],
   )
