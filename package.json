@@ -3,7 +3,7 @@
   "description": "Repository containing the Open Government Products design system",
   "private": true,
   "devDependencies": {
-    "turbo": "^2.1.3"
+    "turbo": "^2.9.14"
   },
   "scripts": {
     "build": "turbo build",
