@@ -27,6 +27,7 @@ export const SelectMenu = (): JSX.Element => {
   const {
     getMenuProps,
     highlightedIndex,
+    inputValue,
     isOpen,
     items,
     nothingFoundLabel,
@@ -59,6 +60,10 @@ export const SelectMenu = (): JSX.Element => {
       >
         {isOpen && items.length > 0 && (
           <Virtuoso
+            // Virtuoso applies initialTopMostItemIndex a few frames after mount and
+            // ignores later highlight changes, so typing in that gap would scroll the
+            // filtered list back towards the selection. A new instance drops that scroll.
+            key={inputValue ? 'filtered' : 'unfiltered'}
             ref={virtualListRef}
             data={items}
             overscan={virtualListHeight / 2}
