@@ -93,6 +93,11 @@ HasValueSelected.args = {
   initialIsOpen: true,
 }
 
+export const HasValueSelectedFurtherDown = Template.bind({})
+HasValueSelectedFurtherDown.args = {
+  value: itemToValue(INITIAL_COMBOBOX_ITEMS[9]), // 'C4', below the 4-row viewport
+}
+
 export const Sizes = () => {
   const items = ['xs', 'sm', 'md']
   const [first, setFirst] = useState('')

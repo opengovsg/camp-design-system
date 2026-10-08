@@ -10,6 +10,7 @@ import { useSelectPopover } from './SelectPopover'
 export const SelectMenu = (): JSX.Element => {
   const {
     getMenuProps,
+    highlightedIndex,
     isOpen,
     items,
     nothingFoundLabel,
@@ -19,6 +20,13 @@ export const SelectMenu = (): JSX.Element => {
   } = useSelectContext()
 
   const { floatingRef, floatingStyles } = useSelectPopover()
+
+  // Virtuoso remounts on every open, and scrollIntoView is a no-op until it has
+  // measured its rows, so the initial position comes from the highlighted item.
+  const initialTopMostItemIndex =
+    highlightedIndex > 0
+      ? { index: highlightedIndex, align: 'center' as const }
+      : 0
 
   return (
     <Portal>
@@ -38,6 +46,7 @@ export const SelectMenu = (): JSX.Element => {
             ref={virtualListRef}
             data={items}
             overscan={virtualListHeight / 2}
+            initialTopMostItemIndex={initialTopMostItemIndex}
             style={{ height: virtualListHeight }}
             itemContent={(index, item) => {
               return (
