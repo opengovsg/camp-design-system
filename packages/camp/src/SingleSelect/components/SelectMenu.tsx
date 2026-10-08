@@ -1,4 +1,5 @@
-import { Virtuoso } from 'react-virtuoso'
+import { forwardRef } from 'react'
+import { ListProps, Virtuoso } from 'react-virtuoso'
 import { List, ListItem, Portal } from '@chakra-ui/react'
 
 import { useSelectContext } from '../SelectContext'
@@ -6,6 +7,21 @@ import { itemToValue } from '../utils/itemUtils'
 
 import { DropdownItem } from './DropdownItem'
 import { useSelectPopover } from './SelectPopover'
+
+/**
+ * With `initialTopMostItemIndex`, Virtuoso hides the list until its row sizes
+ * have stopped changing for 150ms, so the menu would open blank. Show the rows
+ * as soon as they render at the target position instead.
+ */
+const VirtuosoList = forwardRef<
+  HTMLDivElement,
+  ListProps & { context?: unknown }
+>(({ context: _context, style, ...props }, ref) => (
+  <div ref={ref} {...props} style={{ ...style, visibility: undefined }} />
+))
+VirtuosoList.displayName = 'VirtuosoList'
+
+const VIRTUOSO_COMPONENTS = { List: VirtuosoList }
 
 export const SelectMenu = (): JSX.Element => {
   const {
@@ -47,6 +63,7 @@ export const SelectMenu = (): JSX.Element => {
             data={items}
             overscan={virtualListHeight / 2}
             initialTopMostItemIndex={initialTopMostItemIndex}
+            components={VIRTUOSO_COMPONENTS}
             style={{ height: virtualListHeight }}
             itemContent={(index, item) => {
               return (
