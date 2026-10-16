@@ -11,3 +11,20 @@ Credit for design:
 @pearlyong
 
 @NatMaeTan
+
+## Development
+
+Use Node.js 24. The repository pins pnpm 12.14.0 in `package.json`.
+Install pnpm with `npm install --global pnpm@12.14.0` if needed.
+
+Run these commands from the repository root:
+
+```sh
+pnpm install
+pnpm --filter @opengovsg/design-system-react build
+pnpm --filter @opengovsg/design-system-react lint
+pnpm --filter @opengovsg/design-system-react storybook
+```
+
+Commit `pnpm-lock.yaml` when dependencies change. CI installs with
+`pnpm install --frozen-lockfile`.

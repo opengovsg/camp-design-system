@@ -38,19 +38,18 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ steps.app-token.outputs.token || github.token }}
+      - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 24
-          cache: npm
-      - name: Update npm for trusted publishing
-        run: npm install -g npm@11
-      - run: npm ci
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
 
       - name: Publish snapshot to npm
         if: inputs.snapshot == true
         run: |
-          npm run changeset -- version --snapshot snapshot
-          npm run release -- --tag snapshot
+          pnpm run changeset version --snapshot snapshot
+          pnpm run release --tag snapshot
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ""
@@ -60,8 +59,8 @@ jobs:
         id: changesets
         uses: opengovsg/changesets-action@f68bb4b781c954856eabd2643d4087c8faa97f2a
         with:
-          version: npm run version-packages
-          publish: npm run release
+          version: pnpm run version-packages
+          publish: pnpm run release
           title: "chore: release packages"
           commit: "chore: release packages"
         env:
@@ -75,7 +74,7 @@ jobs:
           registry-url: https://npm.pkg.github.com
       - name: Publish to GitHub Packages
         if: inputs.snapshot == true || steps.changesets.outputs.hasChangesets == 'false'
-        run: npm run changeset -- publish --no-git-tag --tag "$RELEASE_TAG"
+        run: pnpm run changeset publish --no-git-tag --tag "$RELEASE_TAG"
         env:
           npm_config_registry: https://npm.pkg.github.com
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
