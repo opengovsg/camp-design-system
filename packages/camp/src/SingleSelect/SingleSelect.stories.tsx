@@ -208,7 +208,12 @@ export const FormInput: StoryFn<SingleSelectProps> = (args) => {
   )
 }
 
-export const OpensSelectedRowWithoutJumping = Template.bind({})
+export const OpensSelectedRowWithoutJumping: StoryFn<SingleSelectProps> = (
+  args,
+) => {
+  const [value, setValue] = useState(args.value)
+  return <SingleSelect {...args} value={value} onChange={setValue} />
+}
 OpensSelectedRowWithoutJumping.args = {
   value: '900',
   items: Array.from({ length: 1000 }, (_, index) => ({
