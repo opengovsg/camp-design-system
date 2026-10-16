@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { FormControl, Stack } from '@chakra-ui/react'
 import { Meta, StoryFn } from '@storybook/react'
+import { expect, userEvent, waitFor, within } from '@storybook/test'
 
 import { BxsCheckCircle } from '~/icons'
 import type { ComboboxItem } from '~/SingleSelect'
@@ -195,4 +196,46 @@ export const ReadOnlyFormInput: StoryFn<MultiSelectProps> = () => {
       />
     </FormControl>
   )
+}
+
+export const VirtualizedNavigation = Template.bind({})
+VirtualizedNavigation.args = {
+  items: Array.from({ length: 1000 }, (_, index) => ({
+    value: String(index),
+    label: `Option ${index}`,
+    description:
+      index % 3 === 0 ? 'A taller option with a description' : undefined,
+    disabled: index === 1,
+  })),
+}
+VirtualizedNavigation.play = async ({ canvasElement }) => {
+  const input = within(canvasElement).getByRole('combobox')
+  const document = canvasElement.ownerDocument
+  const screen = within(document.body)
+  const highlighted = () => screen.getByRole('option', { selected: true })
+  const expectHighlightInView = async () => {
+    await waitFor(() => {
+      const row = highlighted().getBoundingClientRect()
+      const menu = screen.getByRole('listbox').getBoundingClientRect()
+      expect(row.top).toBeGreaterThanOrEqual(menu.top - 2)
+      expect(row.bottom).toBeLessThanOrEqual(menu.bottom + 2)
+    })
+    expect(screen.getAllByRole('option').length).toBeLessThan(50)
+  }
+  await userEvent.click(input)
+  await userEvent.keyboard('{ArrowDown}')
+  expect(highlighted()).toHaveTextContent('Option 2')
+  await userEvent.keyboard('{End}')
+  await waitFor(() => expect(highlighted()).toHaveTextContent('Option 999'))
+  await expectHighlightInView()
+  await userEvent.keyboard('{Enter}')
+  expect(highlighted()).toHaveTextContent(', selected')
+  await userEvent.keyboard('{Enter}')
+  expect(highlighted()).not.toHaveTextContent(', selected')
+  await userEvent.type(input, 'Option 12')
+  expect(highlighted()).toHaveTextContent('Option 12')
+  await expectHighlightInView()
+  await userEvent.clear(input)
+  await userEvent.type(input, 'no matching option')
+  expect(screen.getByRole('option')).toHaveTextContent('No matching results')
 }
