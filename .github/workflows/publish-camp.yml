@@ -1,55 +1,73 @@
 name: Publish (Camp)
-
-defaults:
-  run:
-    working-directory: packages/camp
-
 on:
   push:
     branches:
-      - alpha
-      - beta
-      - latest
+      - main
+  workflow_dispatch:
+    inputs:
+      snapshot:
+        description: Create snapshot release
+        type: boolean
+        default: false
+
+concurrency:
+  group: publish-camp
+  cancel-in-progress: false
 
 permissions:
+  contents: write
+  pull-requests: write
   id-token: write
   packages: write
+  statuses: read
 
 jobs:
-  # JOB to run change detection
-  changes:
+  release:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    # Set job outputs to values from filter step
-    outputs:
-      camp: ${{ steps.filter.outputs.camp }}
     steps:
       - uses: actions/checkout@v4
-      - uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36
-        id: filter
         with:
-          filters: |
-            camp:
-              - packages/camp/**
-  publish:
-    needs: changes
-    runs-on: ubuntu-latest
-    if: ${{ needs.changes.outputs.camp == 'true' }}
-    steps:
-      - uses: actions/checkout@v4
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
-          node-version: "lts/*"
-          cache: "npm"
-          registry-url: "https://registry.npmjs.org"
-      - name: Update npm
-        run: npm install -g npm@latest # Ensure npm 11.5.1 or later is installed for OIDC support
+          node-version: 24
+          cache: npm
+      - name: Update npm for trusted publishing
+        run: npm install -g npm@11
       - run: npm ci
-      - run: npm run build
-      - run: npm publish --tag ${{ github.ref_name }}
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "lts/*"
-          registry-url: "https://npm.pkg.github.com/"
-      - run: npm publish --tag ${{ github.ref_name }}
+
+      - name: Publish snapshot to npm
+        if: inputs.snapshot == true
+        run: |
+          npm run changeset -- version --snapshot snapshot
+          npm run release -- --tag snapshot
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ""
+
+      - name: Create release PR or publish to npm
+        if: inputs.snapshot != true
+        id: changesets
+        uses: opengovsg/changesets-action@f68bb4b781c954856eabd2643d4087c8faa97f2a
+        with:
+          version: npm run version-packages
+          publish: npm run release
+          title: "chore: release packages"
+          commit: "chore: release packages"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ""
+
+      - uses: actions/setup-node@v4
+        if: inputs.snapshot == true || steps.changesets.outputs.hasChangesets == 'false'
+        with:
+          node-version: 24
+          registry-url: https://npm.pkg.github.com
+      - name: Publish to GitHub Packages
+        if: inputs.snapshot == true || steps.changesets.outputs.hasChangesets == 'false'
+        run: npm run changeset -- publish --no-git-tag --tag "$RELEASE_TAG"
+        env:
+          npm_config_registry: https://npm.pkg.github.com
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_TAG: ${{ inputs.snapshot == true && 'snapshot' || 'latest' }}

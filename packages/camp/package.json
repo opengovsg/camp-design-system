@@ -36,8 +36,7 @@
     "lint:prettier": "prettier . -c",
     "lint:eslint": "eslint ./ --ignore-path .gitignore",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
-    "version": "auto-changelog -p && git add CHANGELOG.md && npm run lint-fix"
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@chakra-ui/utils": "^2.2.2",
@@ -88,7 +87,6 @@
     "@typescript-eslint/eslint-plugin": "6.15.0",
     "@typescript-eslint/parser": "6.19.1",
     "@vitejs/plugin-react": "^4.3.3",
-    "auto-changelog": "^2.4.0",
     "esbuild": "^0.28.1",
     "eslint": "8.56.0",
     "eslint-config-prettier": "9.1.0",
