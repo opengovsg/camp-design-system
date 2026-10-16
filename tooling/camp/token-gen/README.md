@@ -47,7 +47,7 @@ git submodule update --remote
 To generate theme files, run the following command:
 
 ```bash
-npm run build
+pnpm build
 ```
 
 ## Using generated themes

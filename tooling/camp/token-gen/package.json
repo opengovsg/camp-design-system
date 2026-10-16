@@ -4,9 +4,9 @@
   "description": "OGP Design System token generator",
   "scripts": {
     "prebuild": "rimraf tokens/raw/* tokens/transformed/*",
-    "transform": "node split.js && npx token-transformer tokens-generated/raw --theme --themeOutputPath=tokens-generated/transformed",
-    "build": "npm run transform && node build.js",
-    "postbuild": "npm run lint",
+    "transform": "node split.js && token-transformer tokens-generated/raw --theme --themeOutputPath=tokens-generated/transformed",
+    "build": "pnpm run transform && node build.js",
+    "postbuild": "pnpm run lint",
     "lint": "prettier . -c --write"
   },
   "author": "karrui@open.gov.sg",

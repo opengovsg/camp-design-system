@@ -1,7 +1,9 @@
 [build]
-    base = "react/"
-    publish = "storybook-static"
-    command = "npm run build-storybook"
+    base = "."
+    publish = "packages/camp/storybook-static"
+    command = "pnpm --filter @opengovsg/design-system-react build-storybook"
+[build.environment]
+    NODE_VERSION = "24"
 [context.deploy-preview]
-    # Skip preview build if there are no changes to mdx files in react/src
-ignore = "curl ${REPOSITORY_URL/'https://github.com'/https://api.github.com/repos}/pulls/$REVIEW_ID/files | grep -L '\"filename\": \"react/src/.*.mdx\"'"
+    # Skip preview build if there are no changes to mdx files in packages/camp/src
+ignore = "curl ${REPOSITORY_URL/'https://github.com'/https://api.github.com/repos}/pulls/$REVIEW_ID/files | grep -L '\"filename\": \"packages/camp/src/.*.mdx\"'"

@@ -141,13 +141,13 @@ Releases use [Changesets](https://github.com/changesets/changesets), following
 [OUI's release workflow](https://github.com/opengovsg/oui-design-system/blob/main/.github/workflows/publish-npm.yml).
 Run commands from the repository root.
 
-For each user-facing change, run `npm run changeset`, select
+For each user-facing change, run `pnpm changeset`, select
 `@opengovsg/design-system-react`, choose a patch, minor, or major bump, and write a
 short release note. Commit the generated `.changeset/*.md` file with your change.
 Documentation and tooling-only changes do not need a changeset.
 
 After changes merge to `main`, the **Publish (Camp)** workflow opens or updates a
-release PR with the package version, changelog, and root `package-lock.json`.
+release PR with the package version, changelog, and root `pnpm-lock.yaml`.
 Review and merge that PR to build and publish to npm (`latest`) and GitHub
 Packages, and create a GitHub release. Already published versions are skipped,
 so a failed GitHub Packages publish can be retried by rerunning the workflow.
@@ -169,7 +169,7 @@ release branches back into `main`.
   **Settings → Actions → General**. The workflow uses `GITHUB_TOKEN` to create
   release PRs, tags, releases, and publish to GitHub Packages.
 - Keep npm trusted publishing configured for `opengovsg/camp-design-system` and
-  `.github/workflows/publish-camp.yml`. The workflow uses npm 11 with OIDC;
+  `.github/workflows/publish-camp.yml`. The workflow uses pnpm 12 with OIDC;
   no npm publishing token is needed.
 - If required checks do not run on a bot-created release PR, close and reopen
   the PR to trigger them before merging.

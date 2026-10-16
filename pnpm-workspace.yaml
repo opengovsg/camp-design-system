@@ -1,0 +1,17 @@
+packages:
+  - packages/**
+  - tooling/camp/**
+
+overrides:
+  minimatch@9.0.3: ^9.0.9
+  '@storybook/addon-actions>uuid': ^11.1.1
+
+allowBuilds:
+  esbuild: true
+
+# Preserve recent versions already present in the npm lockfile.
+minimumReleaseAgeExclude:
+  - '@tanstack/react-virtual@3.14.20'
+  - '@tanstack/virtual-core@3.19.5'
+  - framer-motion@14.3.0
+  - motion-dom@14.3.0
