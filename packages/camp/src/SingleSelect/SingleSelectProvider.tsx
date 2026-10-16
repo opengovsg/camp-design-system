@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import type { VirtuosoHandle } from 'react-virtuoso'
 import {
   FormControlOptions,
   ThemingProps,
@@ -166,7 +165,6 @@ export const SingleSelectProvider = ({
     [getFilteredItems],
   )
 
-  const virtualListRef = useRef<VirtuosoHandle>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
   const {
@@ -199,17 +197,6 @@ export const SingleSelectProvider = ({
     },
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     scrollIntoView: () => {},
-    onHighlightedIndexChange: ({ highlightedIndex }) => {
-      if (
-        highlightedIndex !== undefined &&
-        highlightedIndex >= 0 &&
-        virtualListRef.current
-      ) {
-        virtualListRef.current.scrollIntoView({
-          index: highlightedIndex,
-        })
-      }
-    },
     onStateChange: ({ inputValue, type }) => {
       switch (type) {
         case useCombobox.stateChangeTypes.FunctionSetInputValue:
@@ -364,7 +351,6 @@ export const SingleSelectProvider = ({
         resetInputValue,
         inputAria,
         inputRef,
-        virtualListRef,
         virtualListHeight,
       }}
     >

@@ -48,8 +48,8 @@ interface SelectContextReturn<Item extends ComboboxItem = ComboboxItem>
     label: string
   }
   resetInputValue: () => void
-  /** Ref for list virtualization */
-  virtualListRef: RefObject<VirtuosoHandle>
+  /** Ref for MultiSelect list virtualization */
+  virtualListRef?: RefObject<VirtuosoHandle>
   /** Height to assign to virtual list */
   virtualListHeight: number
 }
