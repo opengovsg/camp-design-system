@@ -19,5 +19,6 @@
     "style-dictionary": "^3.8.0",
     "tinycolor2": "^1.6.0",
     "token-transformer": "^0.0.33"
-  }
+  },
+  "private": true
 }

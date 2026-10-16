@@ -137,25 +137,42 @@ To fix this, ensure that `skipLibCheck` is set to `false` in your `tsconfig.json
 
 ## Publishing a new version
 
-In the `react` directory:
+Releases use [Changesets](https://github.com/changesets/changesets), following
+[OUI's release workflow](https://github.com/opengovsg/oui-design-system/blob/main/.github/workflows/publish-npm.yml).
+Run commands from the repository root.
 
-```bash
-# <version> examples: 1.0.1, 1.0.1-alpha.0, 1.0.1-beta.3
-$ git checkout -b release-v<version>
-$ npm version <version>
-$ git add package.json package-lock.json
-$ git commit -m "build: update version to v<version>"
-$ git tag v<version>
-$ git push --set-upstream origin release-v<version> # push branch
-$ git push origin v<version> # push tag
-```
+For each user-facing change, run `npm run changeset`, select
+`@opengovsg/design-system-react`, choose a patch, minor, or major bump, and write a
+short release note. Commit the generated `.changeset/*.md` file with your change.
+Documentation and tooling-only changes do not need a changeset.
 
-Open 2 PRs:
+After changes merge to `main`, the **Publish (Camp)** workflow opens or updates a
+release PR with the package version, changelog, and root `package-lock.json`.
+Review and merge that PR to build and publish to npm (`latest`) and GitHub
+Packages, and create a GitHub release. Already published versions are skipped,
+so a failed GitHub Packages publish can be retried by rerunning the workflow.
+The token generator is private and is never published.
 
-- `release-v<version> -> alpha / beta / latest` - once this PR is merged, the version will be published to the respective npm tag automatically
-- `release-v<version> -> main` - to keep our `main` branch up-to-date with releases
+For a test release, manually run **Publish (Camp)** on `main` with **Create
+snapshot release** enabled. Pending changesets are released under the `snapshot`
+tag in both registries, without committing version changes or consuming the
+changesets on `main`. A snapshot requires a pending changeset. Install it with
+`npm install @opengovsg/design-system-react@snapshot`.
 
-Lastly, create a new release on GitHub for the new tag.
+The former `alpha`, `beta`, and `latest` branch publishing workflow is retired;
+use release PRs and snapshots instead of `npm version`, manual tags, or merging
+release branches back into `main`.
+
+### Repository setup
+
+- Enable **Allow GitHub Actions to create and approve pull requests** in
+  **Settings → Actions → General**. The workflow uses `GITHUB_TOKEN` to create
+  release PRs, tags, releases, and publish to GitHub Packages.
+- Keep npm trusted publishing configured for `opengovsg/camp-design-system` and
+  `.github/workflows/publish-camp.yml`. The workflow uses npm 11 with OIDC;
+  no npm publishing token is needed.
+- If required checks do not run on a bot-created release PR, close and reopen
+  the PR to trigger them before merging.
 
 ## Further reading
 
