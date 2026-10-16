@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { FormControl, Stack, useControllableState } from '@chakra-ui/react'
 import { Meta, StoryFn } from '@storybook/react'
+import { expect, userEvent, within } from '@storybook/test'
 
 import { BxGitMerge, BxHeart } from '~/icons'
 import { fixedHeightDecorator } from '~/utils/storybook'
@@ -91,6 +92,11 @@ export const HasValueSelected = Template.bind({})
 HasValueSelected.args = {
   value: itemToValue(INITIAL_COMBOBOX_ITEMS[0]),
   initialIsOpen: true,
+}
+
+export const HasValueSelectedFurtherDown = Template.bind({})
+HasValueSelectedFurtherDown.args = {
+  value: itemToValue(INITIAL_COMBOBOX_ITEMS[9]), // 'C4', below the 4-row viewport
 }
 
 export const Sizes = () => {
@@ -199,5 +205,74 @@ export const FormInput: StoryFn<SingleSelectProps> = (args) => {
         items={INITIAL_COMBOBOX_ITEMS}
       />
     </FormControl>
+  )
+}
+
+export const OpensSelectedRowWithoutJumping: StoryFn<SingleSelectProps> = (
+  args,
+) => {
+  const [value, setValue] = useState(args.value)
+  return <SingleSelect {...args} value={value} onChange={setValue} />
+}
+OpensSelectedRowWithoutJumping.args = {
+  value: '900',
+  items: Array.from({ length: 1000 }, (_, index) => ({
+    value: String(index),
+    label: `Option ${index}`,
+    description:
+      index % 3 === 0 ? 'An option with a taller description' : undefined,
+  })),
+}
+OpensSelectedRowWithoutJumping.play = async ({ canvasElement }) => {
+  const input = within(canvasElement).getByRole('combobox')
+  const document = canvasElement.ownerDocument
+  const positions: number[] = []
+  const frames = new Promise<void>((resolve, reject) => {
+    input.addEventListener(
+      'mousedown',
+      () => {
+        const sample = () => {
+          try {
+            const menu = document.querySelector('[role="listbox"]')
+            const row = document.querySelector(
+              '[role="option"][aria-selected="true"]',
+            )
+            expect(row).toHaveTextContent('Option 900')
+            expect(row).toBeVisible()
+            if (!menu || !row)
+              throw new Error('The selected row must exist on the first frame')
+            const bounds = menu.getBoundingClientRect()
+            const rect = row.getBoundingClientRect()
+            expect(rect.top).toBeGreaterThanOrEqual(bounds.top - 1)
+            expect(rect.bottom).toBeLessThanOrEqual(bounds.bottom + 1)
+            positions.push(rect.top - bounds.top)
+            if (positions.length < 12) requestAnimationFrame(sample)
+            else resolve()
+          } catch (error) {
+            reject(error)
+          }
+        }
+        requestAnimationFrame(sample)
+      },
+      { once: true },
+    )
+  })
+  await Promise.all([userEvent.click(input), frames])
+  expect(Math.max(...positions) - Math.min(...positions)).toBeLessThan(1)
+  await userEvent.keyboard('{ArrowDown}{Enter}')
+  await userEvent.click(input)
+  expect(
+    document.querySelector('[role="option"][aria-selected="true"]'),
+  ).toHaveTextContent('Option 901')
+  await userEvent.type(input, 'Option 12')
+  const firstMatch = document.querySelector(
+    '[role="option"][aria-selected="true"]',
+  )
+  expect(firstMatch).toBeVisible()
+  const menu = document.querySelector('[role="listbox"]')
+  if (!firstMatch || !menu)
+    throw new Error('The first filtered match must be visible')
+  expect(firstMatch.getBoundingClientRect().top).toBeGreaterThanOrEqual(
+    menu.getBoundingClientRect().top - 1,
   )
 }

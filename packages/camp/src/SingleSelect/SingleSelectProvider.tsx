@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import type { VirtuosoHandle } from 'react-virtuoso'
 import {
   FormControlOptions,
   ThemingProps,
@@ -7,7 +6,11 @@ import {
   useMultiStyleConfig,
   useTheme,
 } from '@chakra-ui/react'
-import { useCombobox, UseComboboxProps } from 'downshift'
+import {
+  useCombobox,
+  UseComboboxProps,
+  UseComboboxStateChangeTypes,
+} from 'downshift'
 
 import { useItems } from './hooks/useItems'
 import { defaultFilter } from './utils/defaultFilter'
@@ -38,6 +41,28 @@ const getNextEnabledIndex = <Item extends ComboboxItem>(
     !isItemDisabled(items[fallbackIndex])
 
   return isValidFallback ? fallbackIndex : -1
+}
+
+/** Actions that open a closed menu without the user typing. */
+const MENU_OPEN_ACTION_TYPES: Partial<
+  Record<UseComboboxStateChangeTypes, true>
+> = {
+  [useCombobox.stateChangeTypes.FunctionToggleMenu]: true, // input click → toggleMenu()
+  [useCombobox.stateChangeTypes.FunctionOpenMenu]: true,
+  [useCombobox.stateChangeTypes.ToggleButtonClick]: true, // chevron
+  [useCombobox.stateChangeTypes.InputKeyDownArrowDown]: true,
+  [useCombobox.stateChangeTypes.InputKeyDownArrowUp]: true,
+}
+
+/** Index of the selected item in `items`, or -1 if it is absent or disabled. */
+const getSelectedItemIndex = <Item extends ComboboxItem>(
+  items: Item[],
+  selectedItem: Item | null,
+) => {
+  if (!selectedItem) return -1
+  const selectedValue = itemToValue(selectedItem)
+  const index = items.findIndex((item) => itemToValue(item) === selectedValue)
+  return index >= 0 && !isItemDisabled(items[index]) ? index : -1
 }
 
 export interface SingleSelectProviderProps<
@@ -140,7 +165,6 @@ export const SingleSelectProvider = ({
     [getFilteredItems],
   )
 
-  const virtualListRef = useRef<VirtuosoHandle>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
   const {
@@ -173,17 +197,6 @@ export const SingleSelectProvider = ({
     },
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     scrollIntoView: () => {},
-    onHighlightedIndexChange: ({ highlightedIndex }) => {
-      if (
-        highlightedIndex !== undefined &&
-        highlightedIndex >= 0 &&
-        virtualListRef.current
-      ) {
-        virtualListRef.current.scrollIntoView({
-          index: highlightedIndex,
-        })
-      }
-    },
     onStateChange: ({ inputValue, type }) => {
       switch (type) {
         case useCombobox.stateChangeTypes.FunctionSetInputValue:
@@ -200,7 +213,7 @@ export const SingleSelectProvider = ({
       const isArrowDown =
         type === useCombobox.stateChangeTypes.InputKeyDownArrowDown
 
-      const nextChanges =
+      const arrowKeyChanges =
         (isArrowUp || isArrowDown) && changes.highlightedIndex != null
           ? {
               ...changes,
@@ -212,6 +225,18 @@ export const SingleSelectProvider = ({
               ),
             }
           : changes
+
+      // Opening a closed menu without typing highlights the selected item, so users
+      // see their selection and its neighbours instead of the first option.
+      const selectedIndexOnOpen =
+        !state.isOpen && MENU_OPEN_ACTION_TYPES[type]
+          ? getSelectedItemIndex(filteredItems, state.selectedItem)
+          : -1
+
+      const nextChanges =
+        selectedIndexOnOpen >= 0
+          ? { ...arrowKeyChanges, highlightedIndex: selectedIndexOnOpen }
+          : arrowKeyChanges
 
       switch (type) {
         // Handle controlled `value` prop changes.
@@ -326,7 +351,6 @@ export const SingleSelectProvider = ({
         resetInputValue,
         inputAria,
         inputRef,
-        virtualListRef,
         virtualListHeight,
       }}
     >
