@@ -192,8 +192,8 @@ importers:
         specifier: ^2.12.1
         version: 2.12.1(react@18.3.1)
       '@chakra-ui/theme-tools':
-        specifier: ^2.2.7
-        version: 2.2.7(@chakra-ui/styled-system@2.12.1(react@18.3.1))(react@18.3.1)
+        specifier: ^2.2.10
+        version: 2.2.10(@chakra-ui/styled-system@2.12.1(react@18.3.1))(react@18.3.1)
       '@chakra-ui/utils':
         specifier: ^2.2.2
         version: 2.2.3(react@18.3.1)
@@ -561,6 +561,9 @@ packages:
   '@chakra-ui/anatomy@2.3.5':
     resolution: {integrity: sha512-3im33cUOxCbISjaBlINE2u8BOwJSCdzpjCX0H+0JxK2xz26UaVA5xeI3NYHUoxDnr/QIrgfrllGxS0szYwOcyg==}
 
+  '@chakra-ui/anatomy@2.3.6':
+    resolution: {integrity: sha512-TjmjyQouIZzha/l8JxdBZN1pKZTj7sLpJ0YkFnQFyqHcbfWggW9jKWzY1E0VBnhtFz/xF3KC6UAVuZVSJx+y0g==}
+
   '@chakra-ui/cli@2.5.6':
     resolution: {integrity: sha512-sDN5aAxwcAlQc9NfNpDZybFqhDBC75Bfusctzkg6gTMaMUPxMPhiWHIIXmdmev6G/qo07UCdBSUE1BLX+kDKew==}
     hasBin: true
@@ -582,6 +585,11 @@ packages:
   '@chakra-ui/styled-system@2.12.1':
     resolution: {integrity: sha512-DQph1nDiCPtgze7nDe0a36530ByXb5VpPosKGyWMvKocVeZJcDtYG6XM0+V5a0wKuFBXsViBBRIFUTiUesJAcg==}
 
+  '@chakra-ui/theme-tools@2.2.10':
+    resolution: {integrity: sha512-VX+zOwa1mIhvjD25FEDfh7T/mnwk03p0WQEWm5RYDOM20ePpwj4QMFwU/1zXiYwc2vZTouYLDmVBF3nJjmiPzw==}
+    peerDependencies:
+      '@chakra-ui/styled-system': '>=2.0.0'
+
   '@chakra-ui/theme-tools@2.2.7':
     resolution: {integrity: sha512-K/VJd0QcnKik7m+qZTkggqNLep6+MPUu8IP5TUpHsnSM5R/RVjsJIR7gO8IZVAIMIGLLTIhGshHxeMekqv6LcQ==}
     peerDependencies:
@@ -594,6 +602,11 @@ packages:
 
   '@chakra-ui/utils@2.2.3':
     resolution: {integrity: sha512-cldoCQuexZ6e07/9hWHKD4l1QXXlM1Nax9tuQOBvVf/EgwNZt3nZu8zZRDFlhAOKCTQDkmpLTTu+eXXjChNQOw==}
+    peerDependencies:
+      react: '>=16.8.0'
+
+  '@chakra-ui/utils@2.2.6':
+    resolution: {integrity: sha512-xTnQaHHAplUsQb87/0aZt85fFECqee7B35Ib3RNHKvHSNHS2Kz7YkQiof8xYSBQqKCdrsEFeg+ngS2ViCXiK7w==}
     peerDependencies:
       react: '>=16.8.0'
 
@@ -6095,6 +6108,8 @@ snapshots:
 
   '@chakra-ui/anatomy@2.3.5': {}
 
+  '@chakra-ui/anatomy@2.3.6': {}
+
   '@chakra-ui/cli@2.5.6(@types/react@18.3.31)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(supports-color@10.2.2)(typescript@5.9.3)(ws@8.22.0)':
     dependencies:
       bundle-n-require: 1.1.2
@@ -6181,6 +6196,15 @@ snapshots:
     transitivePeerDependencies:
       - react
 
+  '@chakra-ui/theme-tools@2.2.10(@chakra-ui/styled-system@2.12.1(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      '@chakra-ui/anatomy': 2.3.6
+      '@chakra-ui/styled-system': 2.12.1(react@18.3.1)
+      '@chakra-ui/utils': 2.2.6(react@18.3.1)
+      color2k: 2.0.4
+    transitivePeerDependencies:
+      - react
+
   '@chakra-ui/theme-tools@2.2.7(@chakra-ui/styled-system@2.12.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@chakra-ui/anatomy': 2.3.5
@@ -6200,6 +6224,12 @@ snapshots:
       - react
 
   '@chakra-ui/utils@2.2.3(react@18.3.1)':
+    dependencies:
+      '@types/lodash.mergewith': 4.6.9
+      lodash.mergewith: 4.6.2
+      react: 18.3.1
+
+  '@chakra-ui/utils@2.2.6(react@18.3.1)':
     dependencies:
       '@types/lodash.mergewith': 4.6.9
       lodash.mergewith: 4.6.2

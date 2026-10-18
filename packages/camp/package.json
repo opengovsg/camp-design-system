@@ -41,7 +41,7 @@
   "dependencies": {
     "@chakra-ui/anatomy": "^2.3.5",
     "@chakra-ui/styled-system": "^2.12.1",
-    "@chakra-ui/theme-tools": "^2.2.7",
+    "@chakra-ui/theme-tools": "^2.2.10",
     "@chakra-ui/utils": "^2.2.2",
     "@emotion/react": "^11.13.3",
     "@floating-ui/react": "^0.26.1",
