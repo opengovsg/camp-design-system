@@ -114,7 +114,7 @@
     "storybook": "8.6.18",
     "tsc-alias": "^1.8.2",
     "typescript": "^5.0.4",
-    "vite": "^6.4.4",
+    "vite": "^6.4.5",
     "vite-plugin-dts": "^4.3.0"
   },
   "optionalDependencies": {
